@@ -22,6 +22,7 @@
 		"http": "^0.0.1-security",
 		"prisma": "^5.0.0",
 		"socket.io": "^4.7.1",
+		"ts-loader": "^9.4.4",
 		"typescript": "^5.1.6"
 	}
 }
