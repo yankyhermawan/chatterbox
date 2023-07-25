@@ -6,6 +6,7 @@ import ChatPage from "./pages/ChatPage";
 import LoginPage from "./pages/LoginPage";
 import ProfilePage from "./pages/ProfilePage";
 import RegisterPage from "./pages/RegisterPage";
+import "../dist/output.css";
 
 import "./App.css";
 const App: React.FC = () => {
