@@ -18,6 +18,11 @@ app.use(express.json());
 app.use(cors());
 
 
+// MIDDLEWARE
+app.use(express.json());
+app.use(cors());
+
+
 io.on("connection", (socket) => {
 	socket.on("chat message", (msg) => {
 		io.emit("chat message", msg);
