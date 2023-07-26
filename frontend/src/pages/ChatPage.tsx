@@ -14,7 +14,7 @@ export default function ChatPage() {
       {/* LEFT */}
       {/* <ChannelDetail /> */}
 
-      {!channelListIsOpen && <ChannelList />}
+      {channelListIsOpen && <ChannelList />}
 
       {/* RIGHT SIDE */}
       <div className="flex flex-col w-auto h-auto">
