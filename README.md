@@ -1,1 +1,22 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/bkeXqJHH)
+# Group Chat App
+
+Group chat application provides a convenient and efficient platform for users to connect, collaborate, and communicate in real-time.
+
+## Features
+
+- Enter welcome page by default
+- Create new channel with name and description
+- Enter channel of my choice
+- Search channel
+- See member of channel
+- Send a message
+- See other people's message
+- See and update my account detail
+- Register and login
+
+---
+
+- Search message (optional)
+- See others account detail (optional)
+- See others typing status (optional)
+- Send image to others
