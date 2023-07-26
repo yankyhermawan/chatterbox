@@ -1,6 +1,11 @@
 # Group Chat App
 
 Group chat application provides a convenient and efficient platform for users to connect, collaborate, and communicate in real-time.
+This app is created to answer the demand of
+
+## Tech Stack
+- Frontend : Tailwind, React, Headless UI
+- Backend : Express, PostgreSQL, Prisma, socket.io
 
 ## Features
 
