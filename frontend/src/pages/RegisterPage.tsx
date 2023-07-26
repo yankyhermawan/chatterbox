@@ -1,9 +1,10 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import FormInput from './components/FormInput';
+import { RiUserFill, RiLockPasswordFill, RiMailFill } from 'react-icons/ri'
 
 const RegisterPage: React.FC = () => {
   const [formData, setFormData] = useState({
-    username: '',
+    name: '',
     email: '',
     password: '',
   });
@@ -20,32 +21,40 @@ const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div className="w-screen h-screen bg-slate-300">
-       <form onSubmit={handleSubmit}>
-        <h2>Register</h2>
+    <div className='bg-medium-grey flex flex-col items-center mx-auto justify-center w-screen h-screen'>
+      <div className='rounded-xl border-white border shadow-xl p-10 max-w-50'>
+        <h1 className='text-white font-bold'>Register</h1>
+        <form onSubmit={handleSubmit}>
         <FormInput
-          label="E-mail"
+          icon={RiUserFill}
+          placeholder="    Name"
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleInputChange}
+        />
+        <FormInput
+          icon={RiMailFill}
+          placeholder="    Email"
           type="text"
           name="email"
           value={formData.email}
           onChange={handleInputChange}
         />
-         <FormInput
-          label="Username"
-          type="text"
-          name="username"
-          value={formData.username}
-          onChange={handleInputChange}
-        />
         <FormInput
-          label="Password"
+          icon={RiLockPasswordFill}
+          placeholder="    Password"
           type="password"
           name="password"
           value={formData.password}
           onChange={handleInputChange}
         />
-        <button type="submit">Register</button>
-      </form>
+        <button className='text-white bg-blue rounded-md border w-full' type="submit">Register</button>
+        <div className='py-4 text-center'>
+          <p className='text-white font-thin'>Already a member? Login</p>
+        </div>
+        </form>
+      </div>
     </div>
   );
 };
