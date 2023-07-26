@@ -1,80 +1,46 @@
-import {
-    Injectable,
-    UnauthorizedException,
-    ForbiddenException,
-  } from '@nestjs/common';
-  import { PrismaService } from '../prisma/prisma.service';
-  import * as bcrypt from 'bcrypt';
-  import { Prisma } from '@prisma/client';
-  import { JwtService } from '@nestjs/jwt';
-  
-  @Injectable()
-  export class AuthService {
-    private readonly bcryptRound: number;
-  
-    constructor(
-      private readonly prismaService: PrismaService,
-      private jwtService: JwtService,
-    ) {
-      this.bcryptRound = parseInt(process.env['BCRYPT_SALT_ROUND']);
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { PrismaService } from './prisma.service';
+import { User } from '@prisma/client';
+
+const JWT_KEY = "96b76d8d6d79342b39a6b421b469815f1f6fd6b7383e1ce3048eb5517ae4937c";
+
+const prisma = new PrismaService();
+
+export async function registerUser(firstName: string, lastName: string, email: string, password: string): Promise<string> {
+  try {
+    const existingUser = await prisma.user.findUnique({ where: { email } });
+    if (existingUser) {
+      throw new Error('Email already registered');
     }
-  
-    async register(input) {
-      const hashedPassword: string = bcrypt.hashSync(
-        input.password,
-        this.bcryptRound,
-      );
-      try {
-        const newUser = await this.prismaService.user.create({
-          data: {
-            firstName: input.firstName,
-            lastName: input.lastName,
-            email: input.email,
-            userPassword: {
-              create: {
-                password: hashedPassword,
-              },
-            },
-          },
-        });
-        return newUser;
-      } catch (error) {
-        if (error instanceof Prisma.PrismaClientKnownRequestError) {
-          if (error.code === 'P2002') {
-            throw new ForbiddenException(
-              `The ${error.meta.target} is invalid or already taken`,
-            );
-          }
-        }
-        throw error;
-      }
-    }
-  
-    async login(email: string, password: string) {
-      const user = await this.prismaService.user.findFirst({
-        where: {
-          email,
-        },
-        include: {
-          userPassword: true,
-        },
-      });
-  
-      if (!user) {
-        throw new UnauthorizedException('Incorrect username or password');
-      }
-  
-      const isPasswordValid = await bcrypt.compare(
-        password,
-        user.userPassword.password,
-      );
-  
-      if (!isPasswordValid) {
-        throw new UnauthorizedException('Incorrect username or password');
-      }
-  
-      return {
-        accessToken: this.jwtService.sign({ userId: user.id }),
-      };
-    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await prisma.user.create({
+      data: { firstName, lastName, email, password: hashedPassword }
+    });
+
+    return 'User registered successfully';
+  } catch (error) {
+    throw new Error('Could not register user');
   }
+}
+
+export async function loginUser(email: string, password: string): Promise<string> {
+  try {
+    const user: User | null = await prisma.user.findUnique({ where: { email: email } });
+    if (!user) {
+      throw new Error('Invalid credentials');
+    }
+
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      throw new Error('Invalid credentials');
+    }
+    
+    const token = jwt.sign({ email: user.email }, JWT_KEY, { expiresIn: '1h' });
+    return token;
+  } catch (error) {
+    throw new Error('Could not login user');
+  }
+}
