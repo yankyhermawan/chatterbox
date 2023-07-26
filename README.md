@@ -1,6 +1,6 @@
 # Group Chat App
 
-App that provides real-time public discussion for anyone who want to join.
+App that provides real-time community discussion for anyone who want to join.
 
 ## Tech Stack
 - Frontend : Tailwind, React, Headless UI
