@@ -6,6 +6,17 @@ import cors from "cors";
 const app = express();
 const server = createServer(app);
 const io = new Server(server);
+const port = process.env.PORT || 4000;
+
+// MIDDLEWARE
+
+app.use(express.json());
+app.use(cors());
+
+// MIDDLEWARE
+app.use(express.json());
+app.use(cors());
+
 
 // MIDDLEWARE
 app.use(express.json());
@@ -18,4 +29,4 @@ io.on("connection", (socket) => {
 	});
 });
 
-server.listen(4000, () => console.log("listening on *:4000"));
+server.listen(port, () => console.log(`Listening on ${port}`));
