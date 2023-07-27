@@ -1,53 +1,126 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
-import FormInput from './components/FormInput';
-import { RiLockPasswordFill, RiMailFill } from 'react-icons/ri'
+import { Link, useNavigate } from 'react-router-dom';
+import * as yup from 'yup';
+import { Controller, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+// import axios from 'axios';
+import { useState } from 'react';
 
-const LoginPage: React.FC = () => {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+interface LoginProps {
+  email: string;
+  password: string;
+}
+
+const schema = yup
+  .object({
+    email: yup.string().email().required(),
+    password: yup.string().min(5).required(),
+    })
+  .required();
+
+
+function LoginPage() {
+  const [submitLogin, setSubmitLogin] = useState(false);
+  const navigate = useNavigate();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
   });
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
-  };
+   async function onSubmit(formData: LoginProps) {
+    setSubmitLogin(true);
+    try {
+      const response = await axios.post('', {
+        email: formData.email,
+        password: formData.password,
+      });
+    
+      localStorage.setItem('token', response.data.data.token);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    // Handle form submission here (e.g., sending data to a server)
-    console.log(formData);
-  };
+      navigate('/');
+    } catch (error) {
+      console.error(error);
+    }
+  }
+ return (
+    <section className='bg-medium-grey'>
+      <div className='flex flex-col items-center justify-center px-6 py-8 mx-auto w-screen h-screen md:h-screen lg:py-0'>
+        <div className='w-2/4 bg-medium-grey overflow-hidden rounded-lg shadow border mt-0 max-w-md p-0'>
+          <div className='p-6 space-y-4'>
+            <h1 className='text-body-bold text-white text-center'>
+              Login 
+            </h1>
+            <form onSubmit={handleSubmit(onSubmit)} className='space-y-4 md:space-y-6' action='#'>
+              <div>
+                <Controller
+                  name='email'
+                  control={control}
+                  render={({ field }) => (
+                    <>
+                      <input
+                        type='text'
+                        name='email'
+                        id='email'
+                        value={field.value}
+                        onChange={field.onChange}
+                        className='bg-white border-gray-300 text-black sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 '
+                        placeholder='Email'
+                      />
+                      {errors?.email && (
+                        <p className='mt-2 text-sm text-red'>
+                          {errors.email.message}
+                        </p>
+                      )}
+                    </>
+                  )}
+                />
+              </div>
 
-  return (
-    <div className='bg-medium-grey flex flex-col items-center justify-center w-screen h-screen'>
-      <div className='bg-medium-grey rounded-xl border-white border shadow-xl p-10 max-w-50'>
-        <h1 className='text-white font-bold'>Login</h1>
-        <form className='p-3' onSubmit={handleSubmit}>
-        <FormInput
-          icon={RiMailFill}
-          placeholder="    Email"
-          type="text"
-          name="email"
-          value={formData.email}
-          onChange={handleInputChange}
-        />
-        <FormInput
-          icon={RiLockPasswordFill}
-          placeholder="    Password"
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleInputChange}
-        />
-        <button className='text-white bg-blue rounded-md border font-semibold w-full' type="submit">Login</button>
-        <div className='py-4 text-center'>
-          <p className='text-white font-thin'>Not a member? Register</p>
+              <div>
+                <Controller
+                  name='password'
+                  control={control}
+                  render={({ field }) => (
+                    <>
+                      <input
+                        type='password'
+                        name='password'
+                        id='password'
+                        value={field.value}
+                        onChange={field.onChange}
+                        placeholder='Password'
+                        className='bg-white border-gray-300 text-black sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 '
+                      />
+                      {errors?.password && (
+                        <p className='mt-2 text-sm text-red'>
+                          {errors.password.message}
+                        </p>
+                      )}
+                    </>
+                  )}
+                />
+              </div>
+              <button
+                type='submit'
+                disabled={submitLogin}
+                className='w-full text-white bg-blue rounded-lg text-sm px-5 py-2.5 text-center'
+                onClick={handleSubmit(onSubmit)}>Login</button>
+              <p className='text-sm font-light text-center text-white'>
+                Not a member ? {" "}
+                <Link
+                  to='/register'
+                  className='font-medium mx-1 text-white text-primary-500 hover:underline '>
+                  Register
+                </Link>
+              </p>
+            </form>
+          </div>
         </div>
-        </form>
       </div>
-    </div>
+    </section>
   );
-};
+}
 
 export default LoginPage;
