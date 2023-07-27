@@ -25,4 +25,26 @@ export class MessageService {
 			};
 		}
 	}
+	async getChannelMessage(roomID: string) {
+		try {
+			const response = await this.prismaService.message.findMany({
+				where: {
+					roomID: roomID,
+				},
+				orderBy: {
+					date: "desc",
+				},
+				take: 100,
+			});
+			return {
+				code: 200,
+				response: response,
+			};
+		} catch (err) {
+			return {
+				code: 500,
+				response: "Server error",
+			};
+		}
+	}
 }

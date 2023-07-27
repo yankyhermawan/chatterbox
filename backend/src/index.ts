@@ -63,7 +63,7 @@ app.post("/login", async (req, res) => {
 // CHANNEL ENDPOINT
 
 app.get("/channel/:id", async (req, res) => {
-	const response = await channelService.getChannelMessage(req.params.id);
+	const response = await messageService.getChannelMessage(req.params.id);
 	res.status(response.code).json(response.response);
 });
 

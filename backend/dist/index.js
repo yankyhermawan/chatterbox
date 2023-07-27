@@ -30,7 +30,7 @@ app.use((0, cors_1.default)());
 const server = (0, http_1.createServer)(app);
 const io = new socket_io_1.Server(server, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: true,
         methods: ["GET", "POST"],
         allowedHeaders: ["my-custom-header"],
         credentials: true,
@@ -38,7 +38,6 @@ const io = new socket_io_1.Server(server, {
 });
 io.on("connection", (socket) => {
     socket.on("chat message", (msg) => __awaiter(void 0, void 0, void 0, function* () {
-        console.log(msg);
         const response = yield messageService.postMessage(msg.roomID, msg.message, msg.senderID);
         if (response) {
             io.emit("chat message", msg);

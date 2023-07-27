@@ -6,9 +6,15 @@ export class ChannelService {
 	async getAllChannel() {
 		try {
 			const response = await this.prismaService.channel.findMany();
+			if (response) {
+				return {
+					code: 200,
+					response: response,
+				};
+			}
 			return {
-				code: 200,
-				response: response,
+				code: 403,
+				response: "Not Found",
 			};
 		} catch (err) {
 			return {
@@ -41,29 +47,6 @@ export class ChannelService {
 			return {
 				code: 500,
 				response: "Server Error",
-			};
-		}
-	}
-
-	async getChannelMessage(roomID: string) {
-		try {
-			const response = await this.prismaService.channel.findMany({
-				where: {
-					id: roomID,
-				},
-				orderBy: {
-					date: "desc",
-				},
-				take: 100,
-			});
-			return {
-				code: 200,
-				response: response,
-			};
-		} catch (err) {
-			return {
-				code: 500,
-				response: "Server error",
 			};
 		}
 	}
