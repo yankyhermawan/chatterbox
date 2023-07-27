@@ -8,8 +8,8 @@ datasource db {
 }
 
 model User {
-    id        Int       @id @default(autoincrement())
-    email     String
+    id        String    @id @default(uuid())
+    email     String    @unique
     password  String
     username  String    @unique
     firstName String
@@ -19,7 +19,7 @@ model User {
 }
 
 model Channel {
-    id          Int        @id @default(autoincrement())
+    id          String     @id @default(uuid())
     channelName String
     member      User[]
     messages    Message[]
@@ -27,11 +27,11 @@ model Channel {
 }
 
 model Message {
-    id       Int      @id @default(autoincrement())
+    id       String   @id @default(uuid())
     content  String
     date     DateTime @default(now())
     sender   User     @relation(fields: [senderID], references: [id])
-    senderID Int
+    senderID String
     room     Channel  @relation(fields: [roomID], references: [id])
-    roomID   Int
+    roomID   String
 }

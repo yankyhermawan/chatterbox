@@ -1,45 +1,86 @@
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import { PrismaService } from './prisma.service';
-import { User } from '@prisma/client';
+import * as bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { PrismaService } from "../prisma.service";
 
-const JWT_KEY = "96b76d8d6d79342b39a6b421b469815f1f6fd6b7383e1ce3048eb5517ae4937c";
+const JWT_KEY =
+	process.env["JWT_KEY"] ||
+	"0e263e99692d725f0a2335f0dd7cfe080b2d4793d2793d6439e4d6a69daa5e5d";
 const prisma = new PrismaService();
 
-export async function registerUser(firstName: string, lastName: string, email: string, password: string): Promise<string> {
-  try {
-    const existingUser = await prisma.user.findUnique({ where: { email } });
-    if (existingUser) {
-      throw new Error('Email already registered');
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    await prisma.user.create({
-      data: { firstName, lastName, email, password: hashedPassword }
-    });
-
-    return 'User registered successfully';
-  } catch (error) {
-    throw new Error('Could not register user');
-  }
+interface RegisterProps {
+	firstName: string;
+	username: string;
+	lastName: string;
+	email: string;
+	password: string;
 }
 
-export async function loginUser(email: string, password: string): Promise<string> {
-  try {
-    const user: User | null = await prisma.user.findUnique({ where: { email: email } });
-    if (!user) {
-      throw new Error('Invalid Email');
-    }
+export async function registerUser(data: RegisterProps) {
+	try {
+		const existingUser = await prisma.user.findUnique({
+			where: { email: data.email },
+		});
+		if (existingUser) {
+			throw new Error("Email already registered");
+		}
 
-    const passwordMatch = await bcrypt.compare(password, user.password);
-    if (!passwordMatch) {
-      throw new Error('Invalid Password');
-    }
+		const hashedPassword = await bcrypt.hash(data.password, 10);
+		const dataToPost = {
+			firstName: data.firstName,
+			lastName: data.lastName,
+			username: data.username,
+			email: data.email,
+			password: hashedPassword,
+		};
 
-    const token = jwt.sign({ email: user.email }, JWT_KEY, { expiresIn: '1h' });
-    return token;
-  } catch (error) {
-    throw new Error('Could not login user');
-  }
+		const response = await prisma.user.create({
+			data: dataToPost,
+		});
+
+		response.password = "";
+
+		return {
+			code: 201,
+			response: response,
+		};
+	} catch (error) {
+		return {
+			code: 500,
+			response: "Server error",
+		};
+	}
+}
+
+export async function loginUser(email: string, password: string) {
+	try {
+		const user = await prisma.user.findUnique({ where: { email: email } });
+		if (!user) {
+			return {
+				code: 404,
+				response: "User not found",
+			};
+		}
+
+		const passwordMatch = await bcrypt.compare(password, user.password);
+		if (!passwordMatch) {
+			return {
+				code: 404,
+				response: "Invalid password",
+			};
+		}
+
+		const token = jwt.sign({ email: user.email }, JWT_KEY, { expiresIn: "1h" });
+		return {
+			code: 200,
+			response: {
+				userID: user.id,
+				access_token: token,
+			},
+		};
+	} catch (error) {
+		return {
+			code: 500,
+			response: "Server error",
+		};
+	}
 }
