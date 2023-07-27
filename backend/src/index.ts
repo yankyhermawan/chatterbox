@@ -5,24 +5,50 @@ import cors from "cors";
 import { registerUser, loginUser } from "./auth/auth.service";
 import { MessageService } from "./message/message.service";
 import { PrismaService } from "./prisma.service";
+import { ChannelService } from "./channel/channel.service";
+
+interface messageData {
+	roomID: string;
+	message: string;
+	senderID: string;
+}
 
 const app = express();
-const server = createServer(app);
-const io = new Server(server);
+
 const port = process.env.PORT || 4000;
 const prismaService = new PrismaService();
 const messageService = new MessageService(prismaService);
+const channelService = new ChannelService(prismaService);
 
 // MIDDLEWARE
 
 app.use(express.json());
 app.use(cors());
 
+const server = createServer(app);
+const io = new Server(server, {
+	cors: {
+		origin: "http://localhost:3000",
+		methods: ["GET", "POST"],
+		allowedHeaders: ["my-custom-header"],
+		credentials: true,
+	},
+});
+
 io.on("connection", (socket) => {
-	socket.on("chat message", (msg) => {
-		io.emit("chat message", msg);
+	socket.on("chat message", async (msg: messageData) => {
+		const response = await messageService.postMessage(
+			msg.roomID,
+			msg.message,
+			msg.senderID
+		);
+		if (response) {
+			io.emit("chat message", msg);
+		}
 	});
 });
+
+// AUTH
 
 app.post("/register", async (req, res) => {
 	const response = await registerUser(req.body);
@@ -34,9 +60,29 @@ app.post("/login", async (req, res) => {
 	res.status(response.code).json(response.response);
 });
 
-app.get("/messages/:id", async (req, res) => {
-	const response = await messageService.getChannelMessage(req.params.id);
+// CHANNEL ENDPOINT
+
+app.get("/channel/:id", async (req, res) => {
+	const response = await channelService.getChannelMessage(req.params.id);
 	res.status(response.code).json(response.response);
 });
+
+app
+	.route("/channel")
+	.post(async (req, res) => {
+		const {
+			channelName,
+			channelImageURL,
+		}: { channelName: string; channelImageURL: string } = req.body;
+		const response = await channelService.createChannel(
+			channelName,
+			channelImageURL
+		);
+		res.status(response.code).json(response.response);
+	})
+	.get(async (req, res) => {
+		const response = await channelService.getAllChannel();
+		res.status(response.code).json(response.response);
+	});
 
 server.listen(port, () => console.log(`Listening on ${port}`));
