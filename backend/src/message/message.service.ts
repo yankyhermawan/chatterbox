@@ -3,7 +3,7 @@ import { PrismaService } from "../prisma.service";
 export class MessageService {
 	constructor(private readonly prismaService: PrismaService) {}
 
-	async getChannelMessage(roomID: number) {
+	async getChannelMessage(roomID: string) {
 		try {
 			const response = await this.prismaService.message.findMany({
 				where: {
@@ -14,12 +14,10 @@ export class MessageService {
 				},
 				take: 100,
 			});
-			if (response) {
-				return {
-					code: 200,
-					response: response,
-				};
-			}
+			return {
+				code: 200,
+				response: response,
+			};
 		} catch (err) {
 			return {
 				code: 500,
@@ -27,7 +25,7 @@ export class MessageService {
 			};
 		}
 	}
-	async postMessage(roomID: number, message: string, senderID: number) {
+	async postMessage(roomID: string, message: string, senderID: string) {
 		try {
 			const dataToPost = {
 				content: message,
