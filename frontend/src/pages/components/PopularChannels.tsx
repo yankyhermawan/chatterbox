@@ -1,7 +1,7 @@
 export default function() {
 
 return (
-    <div className="bg-medium-grey text-white w-screen h-screen">
+    <div className="bg-medium-grey text-white w-screen h-screen top-0 left-0">
         <div>
             <h1 className="text-body-bold">Popular Channels</h1>
             <p>Explore trending topics and vibrant conversations</p>
