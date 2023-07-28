@@ -39,6 +39,8 @@ export default function ChannelPage() {
   const [activeChannel, setActiveChannel] = useState<Channel>();
   const [channelList, setChannelList] = useState<Channel[]>([]);
   const [channelListIsOpen, setChannelListIsOpen] = useState(true);
+  const [channelDetailIsOpen, setChannelDetailIsOpen] = useState(false);
+
   const [messages, setMessages] = useState<Message[]>([]);
   const [messageInput, setMessageInput] = useState("");
   const handleMessageInputChange = useCallback(
@@ -84,6 +86,7 @@ export default function ChannelPage() {
   useEffect(() => {
     fetchAllChannel();
     fetchMessages();
+    console.log(activeChannel);
   }, [socket, activeChannel]);
 
   const mappedMessage = messages.map((message) => (
@@ -99,21 +102,29 @@ export default function ChannelPage() {
     // PAGE CONTAINER
     <div className="flex h-screen w-screen fixed top-0 left-0 bg-medium-grey">
       {/* LEFT */}
-      {/* <ChannelDetail /> */}
+      {channelDetailIsOpen && (
+        <ChannelDetail
+          activeChannel={activeChannel}
+          setChannelListIsOpen={setChannelListIsOpen}
+          setChannelDetailIsOpen={setChannelDetailIsOpen}
+        />
+      )}
+
       {channelListIsOpen && (
         <ChannelList
           channelList={channelList}
           activeChannel={activeChannel}
           setActiveChannel={setActiveChannel}
           setChannelListIsOpen={setChannelListIsOpen}
+          setChannelDetailIsOpen={setChannelDetailIsOpen}
         />
       )}
 
       {/* RIGHT SIDE */}
-      <div className="flex flex-col w-full h-screen">
-        <nav className="flex items-center gap-4 px-4 lg:px-16 min-h-[60px] w-full text-body-bold bg-medium-grey shadow-xl">
+      <div className="flex flex-col w-full h-screen min-w-[1024px]">
+        <nav className="flex items-center gap-4 px-4 md:px-16 min-h-[60px] w-full text-body-bold bg-medium-grey shadow-xl">
           <button
-            onClick={() => setChannelListIsOpen((current) => !current)}
+            onClick={() => setChannelDetailIsOpen((current) => !current)}
             className="w-[24px] h-[24px] rounded-md md:hidden"
           >
             <img
@@ -125,11 +136,11 @@ export default function ChannelPage() {
           <h3 className="text-white">{activeChannel?.channelName}</h3>
         </nav>
         {/* CHAT CONTAINER */}
-        <div className=" w-full h-screen p-4 lg:p-16 flex flex-col gap-12 overflow-y-scroll scrollbar-hide">
+        <div className=" w-full h-screen p-4 md:p-16 flex flex-col gap-12 overflow-y-scroll scrollbar-hide">
           {mappedMessage}
         </div>
         {/* CHATBOX */}
-        <div className="flex py-4 px-4 lg:px-16 w-full  bg-medium-grey ">
+        <div className="flex py-4 px-4 md:px-16 pb-8 w-full  bg-medium-grey">
           <div className="flex items-center w-full relative bg-light-grey rounded-lg pr-2">
             <input
               type="text"
