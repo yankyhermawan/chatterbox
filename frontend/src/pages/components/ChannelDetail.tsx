@@ -8,6 +8,7 @@ interface Channel {
   id: string;
   channelName: string;
   channelImageURL: string;
+  channelDescription: string;
   date: Date[];
 }
 
@@ -48,10 +49,17 @@ export default function ChannelDetail(props: {
 
         {/* CHANNEL DETAIL */}
         <div className="p-6 flex flex-col gap-4">
-          <span className="flex gap-4 text-almost-white text-body-bold">
+          {/* <div className="w-full h-[200px] overflow-hidden rounded-lg">
+            <img
+              className="object-cover"
+              src={`${props.activeChannel?.channelImageURL}`}
+              alt=""
+            />
+          </div> */}
+          <h3 className="flex gap-4 text-almost-white text-body-bold">
             {props.activeChannel?.channelName}
-          </span>
-          <p className="text-left text-almost-white text-body-regular">
+          </h3>
+          <p className="text-left text-almost-white text-input-medium">
             {props.activeChannel?.channelDescription}
           </p>
         </div>

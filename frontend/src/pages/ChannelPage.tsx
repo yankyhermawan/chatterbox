@@ -9,11 +9,12 @@ import IconHamburger from "../assets/icon-hamburger.svg";
 
 // LIBRARY
 import { useState, useEffect, useCallback } from "react";
-import * as io from "socket.io-client";
+import { io } from "socket.io-client";
 
 const BACKEND_URL =
   "https://w24-group-final-group-3-production.up.railway.app/";
-const socket = io.connect(BACKEND_URL);
+
+const socket = io(BACKEND_URL);
 
 interface RequestOption {
   method: string;
@@ -35,6 +36,10 @@ interface Channel {
 }
 
 export default function ChannelPage() {
+  const unixTimestamp = Date.now();
+  const dateObject = new Date(unixTimestamp);
+  const isoString = dateObject.toISOString();
+
   // STATES
   const [activeChannel, setActiveChannel] = useState<Channel>();
   const [channelList, setChannelList] = useState<Channel[]>([]);
@@ -55,8 +60,40 @@ export default function ChannelPage() {
     redirect: "follow",
   };
 
-  // SEND MESSAGES
-  const sendMessage = () => {};
+  const handleNewMessage = (messageData: Message) => {
+    if (messageData.content) {
+      setMessages((prev) => [...prev, messageData]);
+    }
+  };
+
+  socket.on("chat message", handleNewMessage);
+
+  const displaySentMessage = (randomUUID: string) => {
+    const data = {
+      id: randomUUID,
+      channelID: activeChannel?.id,
+      content: messageInput,
+      senderID: "eb35bc26-fa54-4daa-8539-acc0fe1d2a08",
+      date: isoString,
+    };
+
+    setMessages((prev) => [...prev, data]);
+  };
+
+  const sendMessage = () => {
+    const randomUUID = self.crypto.randomUUID();
+    const data = {
+      id: randomUUID,
+      channelID: activeChannel?.id,
+      message: messageInput,
+      senderID: "eb35bc26-fa54-4daa-8539-acc0fe1d2a08",
+      date: isoString,
+    };
+
+    displaySentMessage(randomUUID);
+    socket.emit("chat message", data);
+    setMessages((prev) => [...prev]);
+  };
 
   const fetchMessages = () => {
     fetch(BACKEND_URL + "channel" + `/${activeChannel?.id}`, requestOptions)
@@ -86,10 +123,10 @@ export default function ChannelPage() {
   useEffect(() => {
     fetchAllChannel();
     fetchMessages();
-    console.log(activeChannel);
   }, [socket, activeChannel]);
 
-  const mappedMessage = messages.map((message) => (
+  const sortedMessage = messages.sort((a, b) => a.date.localeCompare(b.date));
+  const mappedMessage = sortedMessage.map((message) => (
     <Chat
       key={message.id}
       content={message.content}
@@ -121,7 +158,7 @@ export default function ChannelPage() {
       )}
 
       {/* RIGHT SIDE */}
-      <div className="flex flex-col w-full h-screen min-w-[1024px]">
+      <div className="flex flex-col w-full h-screen">
         <nav className="flex items-center gap-4 px-4 md:px-16 min-h-[60px] w-full text-body-bold bg-medium-grey shadow-xl">
           <button
             onClick={() => setChannelDetailIsOpen((current) => !current)}

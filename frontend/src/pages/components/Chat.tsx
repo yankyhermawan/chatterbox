@@ -6,8 +6,26 @@ export default function Chat(props: {
   date: string;
   senderID: string;
 }) {
-  // const now = Date.now();
-  // useEffect(() => {}, []);
+  const unixTimestamp = Date.now();
+  const dateObject = new Date(unixTimestamp);
+  const isoString = dateObject.toISOString();
+  const dateNow = new Date(isoString);
+
+  const time = props.date.match(/\d\d:\d\d/);
+  const date = new Date(props.date);
+  const day = date.getDay();
+
+  console.log(isoString);
+
+  const week = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
 
   return (
     <div className="flex gap-6">
@@ -24,7 +42,9 @@ export default function Chat(props: {
       <div>
         <div className="flex gap-6 mb-1">
           <span className="text-body-bold text-text-grey">Nellie Francis</span>
-          <p className="text-time-small text-text-grey">{props.date}</p>
+          <p className="text-time-small text-text-grey">
+            {week[day]} at {time}
+          </p>
         </div>
         <p className="text-white text-left">{props.content}</p>
       </div>
