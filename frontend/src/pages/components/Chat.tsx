@@ -1,6 +1,16 @@
+import { useEffect } from "react";
 import IconUserSquare from "../../assets/icon-user-square.svg";
 
-export default function Chat() {
+export default function Chat(props: {
+  content: string;
+  date: string;
+  senderID: string;
+}) {
+  const now = Date.now();
+  useEffect(() => {
+    console.log(now);
+  }, []);
+
   return (
     <div className="flex gap-6">
       {/* PROFILE PICTURE */}
@@ -16,14 +26,9 @@ export default function Chat() {
       <div>
         <div className="flex gap-6 mb-1">
           <span className="text-body-bold text-text-grey">Nellie Francis</span>
-          <p className="text-time-small text-text-grey">yesterday at 2:29AM</p>
+          <p className="text-time-small text-text-grey">{props.date}</p>
         </div>
-        <p className="text-white text-left">
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book.
-        </p>
+        <p className="text-white text-left">{props.content}</p>
       </div>
     </div>
   );
