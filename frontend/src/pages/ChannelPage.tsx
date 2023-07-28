@@ -8,12 +8,24 @@ import IconSend from "../assets/icon-send.svg";
 import IconHamburger from "../assets/icon-hamburger.svg";
 
 // LIBRARY
-import { useState, useEffect } from "react";
-import { io } from "socket.io-client";
+import { useState, useEffect, useCallback } from "react";
+import * as io from "socket.io-client";
 
 const BACKEND_URL =
   "https://w24-group-final-group-3-production.up.railway.app/";
 const socket = io.connect(BACKEND_URL);
+
+interface RequestOption {
+  method: string;
+  redirect: string;
+}
+
+interface Message {
+  id: string;
+  content: string;
+  date: string;
+  senderID: string;
+}
 
 interface Channel {
   id: string;
@@ -22,31 +34,34 @@ interface Channel {
   date: Date[];
 }
 
-export default function ChatPage() {
+export default function ChannelPage() {
   // STATES
+  const [activeChannel, setActiveChannel] = useState<Channel>();
   const [channelList, setChannelList] = useState<Channel[]>([]);
   const [channelListIsOpen, setChannelListIsOpen] = useState(true);
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [messageInput, setMessageInput] = useState("");
+  const handleMessageInputChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setMessageInput(event.target.value);
+    },
+    []
+  );
+
+  const requestOptions: RequestOption = {
+    method: "GET",
+    redirect: "follow",
+  };
 
   // SEND MESSAGES
-  const sendMessage = () => {
-    socket.emit("send_message", { message: "hello" });
-  };
-  const fetchMessages = () => {
-    const requestOptions = {
-      method: "GET",
-      redirect: "follow",
-    };
+  const sendMessage = () => {};
 
-    fetch(
-      BACKEND_URL + "channel" + "/02564e50-f124-40ac-9de2-279e5ab1dda9",
-      requestOptions
-    )
+  const fetchMessages = () => {
+    fetch(BACKEND_URL + "channel" + `/${activeChannel?.id}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         try {
           setMessages(result);
-          console.log(result);
         } catch (error) {
           console.log(error);
         }
@@ -54,16 +69,12 @@ export default function ChatPage() {
   };
 
   const fetchAllChannel = () => {
-    const requestOptions = {
-      method: "GET",
-      redirect: "follow",
-    };
-
     fetch(BACKEND_URL + "channel", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         try {
           setChannelList(result);
+          if (activeChannel == undefined) setActiveChannel(result[0]);
         } catch (error) {
           console.log(error);
         }
@@ -73,10 +84,7 @@ export default function ChatPage() {
   useEffect(() => {
     fetchAllChannel();
     fetchMessages();
-    // socket.on("receive_message", (data) => {
-    //   alert(data.message);
-    // });
-  }, [socket]);
+  }, [socket, activeChannel]);
 
   const mappedMessage = messages.map((message) => (
     <Chat
@@ -92,7 +100,14 @@ export default function ChatPage() {
     <div className="flex h-screen w-screen fixed top-0 left-0 bg-medium-grey">
       {/* LEFT */}
       {/* <ChannelDetail /> */}
-      {/* {channelListIsOpen && <ChannelList channelList={channelList} />} */}
+      {channelListIsOpen && (
+        <ChannelList
+          channelList={channelList}
+          activeChannel={activeChannel}
+          setActiveChannel={setActiveChannel}
+          setChannelListIsOpen={setChannelListIsOpen}
+        />
+      )}
 
       {/* RIGHT SIDE */}
       <div className="flex flex-col w-full h-screen">
@@ -107,10 +122,10 @@ export default function ChatPage() {
               className="w-[24px]"
             />
           </button>
-          <h3 className="text-white">FRONT-END DEVELOPERS</h3>
+          <h3 className="text-white">{activeChannel?.channelName}</h3>
         </nav>
         {/* CHAT CONTAINER */}
-        <div className=" w-full p-4 lg:p-16 flex flex-col gap-12 overflow-y-scroll ">
+        <div className=" w-full h-screen p-4 lg:p-16 flex flex-col gap-12 overflow-y-scroll scrollbar-hide">
           {mappedMessage}
         </div>
         {/* CHATBOX */}
@@ -119,7 +134,8 @@ export default function ChatPage() {
             <input
               type="text"
               placeholder="Type a message here"
-              className="text-white bg-light-grey w-full text-input-medium outline-none rounded-lg p-4 h-[50px]"
+              className="text-white bg-light-grey w-full text-input-medium outline-none rounded-lg p-4 min-h-[50px]"
+              onChange={handleMessageInputChange}
             />
             <button
               onClick={sendMessage}
