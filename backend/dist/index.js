@@ -38,7 +38,8 @@ const io = new socket_io_1.Server(server, {
 });
 io.on("connection", (socket) => {
     socket.on("chat message", (msg) => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield messageService.postMessage(msg.roomID, msg.message, msg.senderID);
+        const response = yield messageService.postMessage(msg.channelID, msg.message, msg.senderID);
+        console.log(response);
         if (response) {
             io.emit("chat message", msg);
         }
@@ -52,6 +53,7 @@ app.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const response = yield (0, auth_service_1.loginUser)(req.body.email, req.body.password);
     res.status(response.code).json(response.response);
 }));
+app.get("/userdata", (req, res) => __awaiter(void 0, void 0, void 0, function* () { }));
 app.get("/channel/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const response = yield messageService.getChannelMessage(req.params.id);
     res.status(response.code).json(response.response);

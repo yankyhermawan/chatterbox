@@ -8,7 +8,7 @@ import { PrismaService } from "./prisma.service";
 import { ChannelService } from "./channel/channel.service";
 
 interface messageData {
-	roomID: string;
+	channelID: string;
 	message: string;
 	senderID: string;
 }
@@ -38,10 +38,11 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
 	socket.on("chat message", async (msg: messageData) => {
 		const response = await messageService.postMessage(
-			msg.roomID,
+			msg.channelID,
 			msg.message,
 			msg.senderID
 		);
+		console.log(response);
 		if (response) {
 			io.emit("chat message", msg);
 		}
@@ -59,6 +60,8 @@ app.post("/login", async (req, res) => {
 	const response = await loginUser(req.body.email, req.body.password);
 	res.status(response.code).json(response.response);
 });
+
+app.get("/userdata", async (req, res) => {});
 
 // CHANNEL ENDPOINT
 

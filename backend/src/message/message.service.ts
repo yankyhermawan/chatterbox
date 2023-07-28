@@ -9,9 +9,11 @@ export class MessageService {
 				senderID: senderID,
 				channelID: channelID,
 			};
+			console.log(dataToPost);
 			const response = await this.prismaService.message.create({
 				data: dataToPost,
 			});
+			console.log(response);
 			if (response) {
 				return {
 					code: 201,

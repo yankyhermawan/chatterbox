@@ -4,18 +4,18 @@ POST http://localhost:4000/register
 Content-Type: application/json
 
 {
-    "email" : "test1",  
-    "password"  : "test1",
-    "username"      : "test1",
-    "firstName" :"test1",
-    "lastName"  : "test1",
-    "profileImageURL": "test1"
+    "email" : "test2",  
+    "password"  : "test2",
+    "username"      : "test2",
+    "firstName" :"test2",
+    "lastName"  : "test2",
+    "profileImageURL": "test2"
 }
 
 
 ### LOGIN
 
-POST https://w24-group-final-group-3-production.up.railway.app/login
+POST http://localhost:4000/login
 Content-Type: application/json
 
 {
@@ -25,16 +25,21 @@ Content-Type: application/json
 
 ### CREATE CHANNEL
 
-POST https://w24-group-final-group-3-production.up.railway.app/channel
+POST http://localhost:4000/channel
 Content-Type: application/json
 
 {
     "channelName": "channel",
-    "channelImageURL": "abc"
+    "channelImageURL": "abc",
+    "channelDescription": "Hello",
+    "memberID": "f2cfd3df-16dd-4430-a86a-c79891d78098"
 }
 
 ### GET CHANNEL MESSAGES
-GET https://w24-group-final-group-3-production.up.railway.app/channel/02564e50-f124-40ac-9de2-279e5ab1dda9
+GET http://localhost:4000/channel/8e5a9928-7c9d-4688-bb1f-b0b85d720f9d
 
 ### GET ALL CHANNELS
-GET https://w24-group-final-group-3-production.up.railway.app/channel/
+GET http://localhost:4000/channel/
+
+### JOIN CHANNEL
+POST http://localhost:4000/join/channel/eb35bc26-fa54-4daa-8539-acc0fe1d2a08
