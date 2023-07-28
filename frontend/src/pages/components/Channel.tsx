@@ -11,13 +11,19 @@ export default function Channel(props: {
   channel: Channel;
   activeChannel: Channel;
   setActiveChannel: React.Dispatch<React.SetStateAction<Channel>>;
+  setChannelDetailIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setChannelListIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   useEffect(() => {
     // console.log(props.activeChannel);
   }, []);
   return (
     <span
-      onClick={() => props.setActiveChannel(props.channel)}
+      onClick={() => {
+        props.setActiveChannel(props.channel);
+        props.setChannelDetailIsOpen(true);
+        props.setChannelListIsOpen(false);
+      }}
       className={`flex items-center ${
         props.activeChannel.id === props.channel.id
           ? "text-white"

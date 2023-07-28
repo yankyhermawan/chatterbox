@@ -22,6 +22,7 @@ export default function ChannelList(props: {
   activeChannel: Channel;
   setActiveChannel: React.Dispatch<React.SetStateAction<string[]>>;
   setChannelListIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setChannelDetailIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [profileModalIsOpen, setProfileModalIsOpen] = useState(false);
   const mappedChannelList = props.channelList.map((channel, index) => (
@@ -30,12 +31,14 @@ export default function ChannelList(props: {
       channel={channel}
       activeChannel={props.activeChannel}
       setActiveChannel={props.setActiveChannel}
+      setChannelListIsOpen={props.setChannelListIsOpen}
+      setChannelDetailIsOpen={props.setChannelDetailIsOpen}
     />
   ));
 
   return (
     <>
-      <div className="h-screen w-[325px] md:min-w-[350px] fixed md:static left-0 top-0 bg-very-dark-grey flex flex-col z-50 shadow-xl md:shadow-none">
+      <div className="h-screen w-[325px] md:min-w-[350px] fixed md:static left-0 top-0 bg-dark-grey flex flex-col z-50 shadow-xl md:shadow-none">
         {/* CLOSE BUTTON */}
         <button
           onClick={() => props.setChannelListIsOpen(false)}
