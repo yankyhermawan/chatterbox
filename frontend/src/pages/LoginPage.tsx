@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-// import axios from 'axios';
+import axios from 'axios';
 import { useState } from 'react';
 
 interface LoginProps {
@@ -32,7 +32,7 @@ function LoginPage() {
    async function onSubmit(formData: LoginProps) {
     setSubmitLogin(true);
     try {
-      const response = await axios.post('', {
+      const response = await axios.post('https://w24-group-final-group-3-production.up.railway.app/login', {
         email: formData.email,
         password: formData.password,
       });

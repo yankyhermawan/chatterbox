@@ -8,22 +8,24 @@ datasource db {
 }
 
 model User {
-    id        String    @id @default(uuid())
-    email     String    @unique
-    password  String
-    username  String    @unique
-    firstName String
-    lastName  String
-    channel   Channel[]
-    message   Message[]
+    id              String    @id @default(uuid())
+    email           String    @unique
+    password        String
+    username        String    @unique
+    firstName       String
+    lastName        String
+    profileImageURL String
+    channel         Channel[]
+    message         Message[]
 }
 
 model Channel {
-    id          String     @id @default(uuid())
-    channelName String
-    member      User[]
-    messages    Message[]
-    date        DateTime[]
+    id              String     @id @default(uuid())
+    channelName     String     @unique @db.VarChar(20)
+    channelImageURL String
+    member          User[]
+    messages        Message[]
+    date            DateTime[]
 }
 
 model Message {

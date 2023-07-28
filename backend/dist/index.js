@@ -19,18 +19,30 @@ const cors_1 = __importDefault(require("cors"));
 const auth_service_1 = require("./auth/auth.service");
 const message_service_1 = require("./message/message.service");
 const prisma_service_1 = require("./prisma.service");
+const channel_service_1 = require("./channel/channel.service");
 const app = (0, express_1.default)();
-const server = (0, http_1.createServer)(app);
-const io = new socket_io_1.Server(server);
 const port = process.env.PORT || 4000;
 const prismaService = new prisma_service_1.PrismaService();
 const messageService = new message_service_1.MessageService(prismaService);
+const channelService = new channel_service_1.ChannelService(prismaService);
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
+const server = (0, http_1.createServer)(app);
+const io = new socket_io_1.Server(server, {
+    cors: {
+        origin: true,
+        methods: ["GET", "POST"],
+        allowedHeaders: ["my-custom-header"],
+        credentials: true,
+    },
+});
 io.on("connection", (socket) => {
-    socket.on("chat message", (msg) => {
-        io.emit("chat message", msg);
-    });
+    socket.on("chat message", (msg) => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield messageService.postMessage(msg.roomID, msg.message, msg.senderID);
+        if (response) {
+            io.emit("chat message", msg);
+        }
+    }));
 });
 app.post("/register", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const response = yield (0, auth_service_1.registerUser)(req.body);
@@ -40,8 +52,19 @@ app.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const response = yield (0, auth_service_1.loginUser)(req.body.email, req.body.password);
     res.status(response.code).json(response.response);
 }));
-app.get("/messages/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const response = yield messageService.getChannelMessage(req.params.id);
+app.get("/channel/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const response = yield channelService.getChannelMessage(req.params.id);
+    res.status(response.code).json(response.response);
+}));
+app
+    .route("/channel")
+    .post((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { channelName, channelImageURL, } = req.body;
+    const response = yield channelService.createChannel(channelName, channelImageURL);
+    res.status(response.code).json(response.response);
+}))
+    .get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const response = yield channelService.getAllChannel();
     res.status(response.code).json(response.response);
 }));
 server.listen(port, () => console.log(`Listening on ${port}`));
