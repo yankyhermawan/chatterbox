@@ -2,12 +2,12 @@ import { PrismaService } from "../prisma.service";
 
 export class MessageService {
 	constructor(private readonly prismaService: PrismaService) {}
-	async postMessage(roomID: string, message: string, senderID: string) {
+	async postMessage(channelID: string, message: string, senderID: string) {
 		try {
 			const dataToPost = {
 				content: message,
 				senderID: senderID,
-				roomID: roomID,
+				channelID: channelID,
 			};
 			const response = await this.prismaService.message.create({
 				data: dataToPost,
@@ -25,11 +25,11 @@ export class MessageService {
 			};
 		}
 	}
-	async getChannelMessage(roomID: string) {
+	async getChannelMessage(channelID: string) {
 		try {
 			const response = await this.prismaService.message.findMany({
 				where: {
-					roomID: roomID,
+					channelID: channelID,
 				},
 				orderBy: {
 					date: "desc",

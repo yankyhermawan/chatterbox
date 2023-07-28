@@ -24,11 +24,18 @@ export class ChannelService {
 		}
 	}
 
-	async createChannel(channelName: string, channelImageURL: string) {
+	async createChannel(
+		channelName: string,
+		channelImageURL: string,
+		channelDescription: string,
+		memberID: string
+	) {
 		try {
 			const dataToPost = {
 				channelName: channelName,
 				channelImageURL: channelImageURL,
+				channelDescription: channelDescription,
+				membersID: [memberID],
 			};
 			const response = await this.prismaService.channel.create({
 				data: dataToPost,
@@ -49,5 +56,34 @@ export class ChannelService {
 				response: "Server Error",
 			};
 		}
+	}
+
+	async getChannelMember(channelName: string) {
+		const response = await this.prismaService.channel.findFirst({
+			where: {
+				channelName: channelName,
+			},
+		});
+		return {
+			code: 200,
+			response: response,
+		};
+	}
+
+	async joinChannel(channelName: string, username: string) {
+		const response = await this.prismaService.channel.update({
+			where: {
+				channelName: channelName,
+			},
+			data: {
+				membersID: {
+					push: username,
+				},
+			},
+		});
+		return {
+			code: 200,
+			response: response,
+		};
 	}
 }

@@ -73,10 +73,19 @@ app
 		const {
 			channelName,
 			channelImageURL,
-		}: { channelName: string; channelImageURL: string } = req.body;
+			channelDescription,
+			memberID,
+		}: {
+			channelName: string;
+			channelImageURL: string;
+			channelDescription: string;
+			memberID: string;
+		} = req.body;
 		const response = await channelService.createChannel(
 			channelName,
-			channelImageURL
+			channelImageURL,
+			channelDescription,
+			memberID
 		);
 		res.status(response.code).json(response.response);
 	})
@@ -84,5 +93,18 @@ app
 		const response = await channelService.getAllChannel();
 		res.status(response.code).json(response.response);
 	});
+
+app.route("/channelmembers/:channelID").get(async (req, res) => {
+	const response = await channelService.getChannelMember(req.params.channelID);
+	res.status(response.code).json(response.response);
+});
+
+app.route("/join/:channelName/:username").post(async (req, res) => {
+	const response = await channelService.joinChannel(
+		req.params.channelName,
+		req.params.username
+	);
+	res.status(response.code).json(response.response);
+});
 
 server.listen(port, () => console.log(`Listening on ${port}`));
