@@ -36,8 +36,9 @@ export default function NewChannelButton() {
 
     const raw = JSON.stringify({
       channelName: channelNameInput,
-      channelImageUrl: channelUrlInput,
+      channelImageURL: channelUrlInput,
       channelDescription: channelDescriptionInput,
+      memberID: "eb35bc26-fa54-4daa-8539-acc0fe1d2a08",
     });
 
     const requestOptions = {
@@ -94,7 +95,10 @@ export default function NewChannelButton() {
               className="bg-light-grey h-[48px] p-4 rounded-md outline-none w-full text-white placeholder:text-text-grey text-input-medium placeholder:text-input-medium"
               onChange={handleChannelUrlInputChange}
             />
-            <button className="bg-blue py-1 px-6 rounded-lg text-white text-body-medium ml-auto active:bg-blue-hover outline-none">
+            <button
+              onClick={handleFormSubmit}
+              className="bg-blue py-1 px-6 rounded-lg text-white text-body-medium ml-auto active:bg-blue-hover outline-none"
+            >
               Save
             </button>
           </form>
