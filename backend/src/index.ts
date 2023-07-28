@@ -9,7 +9,7 @@ import { ChannelService } from "./channel/channel.service";
 
 interface messageData {
 	channelID: string;
-	message: string;
+	content: string;
 	senderID: string;
 }
 
@@ -39,10 +39,9 @@ io.on("connection", (socket) => {
 	socket.on("chat message", async (msg: messageData) => {
 		const response = await messageService.postMessage(
 			msg.channelID,
-			msg.message,
+			msg.content,
 			msg.senderID
 		);
-		console.log(response);
 		if (response) {
 			io.emit("chat message", msg);
 		}
