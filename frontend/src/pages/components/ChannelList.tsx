@@ -7,12 +7,30 @@ import IconChevronDown from "../../assets/icon-chevron-down.svg";
 import IconCross from "../../assets/icon-cross.svg";
 
 import ProfileModal from "./ProfileModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NewChannelButton from "./NewChannelButton";
 
-export default function ChannelList() {
-  const [profileModalIsOpen, setProfileModalIsOpen] = useState(false);
+interface Channel {
+  id: string;
+  channelName: string;
+  channelImageURL: string;
+  date: Date[];
+}
 
+export default function ChannelList(props: { channelList: Channel[] }) {
+  const [profileModalIsOpen, setProfileModalIsOpen] = useState(false);
+  const mappedChannelList = props.channelList.map((channel) => (
+    <Channel
+      key={channel.id}
+      id={channel.id}
+      channelName={channel.channelName}
+      channelImageURL={channel.channelImageURL}
+    />
+  ));
+
+  // useEffect(() => {
+  //   console.log(props.channelList);
+  // }, [props.channelList]);
   return (
     <>
       <div className="h-screen w-[325px] md:min-w-[350px] fixed md:static left-0 top-0 bg-very-dark-grey flex flex-col z-50 shadow-xl md:shadow-none">
@@ -41,13 +59,7 @@ export default function ChannelList() {
             />
           </div>
           {/* CHANNELS LIST */}
-          <div className="flex flex-col gap-4">
-            <Channel name="front-end developers" />
-            <Channel name="random" />
-            <Channel name="back-end" />
-            <Channel name="cats and dogs" />
-            <Channel name="welcome" />
-          </div>
+          <div className="flex flex-col gap-4">{mappedChannelList}</div>
         </div>
 
         {/* PROFILE */}
