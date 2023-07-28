@@ -1,8 +1,5 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import ChatPage from "./pages/ChatPage";
+import ChannelPage from "./pages/ChannelPage";
 import LoginPage from "./pages/LoginPage";
 import ProfilePage from "./pages/ProfilePage";
 import RegisterPage from "./pages/RegisterPage";
@@ -17,7 +14,7 @@ const App: React.FC = () => {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<LandingPage />} />
-        <Route path="/chat" element={<ChatPage />} />
+        <Route path="/chat" element={<ChannelPage />} />
         <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </Router>

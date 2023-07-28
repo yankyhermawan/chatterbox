@@ -6,10 +6,8 @@ export default function Chat(props: {
   date: string;
   senderID: string;
 }) {
-  const now = Date.now();
-  useEffect(() => {
-    console.log(now);
-  }, []);
+  // const now = Date.now();
+  // useEffect(() => {}, []);
 
   return (
     <div className="flex gap-6">

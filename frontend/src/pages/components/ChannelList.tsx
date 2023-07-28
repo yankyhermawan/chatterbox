@@ -17,25 +17,30 @@ interface Channel {
   date: Date[];
 }
 
-export default function ChannelList(props: { channelList: Channel[] }) {
+export default function ChannelList(props: {
+  channelList: Channel[];
+  activeChannel: Channel;
+  setActiveChannel: React.Dispatch<React.SetStateAction<string[]>>;
+  setChannelListIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const [profileModalIsOpen, setProfileModalIsOpen] = useState(false);
-  const mappedChannelList = props.channelList.map((channel) => (
+  const mappedChannelList = props.channelList.map((channel, index) => (
     <Channel
-      key={channel.id}
-      id={channel.id}
-      channelName={channel.channelName}
-      channelImageURL={channel.channelImageURL}
+      key={index}
+      channel={channel}
+      activeChannel={props.activeChannel}
+      setActiveChannel={props.setActiveChannel}
     />
   ));
 
-  // useEffect(() => {
-  //   console.log(props.channelList);
-  // }, [props.channelList]);
   return (
     <>
       <div className="h-screen w-[325px] md:min-w-[350px] fixed md:static left-0 top-0 bg-very-dark-grey flex flex-col z-50 shadow-xl md:shadow-none">
         {/* CLOSE BUTTON */}
-        <button className="flex justify-center items-center w-[40px] h-[40px] bg-very-dark-grey shadow-xl rounded-xl top-2 -right-11 md:hidden absolute">
+        <button
+          onClick={() => props.setChannelListIsOpen(false)}
+          className="flex justify-center items-center w-[40px] h-[40px] bg-very-dark-grey shadow-xl rounded-xl top-2 -right-11 md:hidden absolute"
+        >
           <img className="w-[15px] h-[15px]" src={IconCross} alt="icon-cross" />
         </button>
         {/* CHANNELS AND NEW CHANNEL BUTTON */}
