@@ -25,16 +25,16 @@ Content-Type: application/json
 
 ### CREATE CHANNEL
 
-POST http://localhost:4000/channel
+POST https://w24-group-final-group-3-production.up.railway.app/channel
 Content-Type: application/json
 
 {
-    "channelName": "channel1",
+    "channelName": "channel",
     "channelImageURL": "abc"
 }
 
 ### GET CHANNEL MESSAGES
-GET http://localhost:4000/channel/02564e50-f124-40ac-9de2-279e5ab1dda9
+GET https://w24-group-final-group-3-production.up.railway.app/channel/02564e50-f124-40ac-9de2-279e5ab1dda9
 
 ### GET ALL CHANNELS
-GET http://localhost:4000/channel/
+GET https://w24-group-final-group-3-production.up.railway.app/channel/

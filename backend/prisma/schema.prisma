@@ -15,25 +15,24 @@ model User {
     firstName       String
     lastName        String
     profileImageURL String
-    channel         Channel[]
-    message         Message[]
+    messages        Message[]
 }
 
 model Channel {
-    id              String     @id @default(uuid())
-    channelName     String     @unique @db.VarChar(20)
-    channelImageURL String
-    member          User[]
-    messages        Message[]
-    date            DateTime[]
+    id                 String    @id @default(uuid())
+    channelName        String    @unique @db.VarChar(20)
+    channelImageURL    String
+    channelDescription String?
+    membersID          String[]
+    messages           Message[]
 }
 
 model Message {
-    id       String   @id @default(uuid())
-    content  String
-    date     DateTime @default(now())
-    sender   User     @relation(fields: [senderID], references: [id])
-    senderID String
-    room     Channel  @relation(fields: [roomID], references: [id])
-    roomID   String
+    id        String   @id @default(uuid())
+    content   String
+    date      DateTime @default(now())
+    sender    User     @relation(fields: [senderID], references: [id])
+    senderID  String
+    channel   Channel  @relation(fields: [channelID], references: [id])
+    channelID String
 }

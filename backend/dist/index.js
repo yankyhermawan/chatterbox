@@ -53,18 +53,26 @@ app.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     res.status(response.code).json(response.response);
 }));
 app.get("/channel/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const response = yield channelService.getChannelMessage(req.params.id);
+    const response = yield messageService.getChannelMessage(req.params.id);
     res.status(response.code).json(response.response);
 }));
 app
     .route("/channel")
     .post((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { channelName, channelImageURL, } = req.body;
-    const response = yield channelService.createChannel(channelName, channelImageURL);
+    const { channelName, channelImageURL, channelDescription, memberID, } = req.body;
+    const response = yield channelService.createChannel(channelName, channelImageURL, channelDescription, memberID);
     res.status(response.code).json(response.response);
 }))
     .get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const response = yield channelService.getAllChannel();
+    res.status(response.code).json(response.response);
+}));
+app.route("/channelmembers/:channelID").get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const response = yield channelService.getChannelMember(req.params.channelID);
+    res.status(response.code).json(response.response);
+}));
+app.route("/join/:channelName/:username").post((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const response = yield channelService.joinChannel(req.params.channelName, req.params.username);
     res.status(response.code).json(response.response);
 }));
 server.listen(port, () => console.log(`Listening on ${port}`));
