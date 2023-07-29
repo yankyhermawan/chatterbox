@@ -26,3 +26,10 @@ Easy to use app that provides real-time public group discussions
 - See others account detail
 - See others typing status
 - Send image to others
+
+### Contributors
+- Niko Setiawan P - Lead, Frontend Engineer
+- Immanuel Arya - Front-end Engineer
+- Nurdin Beta - Front-end Engineer
+- Yanky Hermawan - Back-end Engineer
+- Gary Cruise - Back-end Engineer
