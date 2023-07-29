@@ -22,7 +22,10 @@ export async function registerUser(data: RegisterProps) {
 			where: { email: data.email },
 		});
 		if (existingUser) {
-			throw new Error("Email already registered");
+			return {
+				code: 409,
+				response: "User already registered",
+			};
 		}
 
 		const hashedPassword = await bcrypt.hash(data.password, 10);

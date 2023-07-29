@@ -38,8 +38,7 @@ const io = new socket_io_1.Server(server, {
 });
 io.on("connection", (socket) => {
     socket.on("chat message", (msg) => __awaiter(void 0, void 0, void 0, function* () {
-        const response = yield messageService.postMessage(msg.channelID, msg.message, msg.senderID);
-        console.log(response);
+        const response = yield messageService.postMessage(msg.channelID, msg.content, msg.senderID);
         if (response) {
             io.emit("chat message", msg);
         }
@@ -61,8 +60,8 @@ app.get("/channel/:id", (req, res) => __awaiter(void 0, void 0, void 0, function
 app
     .route("/channel")
     .post((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { channelName, channelImageURL, channelDescription, memberID, } = req.body;
-    const response = yield channelService.createChannel(channelName, channelImageURL, channelDescription, memberID);
+    const { name, imageURL, description, memberID, } = req.body;
+    const response = yield channelService.createChannel(name, imageURL, description, memberID);
     res.status(response.code).json(response.response);
 }))
     .get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -70,11 +69,12 @@ app
     res.status(response.code).json(response.response);
 }));
 app.route("/channelmembers/:channelID").get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const response = yield channelService.getChannelMember(req.params.channelID);
+    const response = yield channelService.getChannelMembers(req.params.channelID);
     res.status(response.code).json(response.response);
 }));
-app.route("/join/:channelName/:username").post((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const response = yield channelService.joinChannel(req.params.channelName, req.params.username);
+app.route("/join/:channelID/:userID").post((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.params.channelID, req.params.userID);
+    const response = yield channelService.joinChannel(req.params.channelID, req.params.userID);
     res.status(response.code).json(response.response);
 }));
 server.listen(port, () => console.log(`Listening on ${port}`));

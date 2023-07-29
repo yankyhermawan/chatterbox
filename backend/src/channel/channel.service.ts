@@ -25,16 +25,16 @@ export class ChannelService {
 	}
 
 	async createChannel(
-		channelName: string,
-		channelImageURL: string,
-		channelDescription: string,
+		name: string,
+		imageURL: string,
+		description: string,
 		memberID: string
 	) {
 		try {
 			const dataToPost = {
-				channelName: channelName,
-				channelImageURL: channelImageURL,
-				channelDescription: channelDescription,
+				name: name,
+				imageURL: imageURL,
+				description: description,
 				membersID: [memberID],
 			};
 			const response = await this.prismaService.channel.create({
@@ -58,10 +58,11 @@ export class ChannelService {
 		}
 	}
 
-	async getChannelMember(channelName: string) {
-		const response = await this.prismaService.channel.findFirst({
-			where: {
-				channelName: channelName,
+	async joinChannel(channelID: string, userID: string) {
+		const response = await this.prismaService.userChannel.create({
+			data: {
+				user: { connect: { id: userID } },
+				channel: { connect: { id: channelID } },
 			},
 		});
 		return {
@@ -70,20 +71,22 @@ export class ChannelService {
 		};
 	}
 
-	async joinChannel(channelName: string, username: string) {
-		const response = await this.prismaService.channel.update({
-			where: {
-				channelName: channelName,
-			},
-			data: {
-				membersID: {
-					push: username,
+	async getChannelMembers(channelID: string) {
+		try {
+			const response = await this.prismaService.userChannel.findMany({
+				where: {
+					channelID: channelID,
 				},
-			},
-		});
-		return {
-			code: 200,
-			response: response,
-		};
+			});
+			return {
+				code: 200,
+				response: response,
+			};
+		} catch (err) {
+			return {
+				code: 500,
+				response: "Server error",
+			};
+		}
 	}
 }
