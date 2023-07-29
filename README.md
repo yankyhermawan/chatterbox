@@ -1,10 +1,9 @@
 # Group Chat App
 
-App that provides real-time community discussion for anyone who want to join.
+Easy to use app that provides real-time group discussions for everyone
 
-## Tech Stack
-- Frontend : Tailwind, React, Headless UI
-- Backend : Express, PostgreSQL, Prisma, socket.io
+## Built With
+[![My Skills](https://skillicons.dev/icons?i=html,tailwind,ts,react,vite,vercel,express,postgres,socketio,&perline=10)](https://skillicons.dev)
 
 ## Features
 
