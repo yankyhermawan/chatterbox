@@ -5,12 +5,13 @@ interface Channel {
   channelName: string;
   channelImageURL: string;
   date: Date[];
+  channelDescription: string;
 }
 
 export default function Channel(props: {
   channel: Channel;
-  activeChannel: Channel;
-  setActiveChannel: React.Dispatch<React.SetStateAction<Channel>>;
+  activeChannel: Channel | undefined;
+  setActiveChannel: React.Dispatch<React.SetStateAction<Channel | undefined>>;
   setChannelDetailIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setChannelListIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
@@ -25,7 +26,7 @@ export default function Channel(props: {
         props.setChannelListIsOpen(false);
       }}
       className={`flex items-center ${
-        props.activeChannel.id === props.channel.id
+        props.activeChannel?.id === props.channel.id
           ? "text-white"
           : "text-text-grey"
       }  text-body-bold gap-3 text-left hover:cursor-pointer`}
