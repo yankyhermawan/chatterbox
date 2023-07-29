@@ -11,9 +11,9 @@ import NewChannelButton from "./NewChannelButton";
 
 interface Channel {
   id: string;
-  channelName: string;
-  channelDescription: string;
-  channelImageURL: string;
+  name: string;
+  description: string;
+  imageURL: string;
   date: Date[];
 }
 

@@ -9,29 +9,30 @@ interface RequestOption {
   headers: Headers;
   body: string;
   redirect: "follow";
+  mode: "no-cors";
 }
 
 export default function NewChannelButton() {
   const [newChannelModalIsOpen, setNewChannelModalIsOpen] = useState(false);
-  const [channelNameInput, setChannelNameInput] = useState("");
-  const [channelDescriptionInput, setChannelDescriptionInput] = useState("");
-  const [channelUrlInput, setChannelUrlInput] = useState("");
+  const [nameInput, setNameInput] = useState("");
+  const [descriptionInput, setDescriptionInput] = useState("");
+  const [urlInput, setUrlInput] = useState("");
 
-  const handleChannelNameInputChange = useCallback(
+  const handleNameInputChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      setChannelNameInput(event.target.value);
+      setNameInput(event.target.value);
     },
     []
   );
-  const handleChannelDescriptionInputChange = useCallback(
+  const handleDescriptionInputChange = useCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setChannelDescriptionInput(event.target.value);
+      setDescriptionInput(event.target.value);
     },
     []
   );
-  const handleChannelUrlInputChange = useCallback(
+  const handleUrlInputChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      setChannelUrlInput(event.target.value);
+      setUrlInput(event.target.value);
     },
     []
   );
@@ -42,10 +43,10 @@ export default function NewChannelButton() {
     myHeaders.append("Content-Type", "application/json");
 
     const raw = JSON.stringify({
-      channelName: channelNameInput,
-      channelImageURL: channelUrlInput,
-      channelDescription: channelDescriptionInput,
-      memberID: "eb35bc26-fa54-4daa-8539-acc0fe1d2a08",
+      name: nameInput,
+      description: descriptionInput,
+      imageURL: urlInput,
+      // memberID: "eb35bc26-fa54-4daa-8539-acc0fe1d2a08",
     });
 
     const requestOptions: RequestOption = {
@@ -53,6 +54,7 @@ export default function NewChannelButton() {
       headers: myHeaders,
       body: raw,
       redirect: "follow",
+      mode: "no-cors",
     };
 
     fetch(BACKEND_URL + "channel", requestOptions)
@@ -85,7 +87,7 @@ export default function NewChannelButton() {
               type="text"
               placeholder="Channel name"
               className="bg-light-grey h-[48px] p-4 rounded-md outline-none w-full text-white placeholder:text-text-grey text-input-medium placeholder:text-input-medium"
-              onChange={handleChannelNameInputChange}
+              onChange={handleNameInputChange}
             />
             <textarea
               name="description"
@@ -94,13 +96,13 @@ export default function NewChannelButton() {
               cols={30}
               rows={4}
               className="bg-light-grey p-4 rounded-md outline-none w-full text-white placeholder:text-text-grey text-input-medium placeholder:text-input-medium resize-none"
-              onChange={handleChannelDescriptionInputChange}
+              onChange={handleDescriptionInputChange}
             ></textarea>
             <input
               type="text"
               placeholder="Channel image url"
               className="bg-light-grey h-[48px] p-4 rounded-md outline-none w-full text-white placeholder:text-text-grey text-input-medium placeholder:text-input-medium"
-              onChange={handleChannelUrlInputChange}
+              onChange={handleUrlInputChange}
             />
             <button
               onClick={handleFormSubmit}

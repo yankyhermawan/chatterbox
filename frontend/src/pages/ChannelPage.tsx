@@ -30,9 +30,9 @@ interface Message {
 
 interface Channel {
   id: string;
-  channelName: string;
-  channelImageURL: string;
-  channelDescription: string;
+  name: string;
+  imageURL: string;
+  description: string;
   date: Date[];
 }
 
@@ -164,7 +164,7 @@ export default function ChannelPage() {
               className="w-[24px]"
             />
           </button>
-          <h3 className="text-white">{activeChannel?.channelName}</h3>
+          <h3 className="text-white">{activeChannel?.name}</h3>
         </nav>
         {/* CHAT CONTAINER */}
         <div className=" w-full h-screen p-4 md:p-16 flex flex-col gap-12 overflow-y-scroll scrollbar-hide">

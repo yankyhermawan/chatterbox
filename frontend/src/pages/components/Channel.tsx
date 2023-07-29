@@ -1,11 +1,9 @@
-import { useEffect } from "react";
-
 interface Channel {
   id: string;
-  channelName: string;
-  channelImageURL: string;
+  name: string;
+  imageURL: string;
   date: Date[];
-  channelDescription: string;
+  description: string;
 }
 
 export default function Channel(props: {
@@ -15,9 +13,6 @@ export default function Channel(props: {
   setChannelDetailIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setChannelListIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  useEffect(() => {
-    // console.log(props.activeChannel);
-  }, []);
   return (
     <span
       onClick={() => {
@@ -32,9 +27,9 @@ export default function Channel(props: {
       }  text-body-bold gap-3 text-left hover:cursor-pointer`}
     >
       <div className="flex justify-center items-center w-[42px] h-[42px] rounded-lg text-white bg-medium-grey uppercase">
-        {props.channel.channelName[0]}
+        {props.channel.name[0]}
       </div>
-      {props.channel.channelName}
+      {props.channel.name}
     </span>
   );
 }
