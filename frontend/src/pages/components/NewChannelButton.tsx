@@ -4,6 +4,13 @@ import AddIcon from "../../assets/add-icon.svg";
 const BACKEND_URL =
   "https://w24-group-final-group-3-production.up.railway.app/";
 
+interface RequestOption {
+  method: "POST";
+  headers: Headers;
+  body: string;
+  redirect: "follow";
+}
+
 export default function NewChannelButton() {
   const [newChannelModalIsOpen, setNewChannelModalIsOpen] = useState(false);
   const [channelNameInput, setChannelNameInput] = useState("");
@@ -41,7 +48,7 @@ export default function NewChannelButton() {
       memberID: "eb35bc26-fa54-4daa-8539-acc0fe1d2a08",
     });
 
-    const requestOptions = {
+    const requestOptions: RequestOption = {
       method: "POST",
       headers: myHeaders,
       body: raw,

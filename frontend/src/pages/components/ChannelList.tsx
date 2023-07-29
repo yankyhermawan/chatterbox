@@ -1,4 +1,3 @@
-import AddIcon from "../../assets/add-icon.svg";
 import SearchIcon from "../../assets/search-icon.svg";
 import Channel from "./Channel";
 
@@ -7,20 +6,21 @@ import IconChevronDown from "../../assets/icon-chevron-down.svg";
 import IconCross from "../../assets/icon-cross.svg";
 
 import ProfileModal from "./ProfileModal";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import NewChannelButton from "./NewChannelButton";
 
 interface Channel {
   id: string;
   channelName: string;
+  channelDescription: string;
   channelImageURL: string;
   date: Date[];
 }
 
 export default function ChannelList(props: {
   channelList: Channel[];
-  activeChannel: Channel;
-  setActiveChannel: React.Dispatch<React.SetStateAction<string[]>>;
+  activeChannel: Channel | undefined;
+  setActiveChannel: React.Dispatch<React.SetStateAction<Channel | undefined>>;
   setChannelListIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setChannelDetailIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {

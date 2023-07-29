@@ -6,7 +6,6 @@ import axios from "axios";
 import { useState } from "react";
 import IconMail from "../assets/icon-mail.svg";
 import IconLock from "../assets/icon-lock.svg";
-import IconUserLogin from "../assets/icon-user-login.svg";
 
 interface LoginProps {
   email: string;

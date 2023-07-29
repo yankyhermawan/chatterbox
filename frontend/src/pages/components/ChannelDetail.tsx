@@ -13,7 +13,7 @@ interface Channel {
 }
 
 export default function ChannelDetail(props: {
-  activeChannel: Channel;
+  activeChannel: Channel | undefined;
   setChannelListIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setChannelDetailIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
@@ -49,13 +49,6 @@ export default function ChannelDetail(props: {
 
         {/* CHANNEL DETAIL */}
         <div className="p-6 flex flex-col gap-4">
-          {/* <div className="w-full h-[200px] overflow-hidden rounded-lg">
-            <img
-              className="object-cover"
-              src={`${props.activeChannel?.channelImageURL}`}
-              alt=""
-            />
-          </div> */}
           <h3 className="flex gap-4 text-almost-white text-body-bold">
             {props.activeChannel?.channelName}
           </h3>
