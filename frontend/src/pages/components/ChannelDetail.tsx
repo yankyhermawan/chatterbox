@@ -6,9 +6,9 @@ import Member from "./Member";
 
 interface Channel {
   id: string;
-  channelName: string;
-  channelImageURL: string;
-  channelDescription: string;
+  name: string;
+  imageURL: string;
+  description: string;
   date: Date[];
 }
 
@@ -50,10 +50,10 @@ export default function ChannelDetail(props: {
         {/* CHANNEL DETAIL */}
         <div className="p-6 flex flex-col gap-4">
           <h3 className="flex gap-4 text-almost-white text-body-bold">
-            {props.activeChannel?.channelName}
+            {props.activeChannel?.name}
           </h3>
           <p className="text-left text-almost-white text-input-medium">
-            {props.activeChannel?.channelDescription}
+            {props.activeChannel?.description}
           </p>
         </div>
 
