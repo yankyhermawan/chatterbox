@@ -1,6 +1,7 @@
 import IconChevronDown from "../../assets/icon-chevron-down.svg";
 import IconCross from "../../assets/icon-cross.svg";
 import IconUserSquare from "../../assets/icon-user-square.svg";
+import DropdownSidebar from "./DropdownSidebar";
 
 import Member from "./Member";
 
@@ -67,6 +68,10 @@ export default function ChannelDetail(props: {
             <Member name={"Nellie Francis"} />
             <Member name={"Denzel Barrett"} />
             <Member name={"Shaunna Firth"} />
+            <Member name={"Shaunna Firth"} />
+            <Member name={"Shaunna Firth"} />
+            <Member name={"Shaunna Firth"} />
+            <Member name={"Shaunna Firth"} />
           </div>
         </div>
 
@@ -80,6 +85,7 @@ export default function ChannelDetail(props: {
           <span className="text-body-bold text-text-light-grey">
             Xanthe Neal
           </span>
+          <DropdownSidebar />
         </div>
       </div>
     </>

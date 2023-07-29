@@ -9,7 +9,6 @@ interface RequestOption {
   headers: Headers;
   body: string;
   redirect: "follow";
-  mode: "no-cors";
 }
 
 export default function NewChannelButton() {
@@ -54,7 +53,6 @@ export default function NewChannelButton() {
       headers: myHeaders,
       body: raw,
       redirect: "follow",
-      mode: "no-cors",
     };
 
     fetch(BACKEND_URL + "channel", requestOptions)

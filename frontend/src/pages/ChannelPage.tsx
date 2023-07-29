@@ -70,7 +70,6 @@ export default function ChannelPage() {
     };
 
     socket.on("chat message", handleNewMessage);
-
     return () => {
       socket.off("chat message", handleNewMessage);
     };
@@ -83,8 +82,6 @@ export default function ChannelPage() {
       senderID: "eb35bc26-fa54-4daa-8539-acc0fe1d2a08",
       date: isoString,
     };
-
-    // displaySentMessage(randomUUID);
     socket.emit("chat message", data);
     setMessages((prev) => [...prev]);
   };

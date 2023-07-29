@@ -2,12 +2,10 @@ import SearchIcon from "../../assets/search-icon.svg";
 import Channel from "./Channel";
 
 import IconUserSquare from "../../assets/icon-user-square.svg";
-import IconChevronDown from "../../assets/icon-chevron-down.svg";
 import IconCross from "../../assets/icon-cross.svg";
 
-import ProfileModal from "./ProfileModal";
-import { useState } from "react";
 import NewChannelButton from "./NewChannelButton";
+import DropdownSidebar from "./DropdownSidebar";
 
 interface Channel {
   id: string;
@@ -24,7 +22,6 @@ export default function ChannelList(props: {
   setChannelListIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setChannelDetailIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const [profileModalIsOpen, setProfileModalIsOpen] = useState(false);
   const mappedChannelList = props.channelList.map((channel, index) => (
     <Channel
       key={index}
@@ -52,7 +49,7 @@ export default function ChannelList(props: {
           <NewChannelButton />
         </div>
 
-        <div className="px-4 py-4">
+        <div className="flex flex-col px-4 pt-4 h-full">
           {/* SEARCH BAR */}
           <div className="relative mb-8">
             <input
@@ -67,7 +64,9 @@ export default function ChannelList(props: {
             />
           </div>
           {/* CHANNELS LIST */}
-          <div className="flex flex-col gap-4">{mappedChannelList}</div>
+          <div className="relative flex flex-col gap-4 overflow-y-scroll max-h-[550px]">
+            {mappedChannelList}
+          </div>
         </div>
 
         {/* PROFILE */}
@@ -80,19 +79,8 @@ export default function ChannelList(props: {
           <span className="text-body-bold text-text-light-grey">
             Xanthe Neal
           </span>
-          <button
-            onClick={() => setProfileModalIsOpen((current) => !current)}
-            className="flex justify-center items-center w-[24px] h-[24px] rounded-md ml-auto active:bg-light-grey transition-colors"
-          >
-            <img
-              src={IconChevronDown}
-              alt="icon-chevron-down"
-              className={`w-[12px] ${
-                !profileModalIsOpen && "rotate-180"
-              } transition-all`}
-            />
-          </button>
-          {profileModalIsOpen && <ProfileModal />}
+          {/* PROFILE MODAL */}
+          <DropdownSidebar />
         </div>
       </div>
     </>
