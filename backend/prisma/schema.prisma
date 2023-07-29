@@ -8,23 +8,23 @@ datasource db {
 }
 
 model User {
-    id              String    @id @default(uuid())
-    email           String    @unique
-    password        String
-    username        String    @unique
-    firstName       String
-    lastName        String
-    profileImageURL String
-    messages        Message[]
+    id        String        @id @default(uuid())
+    email     String        @unique
+    username  String        @unique
+    password  String
+    firstName String
+    lastName  String
+    channels  UserChannel[]
+    messages  Message[]
 }
 
 model Channel {
-    id                 String    @id @default(uuid())
-    channelName        String    @unique @db.VarChar(20)
-    channelImageURL    String
-    channelDescription String?
-    membersID          String[]
-    messages           Message[]
+    id          String        @id @default(uuid())
+    name        String        @unique
+    imageURL    String
+    description String        @db.VarChar(20)
+    users       UserChannel[]
+    messages    Message[]
 }
 
 model Message {
@@ -35,4 +35,13 @@ model Message {
     senderID  String
     channel   Channel  @relation(fields: [channelID], references: [id])
     channelID String
+}
+
+model UserChannel {
+    user      User    @relation(fields: [userID], references: [id])
+    userID    String
+    channel   Channel @relation(fields: [channelID], references: [id])
+    channelID String
+
+    @@id([userID, channelID])
 }

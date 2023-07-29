@@ -9,11 +9,9 @@ export class MessageService {
 				senderID: senderID,
 				channelID: channelID,
 			};
-			console.log(dataToPost);
 			const response = await this.prismaService.message.create({
 				data: dataToPost,
 			});
-			console.log(response);
 			if (response) {
 				return {
 					code: 201,
@@ -27,16 +25,12 @@ export class MessageService {
 			};
 		}
 	}
-	async getChannelMessage(channelID: string) {
+	async getChannelMessage(channelId: string) {
 		try {
 			const response = await this.prismaService.message.findMany({
 				where: {
-					channelID: channelID,
+					channelID: channelId,
 				},
-				orderBy: {
-					date: "desc",
-				},
-				take: 100,
 			});
 			return {
 				code: 200,

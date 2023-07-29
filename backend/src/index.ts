@@ -73,20 +73,20 @@ app
 	.route("/channel")
 	.post(async (req, res) => {
 		const {
-			channelName,
-			channelImageURL,
-			channelDescription,
+			name,
+			imageURL,
+			description,
 			memberID,
 		}: {
-			channelName: string;
-			channelImageURL: string;
-			channelDescription: string;
+			name: string;
+			imageURL: string;
+			description: string;
 			memberID: string;
 		} = req.body;
 		const response = await channelService.createChannel(
-			channelName,
-			channelImageURL,
-			channelDescription,
+			name,
+			imageURL,
+			description,
 			memberID
 		);
 		res.status(response.code).json(response.response);
@@ -97,14 +97,15 @@ app
 	});
 
 app.route("/channelmembers/:channelID").get(async (req, res) => {
-	const response = await channelService.getChannelMember(req.params.channelID);
+	const response = await channelService.getChannelMembers(req.params.channelID);
 	res.status(response.code).json(response.response);
 });
 
-app.route("/join/:channelName/:username").post(async (req, res) => {
+app.route("/join/:channelID/:userID").post(async (req, res) => {
+	console.log(req.params.channelID, req.params.userID);
 	const response = await channelService.joinChannel(
-		req.params.channelName,
-		req.params.username
+		req.params.channelID,
+		req.params.userID
 	);
 	res.status(response.code).json(response.response);
 });
