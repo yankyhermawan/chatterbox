@@ -76,18 +76,15 @@ app
 			name,
 			imageURL,
 			description,
-			memberID,
 		}: {
 			name: string;
 			imageURL: string;
 			description: string;
-			memberID: string;
 		} = req.body;
 		const response = await channelService.createChannel(
 			name,
 			imageURL,
-			description,
-			memberID
+			description
 		);
 		res.status(response.code).json(response.response);
 	})

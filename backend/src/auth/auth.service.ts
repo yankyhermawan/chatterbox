@@ -13,7 +13,7 @@ interface RegisterProps {
 	lastName: string;
 	email: string;
 	password: string;
-	profileImageURL: string;
+	imageURL: string;
 }
 
 export async function registerUser(data: RegisterProps) {
@@ -34,7 +34,7 @@ export async function registerUser(data: RegisterProps) {
 			lastName: data.lastName,
 			username: data.username,
 			email: data.email,
-			profileImageURL: data.profileImageURL,
+			imageURL: data.imageURL,
 			password: hashedPassword,
 		};
 

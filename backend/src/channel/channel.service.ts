@@ -24,38 +24,32 @@ export class ChannelService {
 		}
 	}
 
-	async createChannel(
-		name: string,
-		imageURL: string,
-		description: string,
-		memberID: string
-	) {
-		try {
-			const dataToPost = {
-				name: name,
-				imageURL: imageURL,
-				description: description,
-				membersID: [memberID],
-			};
-			const response = await this.prismaService.channel.create({
-				data: dataToPost,
-			});
-			if (response) {
-				return {
-					code: 200,
-					response: response,
-				};
-			}
+	async createChannel(name: string, imageURL: string, description: string) {
+		// try {
+		const dataToPost = {
+			name: name,
+			imageURL: imageURL,
+			description: description,
+		};
+		const response = await this.prismaService.channel.create({
+			data: dataToPost,
+		});
+		if (response) {
 			return {
-				code: 422,
-				response: "Channel Creation Failed",
-			};
-		} catch (err) {
-			return {
-				code: 500,
-				response: "Server Error",
+				code: 200,
+				response: response,
 			};
 		}
+		return {
+			code: 422,
+			response: "Channel Creation Failed",
+		};
+		// } catch (err) {
+		// 	return {
+		// 		code: 500,
+		// 		response: "Server Error",
+		// 	};
+		// }
 	}
 
 	async joinChannel(channelID: string, userID: string) {

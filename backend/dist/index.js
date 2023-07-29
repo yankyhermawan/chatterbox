@@ -60,8 +60,8 @@ app.get("/channel/:id", (req, res) => __awaiter(void 0, void 0, void 0, function
 app
     .route("/channel")
     .post((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, imageURL, description, memberID, } = req.body;
-    const response = yield channelService.createChannel(name, imageURL, description, memberID);
+    const { name, imageURL, description, } = req.body;
+    const response = yield channelService.createChannel(name, imageURL, description);
     res.status(response.code).json(response.response);
 }))
     .get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
