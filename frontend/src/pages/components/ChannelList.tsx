@@ -17,8 +17,6 @@ interface Channel {
 
 export default function ChannelList(props: {
   channelList: Channel[];
-  activeChannel: Channel | undefined;
-  setActiveChannel: React.Dispatch<React.SetStateAction<Channel | undefined>>;
   setChannelListIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setChannelDetailIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
@@ -26,8 +24,6 @@ export default function ChannelList(props: {
     <Channel
       key={index}
       channel={channel}
-      activeChannel={props.activeChannel}
-      setActiveChannel={props.setActiveChannel}
       setChannelListIsOpen={props.setChannelListIsOpen}
       setChannelDetailIsOpen={props.setChannelDetailIsOpen}
     />

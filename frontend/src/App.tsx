@@ -14,7 +14,8 @@ const App: React.FC = () => {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<LandingPage />} />
-        <Route path="/chat" element={<ChannelPage />} />
+        <Route path="/channel" element={<ChannelPage />} />
+        <Route path="/channel/:channelID" element={<ChannelPage />} />
         <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </Router>
