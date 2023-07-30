@@ -9,7 +9,7 @@ import IconHamburger from "../assets/icon-hamburger.svg";
 import IconChat from "../assets/icon-chat.svg";
 
 // LIBRARY
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { io } from "socket.io-client";
 import { useParams } from "react-router-dom";
 
@@ -55,15 +55,15 @@ export default function ChannelPage() {
   const [channelList, setChannelList] = useState<Channel[]>([]);
   const [channelListIsOpen, setChannelListIsOpen] = useState(true);
   const [channelDetailIsOpen, setChannelDetailIsOpen] = useState(false);
+  const ref = useRef<HTMLInputElement>(null);
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [messageInput, setMessageInput] = useState("");
-  const handleMessageInputChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setMessageInput(event.target.value);
-    },
-    []
-  );
+  const handleMessageInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setMessageInput(event.target.value);
+  };
 
   const requestOptions: RequestOption = {
     method: "GET",
@@ -88,15 +88,18 @@ export default function ChannelPage() {
     };
   }, [channelID, messages]);
 
-  const sendMessage = () => {
+  const sendMessage = (e: React.ChangeEvent<any>) => {
     const data = {
       channelID: channelID,
       content: messageInput,
       senderID: userID,
       date: isoString,
     };
+    e.preventDefault();
     socket.emit("chat message", data);
     setMessages((prev) => [...prev]);
+    setMessageInput("");
+    if (ref.current) ref.current.value = "";
   };
 
   const fetchMessages = () => {
@@ -175,7 +178,7 @@ export default function ChannelPage() {
         </nav>
         {/* CHAT CONTAINER */}
         <div className=" w-full h-screen p-4 md:p-16 flex flex-col gap-12 overflow-y-scroll scrollbar-hide">
-          {channelID ? (
+          {messages.length > 0 ? (
             mappedMessage
           ) : (
             <div className="flex flex-col justify-center gap-4 items-center w-full h-full text-text-grey">
@@ -188,8 +191,12 @@ export default function ChannelPage() {
         {/* CHATBOX */}
         {channelID && (
           <div className="flex py-4 px-4 md:px-16 pb-8 w-full  bg-medium-grey">
-            <div className="flex items-center w-full relative bg-light-grey rounded-lg pr-2">
+            <form
+              onSubmit={sendMessage}
+              className="flex items-center w-full relative bg-light-grey rounded-lg pr-2"
+            >
               <input
+                ref={ref}
                 type="text"
                 placeholder="Type a message here"
                 className="text-white bg-light-grey w-full text-input-medium outline-none rounded-lg p-4 min-h-[50px]"
@@ -197,11 +204,12 @@ export default function ChannelPage() {
               />
               <button
                 onClick={sendMessage}
-                className="bg-blue active:bg-blue-hover w-[40px] h-[40px] right-2 inset-y-0 rounded-lg flex justify-center items-center"
+                className="bg-blue active:bg-blue-hover w-[40px] h-[40px] right-2 inset-y-0 rounded-lg flex justify-center items-center disabled:bg-text-grey"
+                disabled={!messageInput}
               >
                 <img src={IconSend} alt="icon-send" className="w-[20px]" />
               </button>
-            </div>
+            </form>
           </div>
         )}
       </div>
