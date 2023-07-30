@@ -14,12 +14,11 @@ interface Channel {
 }
 
 export default function ChannelDetail(props: {
-  // activeChannel: Channel | undefined;
+  channelDetail: Channel | undefined;
   setChannelListIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setChannelDetailIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   // CHANNEL ID
-  const channelID = useParams();
   return (
     <>
       <div className="h-screen w-[325px] md:min-w-[350px] fixed md:static left-0 top-0 bg-dark-grey flex flex-col z-50 shadow-xl md:shadow-none">
@@ -53,11 +52,11 @@ export default function ChannelDetail(props: {
         {/* CHANNEL DETAIL */}
         <div className="p-6 flex flex-col gap-4">
           <h3 className="flex gap-4 text-almost-white text-body-bold">
-            Channel Name
+            {props.channelDetail?.name}
             {/* {props.activeChannel?.name} */}
           </h3>
           <p className="text-left text-almost-white text-input-medium">
-            Channel Description
+            {props.channelDetail?.description}
             {/* {props.activeChannel?.description} */}
           </p>
         </div>

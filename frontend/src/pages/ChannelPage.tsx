@@ -6,6 +6,7 @@ import ChannelDetail from "./components/ChannelDetail";
 // ASSETS
 import IconSend from "../assets/icon-send.svg";
 import IconHamburger from "../assets/icon-hamburger.svg";
+import IconChat from "../assets/icon-chat.svg";
 
 // LIBRARY
 import { useState, useEffect, useCallback } from "react";
@@ -69,6 +70,10 @@ export default function ChannelPage() {
     redirect: "follow",
   };
 
+  const channelDetail = channelList.find(
+    (channel: Channel) => channel.id == channelID
+  );
+
   useEffect(() => {
     const handleNewMessage = (messageData: Message) => {
       console.log(messageData);
@@ -112,7 +117,6 @@ export default function ChannelPage() {
       .then((result) => {
         try {
           setChannelList(result);
-          // if (activeChannel == undefined) setActiveChannel(result[0]);
         } catch (error) {
           console.log(error);
         }
@@ -140,7 +144,7 @@ export default function ChannelPage() {
       {/* LEFT */}
       {channelDetailIsOpen && (
         <ChannelDetail
-          // activeChannel={activeChannel}
+          channelDetail={channelDetail}
           setChannelListIsOpen={setChannelListIsOpen}
           setChannelDetailIsOpen={setChannelDetailIsOpen}
         />
@@ -149,8 +153,6 @@ export default function ChannelPage() {
       {channelListIsOpen && (
         <ChannelList
           channelList={channelList}
-          // activeChannel={activeChannel}
-          // setActiveChannel={setActiveChannel}
           setChannelListIsOpen={setChannelListIsOpen}
           setChannelDetailIsOpen={setChannelDetailIsOpen}
         />
@@ -169,29 +171,39 @@ export default function ChannelPage() {
               className="w-[24px]"
             />
           </button>
-          <h3 className="text-white">Channel Name</h3>
+          <h3 className="text-white">{channelDetail?.name}</h3>
         </nav>
         {/* CHAT CONTAINER */}
         <div className=" w-full h-screen p-4 md:p-16 flex flex-col gap-12 overflow-y-scroll scrollbar-hide">
-          {mappedMessage}
+          {channelID ? (
+            mappedMessage
+          ) : (
+            <div className="flex flex-col justify-center gap-4 items-center w-full h-full text-text-grey">
+              <img className="w-[100px]" src={IconChat} alt="icon-chat" />
+              <h3 className="font-bold text-[24px]">No Conversation</h3>
+              <p> Please join or select a channel to start chattering!</p>
+            </div>
+          )}
         </div>
         {/* CHATBOX */}
-        <div className="flex py-4 px-4 md:px-16 pb-8 w-full  bg-medium-grey">
-          <div className="flex items-center w-full relative bg-light-grey rounded-lg pr-2">
-            <input
-              type="text"
-              placeholder="Type a message here"
-              className="text-white bg-light-grey w-full text-input-medium outline-none rounded-lg p-4 min-h-[50px]"
-              onChange={handleMessageInputChange}
-            />
-            <button
-              onClick={sendMessage}
-              className="bg-blue active:bg-blue-hover w-[40px] h-[40px] right-2 inset-y-0 rounded-lg flex justify-center items-center"
-            >
-              <img src={IconSend} alt="icon-send" className="w-[20px]" />
-            </button>
+        {channelID && (
+          <div className="flex py-4 px-4 md:px-16 pb-8 w-full  bg-medium-grey">
+            <div className="flex items-center w-full relative bg-light-grey rounded-lg pr-2">
+              <input
+                type="text"
+                placeholder="Type a message here"
+                className="text-white bg-light-grey w-full text-input-medium outline-none rounded-lg p-4 min-h-[50px]"
+                onChange={handleMessageInputChange}
+              />
+              <button
+                onClick={sendMessage}
+                className="bg-blue active:bg-blue-hover w-[40px] h-[40px] right-2 inset-y-0 rounded-lg flex justify-center items-center"
+              >
+                <img src={IconSend} alt="icon-send" className="w-[20px]" />
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
