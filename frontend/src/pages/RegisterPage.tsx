@@ -50,6 +50,7 @@ function RegisterPage() {
           username: userData.username,
           email: userData.email,
           password: userData.password,
+          imageURL: "",
         }
       );
 
