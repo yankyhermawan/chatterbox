@@ -10,6 +10,7 @@ import IconHamburger from "../assets/icon-hamburger.svg";
 // LIBRARY
 import { useState, useEffect, useCallback } from "react";
 import { io } from "socket.io-client";
+import { useParams } from "react-router-dom";
 
 const BACKEND_URL =
   "https://w24-group-final-group-3-production.up.railway.app/";
@@ -37,6 +38,9 @@ interface Channel {
 }
 
 export default function ChannelPage() {
+  // CHANNEL ID
+  const { channelID } = useParams();
+
   // ACCESS TOKEN & USERID
   const userID = localStorage.getItem("userID");
   const access_token = localStorage.getItem("access_token");
@@ -47,7 +51,6 @@ export default function ChannelPage() {
   const isoString = dateObject.toISOString();
 
   // STATES
-  const [activeChannel, setActiveChannel] = useState<Channel>();
   const [channelList, setChannelList] = useState<Channel[]>([]);
   const [channelListIsOpen, setChannelListIsOpen] = useState(true);
   const [channelDetailIsOpen, setChannelDetailIsOpen] = useState(false);
@@ -78,11 +81,11 @@ export default function ChannelPage() {
     return () => {
       socket.off("chat message", handleNewMessage);
     };
-  }, [messages]);
+  }, [channelID, messages]);
 
   const sendMessage = () => {
     const data = {
-      channelID: activeChannel?.id,
+      channelID: channelID,
       content: messageInput,
       senderID: userID,
       date: isoString,
@@ -92,7 +95,7 @@ export default function ChannelPage() {
   };
 
   const fetchMessages = () => {
-    fetch(BACKEND_URL + "channel" + `/${activeChannel?.id}`, requestOptions)
+    fetch(BACKEND_URL + `channel/${channelID}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         try {
@@ -109,7 +112,7 @@ export default function ChannelPage() {
       .then((result) => {
         try {
           setChannelList(result);
-          if (activeChannel == undefined) setActiveChannel(result[0]);
+          // if (activeChannel == undefined) setActiveChannel(result[0]);
         } catch (error) {
           console.log(error);
         }
@@ -119,7 +122,7 @@ export default function ChannelPage() {
   useEffect(() => {
     fetchAllChannel();
     fetchMessages();
-  }, [socket, activeChannel]);
+  }, [channelID, socket]);
 
   const sortedMessage = messages.sort((a, b) => a.date.localeCompare(b.date));
   const mappedMessage = sortedMessage.map((message) => (
@@ -137,7 +140,7 @@ export default function ChannelPage() {
       {/* LEFT */}
       {channelDetailIsOpen && (
         <ChannelDetail
-          activeChannel={activeChannel}
+          // activeChannel={activeChannel}
           setChannelListIsOpen={setChannelListIsOpen}
           setChannelDetailIsOpen={setChannelDetailIsOpen}
         />
@@ -146,8 +149,8 @@ export default function ChannelPage() {
       {channelListIsOpen && (
         <ChannelList
           channelList={channelList}
-          activeChannel={activeChannel}
-          setActiveChannel={setActiveChannel}
+          // activeChannel={activeChannel}
+          // setActiveChannel={setActiveChannel}
           setChannelListIsOpen={setChannelListIsOpen}
           setChannelDetailIsOpen={setChannelDetailIsOpen}
         />
@@ -166,7 +169,7 @@ export default function ChannelPage() {
               className="w-[24px]"
             />
           </button>
-          <h3 className="text-white">{activeChannel?.name}</h3>
+          <h3 className="text-white">Channel Name</h3>
         </nav>
         {/* CHAT CONTAINER */}
         <div className=" w-full h-screen p-4 md:p-16 flex flex-col gap-12 overflow-y-scroll scrollbar-hide">

@@ -1,7 +1,7 @@
+import { useParams } from "react-router-dom";
 import IconChevronDown from "../../assets/icon-chevron-down.svg";
 import IconCross from "../../assets/icon-cross.svg";
 import IconUserSquare from "../../assets/icon-user-square.svg";
-import DropdownSidebar from "./DropdownSidebar";
 
 import Member from "./Member";
 
@@ -14,10 +14,12 @@ interface Channel {
 }
 
 export default function ChannelDetail(props: {
-  activeChannel: Channel | undefined;
+  // activeChannel: Channel | undefined;
   setChannelListIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setChannelDetailIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+  // CHANNEL ID
+  const channelID = useParams();
   return (
     <>
       <div className="h-screen w-[325px] md:min-w-[350px] fixed md:static left-0 top-0 bg-dark-grey flex flex-col z-50 shadow-xl md:shadow-none">
@@ -51,10 +53,12 @@ export default function ChannelDetail(props: {
         {/* CHANNEL DETAIL */}
         <div className="p-6 flex flex-col gap-4">
           <h3 className="flex gap-4 text-almost-white text-body-bold">
-            {props.activeChannel?.name}
+            Channel Name
+            {/* {props.activeChannel?.name} */}
           </h3>
           <p className="text-left text-almost-white text-input-medium">
-            {props.activeChannel?.description}
+            Channel Description
+            {/* {props.activeChannel?.description} */}
           </p>
         </div>
 
@@ -67,10 +71,6 @@ export default function ChannelDetail(props: {
             <Member name={"Xanthe Neal"} />
             <Member name={"Nellie Francis"} />
             <Member name={"Denzel Barrett"} />
-            <Member name={"Shaunna Firth"} />
-            <Member name={"Shaunna Firth"} />
-            <Member name={"Shaunna Firth"} />
-            <Member name={"Shaunna Firth"} />
             <Member name={"Shaunna Firth"} />
           </div>
         </div>
@@ -85,7 +85,6 @@ export default function ChannelDetail(props: {
           <span className="text-body-bold text-text-light-grey">
             Xanthe Neal
           </span>
-          <DropdownSidebar />
         </div>
       </div>
     </>
