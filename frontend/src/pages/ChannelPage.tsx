@@ -37,6 +37,11 @@ interface Channel {
 }
 
 export default function ChannelPage() {
+  // ACCESS TOKEN & USERID
+  const userID = localStorage.getItem("userID");
+  const access_token = localStorage.getItem("access_token");
+
+  // TIME
   const unixTimestamp = Date.now();
   const dateObject = new Date(unixTimestamp);
   const isoString = dateObject.toISOString();
@@ -79,7 +84,7 @@ export default function ChannelPage() {
     const data = {
       channelID: activeChannel?.id,
       content: messageInput,
-      senderID: "eb35bc26-fa54-4daa-8539-acc0fe1d2a08",
+      senderID: userID,
       date: isoString,
     };
     socket.emit("chat message", data);

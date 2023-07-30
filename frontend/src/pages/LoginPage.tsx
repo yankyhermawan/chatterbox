@@ -40,8 +40,8 @@ function LoginPage() {
           password: formData.password,
         }
       );
-
-      localStorage.setItem("token", response.data.data.token);
+      localStorage.setItem("userID", response.data.userID);
+      localStorage.setItem("access_token", response.data.access_token);
 
       navigate("/");
     } catch (error) {
