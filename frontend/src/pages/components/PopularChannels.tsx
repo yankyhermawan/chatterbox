@@ -1,6 +1,7 @@
 export default function() {
 
 return (
+<section>
     <div className="bg-medium-grey text-white w-screen h-screen top-0 left-0">
         <div>
             <h1 className="text-body-bold">Popular Channels</h1>
@@ -34,5 +35,6 @@ return (
         </div>
         </div>
     </div>
+</section>
 )
 }
