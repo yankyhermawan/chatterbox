@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import cors from "cors";
@@ -28,6 +28,44 @@ const userService = new UserService(prismaService, userGuard);
 
 app.use(express.json());
 app.use(cors());
+const checkTokenMiddleware = (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		const token = String(
+			req.headers["authorization"]?.split(" ")[1].replace("'", "")
+		);
+		const checkToken = userGuard.checkTokenValid(token);
+		if (checkToken) {
+			// Token is valid, proceed to the next middleware or route handler
+			next();
+		} else {
+			// Token is invalid, return an error response
+			res.status(400).json("Invalid token");
+		}
+	} catch (err) {
+		res.status(500).json("Server Error");
+	}
+};
+
+const authorizationMiddleware = (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		const token = String(
+			req.headers["authorization"]?.split(" ")[1].replace("'", "")
+		);
+		if (userGuard.authorization(req.params.id, token)) {
+			next();
+		}
+	} catch (err) {
+		res.status(500).json("Server Error");
+	}
+};
 
 const server = createServer(app);
 const io = new Server(server, {
@@ -66,7 +104,7 @@ app.post("/login", async (req, res) => {
 
 app
 	.route("/user/:id")
-	.get(async (req, res) => {
+	.get(checkTokenMiddleware, async (req, res) => {
 		try {
 			const token = String(
 				req.headers["authorization"]?.split(" ")[1].replace("'", "")
@@ -77,7 +115,7 @@ app
 			res.status(500).json("Server error");
 		}
 	})
-	.put(async (req, res) => {
+	.put(checkTokenMiddleware, authorizationMiddleware, async (req, res) => {
 		try {
 			const token = String(
 				req.headers["authorization"]?.split(" ")[1].replace("'", "")
@@ -95,14 +133,14 @@ app
 
 // CHANNEL ENDPOINT
 
-app.get("/channel/:id", async (req, res) => {
+app.get("/channel/:id", checkTokenMiddleware, async (req, res) => {
 	const response = await messageService.getChannelMessage(req.params.id);
 	res.status(response.code).json(response.response);
 });
 
 app
 	.route("/channel")
-	.post(async (req, res) => {
+	.post(checkTokenMiddleware, async (req, res) => {
 		const {
 			name,
 			imageURL,
@@ -119,23 +157,28 @@ app
 		);
 		res.status(response.code).json(response.response);
 	})
-	.get(async (req, res) => {
+	.get(checkTokenMiddleware, async (req, res) => {
 		const response = await channelService.getAllChannel();
 		res.status(response.code).json(response.response);
 	});
 
-app.route("/channelmembers/:channelID").get(async (req, res) => {
-	const response = await channelService.getChannelMembers(req.params.channelID);
-	res.status(response.code).json(response.response);
-});
+app
+	.route("/channelmembers/:channelID")
+	.get(checkTokenMiddleware, async (req, res) => {
+		const response = await channelService.getChannelMembers(
+			req.params.channelID
+		);
+		res.status(response.code).json(response.response);
+	});
 
-app.route("/join/:channelID/:userID").post(async (req, res) => {
-	console.log(req.params.channelID, req.params.userID);
-	const response = await channelService.joinChannel(
-		req.params.channelID,
-		req.params.userID
-	);
-	res.status(response.code).json(response.response);
-});
+app
+	.route("/join/:channelID/:userID")
+	.post(checkTokenMiddleware, async (req, res) => {
+		const response = await channelService.joinChannel(
+			req.params.channelID,
+			req.params.userID
+		);
+		res.status(response.code).json(response.response);
+	});
 
 server.listen(port, () => console.log(`Listening on ${port}`));
