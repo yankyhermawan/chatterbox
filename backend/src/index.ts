@@ -6,6 +6,8 @@ import { registerUser, loginUser } from "./auth/auth.service";
 import { MessageService } from "./message/message.service";
 import { PrismaService } from "./prisma.service";
 import { ChannelService } from "./channel/channel.service";
+import { UserService } from "./user/user.service";
+import { UserGuard } from "./auth/user.guard";
 
 interface messageData {
 	channelID: string;
@@ -19,6 +21,8 @@ const port = process.env.PORT || 4000;
 const prismaService = new PrismaService();
 const messageService = new MessageService(prismaService);
 const channelService = new ChannelService(prismaService);
+const userGuard = new UserGuard();
+const userService = new UserService(prismaService, userGuard);
 
 // MIDDLEWARE
 
@@ -60,7 +64,45 @@ app.post("/login", async (req, res) => {
 	res.status(response.code).json(response.response);
 });
 
-app.get("/userdata", async (req, res) => {});
+app
+	.route("/user/:id")
+	.get(async (req, res) => {
+		try {
+			const token = String(
+				req.headers["authorization"]?.split(" ")[1].replace("'", "")
+			);
+			const response = await userService.getUserById(req.params.id, token);
+			res.status(response.code).json(response.response);
+		} catch (err) {
+			res.status(500).json("Server error");
+		}
+	})
+	.put(async (req, res) => {
+		try {
+			const token = String(
+				req.headers["authorization"]?.split(" ")[1].replace("'", "")
+			);
+			const response = await userService.putUser(
+				req.params.id,
+				token,
+				req.body
+			);
+			res.status(response.code).json(response.response);
+		} catch (err) {
+			res.status(500).json("Server Error");
+		}
+	})
+	.delete(async (req, res) => {
+		try {
+			const token = String(
+				req.headers["authorization"]?.split(" ")[1].replace("'", "")
+			);
+			const response = await userService.deleteUser(req.params.id, token);
+			return res.status(response.code).json(response.response);
+		} catch (err) {
+			res.status(500).json("Server Error");
+		}
+	});
 
 // CHANNEL ENDPOINT
 

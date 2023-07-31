@@ -20,11 +20,15 @@ const auth_service_1 = require("./auth/auth.service");
 const message_service_1 = require("./message/message.service");
 const prisma_service_1 = require("./prisma.service");
 const channel_service_1 = require("./channel/channel.service");
+const user_service_1 = require("./user/user.service");
+const user_guard_1 = require("./auth/user.guard");
 const app = (0, express_1.default)();
 const port = process.env.PORT || 4000;
 const prismaService = new prisma_service_1.PrismaService();
 const messageService = new message_service_1.MessageService(prismaService);
 const channelService = new channel_service_1.ChannelService(prismaService);
+const userGuard = new user_guard_1.UserGuard();
+const userService = new user_service_1.UserService(prismaService, userGuard);
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
 const server = (0, http_1.createServer)(app);
@@ -52,7 +56,41 @@ app.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const response = yield (0, auth_service_1.loginUser)(req.body.email, req.body.password);
     res.status(response.code).json(response.response);
 }));
-app.get("/userdata", (req, res) => __awaiter(void 0, void 0, void 0, function* () { }));
+app
+    .route("/user/:id")
+    .get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    try {
+        const token = String((_a = req.headers["authorization"]) === null || _a === void 0 ? void 0 : _a.split(" ")[1].replace("'", ""));
+        const response = yield userService.getUserById(req.params.id, token);
+        res.status(response.code).json(response.response);
+    }
+    catch (err) {
+        res.status(500).json("Server error");
+    }
+}))
+    .put((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _b;
+    try {
+        const token = String((_b = req.headers["authorization"]) === null || _b === void 0 ? void 0 : _b.split(" ")[1].replace("'", ""));
+        const response = yield userService.putUser(req.params.id, token, req.body);
+        res.status(response.code).json(response.response);
+    }
+    catch (err) {
+        res.status(500).json("Server Error");
+    }
+}))
+    .delete((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c;
+    try {
+        const token = String((_c = req.headers["authorization"]) === null || _c === void 0 ? void 0 : _c.split(" ")[1].replace("'", ""));
+        const response = yield userService.deleteUser(req.params.id, token);
+        return res.status(response.code).json(response.response);
+    }
+    catch (err) {
+        res.status(500).json("Server Error");
+    }
+}));
 app.get("/channel/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const response = yield messageService.getChannelMessage(req.params.id);
     res.status(response.code).json(response.response);
