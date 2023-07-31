@@ -91,17 +91,6 @@ app
 		} catch (err) {
 			res.status(500).json("Server Error");
 		}
-	})
-	.delete(async (req, res) => {
-		try {
-			const token = String(
-				req.headers["authorization"]?.split(" ")[1].replace("'", "")
-			);
-			const response = await userService.deleteUser(req.params.id, token);
-			return res.status(response.code).json(response.response);
-		} catch (err) {
-			res.status(500).json("Server Error");
-		}
 	});
 
 // CHANNEL ENDPOINT

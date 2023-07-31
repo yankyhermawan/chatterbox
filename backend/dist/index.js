@@ -82,14 +82,9 @@ app
 }))
     .delete((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _c;
-    try {
-        const token = String((_c = req.headers["authorization"]) === null || _c === void 0 ? void 0 : _c.split(" ")[1].replace("'", ""));
-        const response = yield userService.deleteUser(req.params.id, token);
-        return res.status(response.code).json(response.response);
-    }
-    catch (err) {
-        res.status(500).json("Server Error");
-    }
+    const token = String((_c = req.headers["authorization"]) === null || _c === void 0 ? void 0 : _c.split(" ")[1].replace("'", ""));
+    const response = yield userService.deleteUser(req.params.id, token);
+    return res.status(response.code).json(response.response);
 }));
 app.get("/channel/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const response = yield messageService.getChannelMessage(req.params.id);
