@@ -103,43 +103,4 @@ export class UserService {
 			};
 		}
 	}
-
-	async deleteUser(userId: string, token: string) {
-		const checkToken = this.userGuard.checkTokenValid(token);
-
-		if (!checkToken) {
-			return {
-				code: 403,
-				response: "Unauthorized. Please Log In.",
-			};
-		}
-
-		try {
-			const userExist = await this.prismaService.user.findUnique({
-				where: { id: userId },
-			});
-
-			if (userExist) {
-				const deleteUser = await this.prismaService.user.delete({
-					where: { id: userId },
-				});
-
-				if (deleteUser) {
-					return {
-						code: 200,
-						response: "User deleted successfully",
-					};
-				}
-			}
-			return {
-				code: 404,
-				response: "User not found",
-			};
-		} catch (err) {
-			return {
-				code: 500,
-				response: "Server error",
-			};
-		}
-	}
 }
