@@ -21,9 +21,9 @@ model User {
 
 model Channel {
     id          String        @id @default(uuid())
-    name        String        @unique
+    name        String        @unique @db.VarChar(20)
     imageURL    String
-    description String        @db.VarChar(20)
+    description String
     users       UserChannel[]
     messages    Message[]
 }
