@@ -73,8 +73,8 @@ export async function loginUser(email: string, password: string) {
 				response: "Invalid password",
 			};
 		}
-
-		const token = jwt.sign({ email: user.email }, JWT_KEY, { expiresIn: "1h" });
+		user.password = "";
+		const token = jwt.sign({ id: user.id }, JWT_KEY, { expiresIn: "1h" });
 		return {
 			code: 200,
 			response: {

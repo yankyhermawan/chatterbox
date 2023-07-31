@@ -31,6 +31,34 @@ const userGuard = new user_guard_1.UserGuard();
 const userService = new user_service_1.UserService(prismaService, userGuard);
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
+const checkTokenMiddleware = (req, res, next) => {
+    var _a;
+    try {
+        const token = String((_a = req.headers["authorization"]) === null || _a === void 0 ? void 0 : _a.split(" ")[1].replace("'", ""));
+        const checkToken = userGuard.checkTokenValid(token);
+        if (checkToken) {
+            next();
+        }
+        else {
+            res.status(400).json("Invalid token");
+        }
+    }
+    catch (err) {
+        res.status(500).json("Server Error");
+    }
+};
+const authorizationMiddleware = (req, res, next) => {
+    var _a;
+    try {
+        const token = String((_a = req.headers["authorization"]) === null || _a === void 0 ? void 0 : _a.split(" ")[1].replace("'", ""));
+        if (userGuard.authorization(req.params.id, token)) {
+            next();
+        }
+    }
+    catch (err) {
+        res.status(500).json("Server Error");
+    }
+};
 const server = (0, http_1.createServer)(app);
 const io = new socket_io_1.Server(server, {
     cors: {
@@ -58,7 +86,7 @@ app.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 }));
 app
     .route("/user/:id")
-    .get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    .get(checkTokenMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
         const token = String((_a = req.headers["authorization"]) === null || _a === void 0 ? void 0 : _a.split(" ")[1].replace("'", ""));
@@ -69,7 +97,7 @@ app
         res.status(500).json("Server error");
     }
 }))
-    .put((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    .put(checkTokenMiddleware, authorizationMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _b;
     try {
         const token = String((_b = req.headers["authorization"]) === null || _b === void 0 ? void 0 : _b.split(" ")[1].replace("'", ""));
@@ -79,34 +107,31 @@ app
     catch (err) {
         res.status(500).json("Server Error");
     }
-}))
-    .delete((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _c;
-    const token = String((_c = req.headers["authorization"]) === null || _c === void 0 ? void 0 : _c.split(" ")[1].replace("'", ""));
-    const response = yield userService.deleteUser(req.params.id, token);
-    return res.status(response.code).json(response.response);
 }));
-app.get("/channel/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get("/channel/:id", checkTokenMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const response = yield messageService.getChannelMessage(req.params.id);
     res.status(response.code).json(response.response);
 }));
 app
     .route("/channel")
-    .post((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    .post(checkTokenMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, imageURL, description, } = req.body;
     const response = yield channelService.createChannel(name, imageURL, description);
     res.status(response.code).json(response.response);
 }))
-    .get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    .get(checkTokenMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const response = yield channelService.getAllChannel();
     res.status(response.code).json(response.response);
 }));
-app.route("/channelmembers/:channelID").get((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app
+    .route("/channelmembers/:channelID")
+    .get(checkTokenMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const response = yield channelService.getChannelMembers(req.params.channelID);
     res.status(response.code).json(response.response);
 }));
-app.route("/join/:channelID/:userID").post((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.params.channelID, req.params.userID);
+app
+    .route("/join/:channelID/:userID")
+    .post(checkTokenMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const response = yield channelService.joinChannel(req.params.channelID, req.params.userID);
     res.status(response.code).json(response.response);
 }));
