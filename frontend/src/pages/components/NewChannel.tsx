@@ -11,7 +11,7 @@ interface RequestOption {
   redirect: "follow";
 }
 
-export default function NewChannelButton() {
+export default function NewChannel() {
   const [newChannelModalIsOpen, setNewChannelModalIsOpen] = useState(false);
   const [nameInput, setNameInput] = useState("");
   const [descriptionInput, setDescriptionInput] = useState("");

@@ -1,7 +1,7 @@
 // COMPONENTS
 import ChannelList from "./components/ChannelList";
 import Chat from "./components/Chat";
-import ChannelDetail from "./components/ChannelDetail";
+import ChannelDetailSidebar from "./components/ChannelDetailSidebar";
 
 // ASSETS
 import IconSend from "../assets/icon-send.svg";
@@ -9,9 +9,10 @@ import IconHamburger from "../assets/icon-hamburger.svg";
 import IconChat from "../assets/icon-chat.svg";
 
 // LIBRARY
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { useParams } from "react-router-dom";
+import ChannelDetail from "./components/ChannelDetail";
 
 const BACKEND_URL =
   "https://w24-group-final-group-3-production.up.railway.app/";
@@ -56,6 +57,7 @@ export default function ChannelPage() {
   const [channelListIsOpen, setChannelListIsOpen] = useState(true);
   const [channelDetailIsOpen, setChannelDetailIsOpen] = useState(false);
   const ref = useRef<HTMLInputElement>(null);
+  const dummyRef = useRef<HTMLDivElement>(null);
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [messageInput, setMessageInput] = useState("");
@@ -131,6 +133,13 @@ export default function ChannelPage() {
     fetchMessages();
   }, [channelID, socket]);
 
+  useEffect(() => {
+    if (messages.length)
+      dummyRef.current?.scrollIntoView({
+        block: "end",
+      });
+  }, [messages, channelID]);
+
   const sortedMessage = messages.sort((a, b) => a.date.localeCompare(b.date));
   const mappedMessage = sortedMessage.map((message) => (
     <Chat
@@ -145,13 +154,11 @@ export default function ChannelPage() {
     // PAGE CONTAINER
     <div className="flex h-screen w-screen fixed top-0 left-0 bg-medium-grey">
       {/* LEFT */}
-      {channelDetailIsOpen && (
-        <ChannelDetail
-          channelDetail={channelDetail}
-          setChannelListIsOpen={setChannelListIsOpen}
-          setChannelDetailIsOpen={setChannelDetailIsOpen}
-        />
-      )}
+      {/* <ChannelDetailSidebar
+        channelDetail={channelDetail}
+        setChannelListIsOpen={setChannelListIsOpen}
+        setChannelDetailIsOpen={setChannelDetailIsOpen}
+      /> */}
 
       {channelListIsOpen && (
         <ChannelList
@@ -163,21 +170,27 @@ export default function ChannelPage() {
 
       {/* RIGHT SIDE */}
       <div className="flex flex-col w-full h-screen">
-        <nav className="flex items-center gap-4 px-4 md:px-16 min-h-[60px] w-full text-body-bold bg-medium-grey shadow-xl">
-          <button
-            onClick={() => setChannelDetailIsOpen((current) => !current)}
-            className="w-[24px] h-[24px] rounded-md md:hidden"
-          >
-            <img
-              src={IconHamburger}
-              alt="icon-hamburger"
-              className="w-[24px]"
-            />
-          </button>
-          <h3 className="text-white">{channelDetail?.name}</h3>
+        <nav className="flex items-center gap-4 px-4 md:px-12 min-h-[60px] w-full text-body-bold bg-medium-grey shadow-xl">
+          {!channelListIsOpen && (
+            <button
+              onClick={() => setChannelListIsOpen((current) => !current)}
+              className="w-[24px] h-[24px] rounded-md"
+            >
+              <img
+                src={IconHamburger}
+                alt="icon-hamburger"
+                className="w-[24px]"
+              />
+            </button>
+          )}
+
+          {/* <button className="text-white hover:underline">
+            {channelDetail?.name}
+          </button> */}
+          <ChannelDetail channelDetail={channelDetail} />
         </nav>
         {/* CHAT CONTAINER */}
-        <div className=" w-full h-screen p-4 md:p-16 flex flex-col gap-12 overflow-y-scroll scrollbar-hide">
+        <div className=" w-full h-screen p-4 md:p-12 pb-0 md:pb-0 gap-4 flex flex-col overflow-y-scroll scrollbar-hide">
           {messages.length > 0 ? (
             mappedMessage
           ) : (
@@ -187,19 +200,20 @@ export default function ChannelPage() {
               <p> Please join or select a channel to start chattering!</p>
             </div>
           )}
+          <div ref={dummyRef}></div>
         </div>
         {/* CHATBOX */}
         {channelID && (
-          <div className="flex py-4 px-4 md:px-16 pb-8 w-full  bg-medium-grey">
+          <div className="flex py-4 px-4 md:px-12 pb-8 w-full  bg-medium-grey">
             <form
               onSubmit={sendMessage}
-              className="flex items-center w-full relative bg-light-grey rounded-lg pr-2"
+              className="group flex items-center w-full relative bg-light-grey rounded-lg pr-2 border border-text-grey/0"
             >
               <input
                 ref={ref}
                 type="text"
                 placeholder="Type a message here"
-                className="text-white bg-light-grey w-full text-input-medium outline-none rounded-lg p-4 min-h-[50px]"
+                className="group-active:border-text-grey text-white bg-light-grey w-full text-input-medium outline-none rounded-lg p-4 min-h-[50px]"
                 onChange={handleMessageInputChange}
               />
               <button
