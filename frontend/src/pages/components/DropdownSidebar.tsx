@@ -1,7 +1,8 @@
-import { Menu } from "@headlessui/react";
+import { Menu, Transition } from "@headlessui/react";
 import IconProfileRounded from "../../assets/icon-user-rounded.svg";
 import IconLogout from "../../assets/icon-logout.svg";
 import IconChevronDown from "../../assets/icon-chevron-down.svg";
+import { useState } from "react";
 
 export default function DropdownSidebar() {
   return (
@@ -14,7 +15,7 @@ export default function DropdownSidebar() {
         <img
           src={IconChevronDown}
           alt="icon-chevron-down"
-          className={`w-[12px] transition-all`}
+          className={`w-[12px] transition-all rotate-180`}
         />
       </Menu.Button>
       <Menu.Items

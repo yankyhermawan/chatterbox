@@ -1,9 +1,5 @@
-import { useParams } from "react-router-dom";
-import IconChevronDown from "../../assets/icon-chevron-down.svg";
-import IconCross from "../../assets/icon-cross.svg";
-import IconUserSquare from "../../assets/icon-user-square.svg";
-
-import Member from "./Member";
+import { useState } from "react";
+import { Dialog } from "@headlessui/react";
 
 interface Channel {
   id: string;
@@ -15,77 +11,72 @@ interface Channel {
 
 export default function ChannelDetail(props: {
   channelDetail: Channel | undefined;
-  setChannelListIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setChannelDetailIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  // CHANNEL ID
+  let [isOpen, setIsOpen] = useState(false);
+
   return (
     <>
-      <div className="h-screen w-[325px] md:min-w-[350px] fixed md:static left-0 top-0 bg-dark-grey flex flex-col z-50 shadow-xl md:shadow-none">
-        {/* CLOSE BUTTON */}
-        <button
-          onClick={() => props.setChannelDetailIsOpen(false)}
-          className="flex justify-center items-center w-[40px] h-[40px] bg-very-dark-grey shadow-xl rounded-xl top-2 -right-11 md:hidden absolute"
-        >
-          <img className="w-[15px] h-[15px]" src={IconCross} alt="icon-cross" />
-        </button>
-        {/* CHANNEL NAME */}
-        <div className="min-h-[60px] bg-very-dark-grey px-4 py-2 flex justify-between items-center shadow-xl">
-          <span className="flex gap-4 text-almost-white text-body-bold">
-            <button
-              onClick={() => {
-                props.setChannelDetailIsOpen(false);
-                props.setChannelListIsOpen(true);
-              }}
-              className="flex justify-center items-center rounded-lg p-1 active:bg-dark-grey"
-            >
-              <img
-                src={IconChevronDown}
-                alt="icon-chevron-down"
-                className="rotate-90 w-[20px]"
-              />
-            </button>
-            All Channels
-          </span>
-        </div>
+      <button
+        onClick={() => setIsOpen((current: boolean) => !current)}
+        className="text-white active:bg-light-grey p-2 rounded-lg"
+      >
+        {props.channelDetail?.name}
+      </button>
 
-        {/* CHANNEL DETAIL */}
-        <div className="p-6 flex flex-col gap-4">
-          <h3 className="flex gap-4 text-almost-white text-body-bold">
-            {props.channelDetail?.name}
-            {/* {props.activeChannel?.name} */}
-          </h3>
-          <p className="text-left text-almost-white text-input-medium">
-            {props.channelDetail?.description}
-            {/* {props.activeChannel?.description} */}
+      <Dialog
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        className="relative z-50 w-full max bg-red"
+      >
+        {/* The backdrop, rendered as a fixed sibling to the panel container */}
+        <div
+          className="fixed top-0 left-0 flex justify-center items-center inset-0 bg-black/50 p-4"
+          aria-hidden="true"
+        />
+
+        {/* Full-screen container to center the panel */}
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          {/* The actual dialog panel  */}
+          <Dialog.Panel className="bg-dark-grey rounded-lg w-full max-w-[425px] p-8 flex flex-col items-center gap-4">
+            <div className="flex justify-center items-center rounded-lg w-[100px] h-[100px] overflow-hidden bg-medium-grey">
+              {props.channelDetail?.imageURL ? (
+                <img
+                  className="object-cover h-full w-full"
+                  src={props.channelDetail?.imageURL}
+                  alt="image"
+                />
+              ) : (
+                <div className="text-body-bold">
+                  {props.channelDetail?.name[0]}
+                </div>
+              )}
+            </div>
+            <Dialog.Title className={"text-white text-body-bold"}>
+              {props.channelDetail?.name}
+            </Dialog.Title>
+            <p className="text-text-grey text-input-medium -mt-4">30 members</p>
+            <Dialog.Description className="text-center text-almost-white text-input-medium">
+              {props.channelDetail?.description}
+            </Dialog.Description>
+          </Dialog.Panel>
+        </div>
+      </Dialog>
+      {/* <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
+        <Dialog.Panel className={"bg-red w-full h-full"}>
+          <Dialog.Title>Deactivate account</Dialog.Title>
+          <Dialog.Description>
+            This will permanently deactivate your account
+          </Dialog.Description>
+
+          <p>
+            Are you sure you want to deactivate your account? All of your data
+            will be permanently removed. This action cannot be undone.
           </p>
-        </div>
 
-        {/* MEMBERS LIST */}
-        <div className="flex flex-col mt-auto gap-8 p-6 overflow-y-scroll scrollbar-hide">
-          <span className="flex gap-4 text-almost-white text-body-bold">
-            MEMBERS
-          </span>
-          <div className="flex flex-col gap-8 overflow-y-scroll scrollbar-hide">
-            <Member name={"Xanthe Neal"} />
-            <Member name={"Nellie Francis"} />
-            <Member name={"Denzel Barrett"} />
-            <Member name={"Shaunna Firth"} />
-          </div>
-        </div>
-
-        {/* PROFILE */}
-        <div className="relative bg-black h-[75px] w-full flex items-center gap-6 p-6">
-          <img
-            src={IconUserSquare}
-            alt="user-square"
-            className="w-[42px] h-[42px]"
-          />
-          <span className="text-body-bold text-text-light-grey">
-            Xanthe Neal
-          </span>
-        </div>
-      </div>
+          <button onClick={() => setIsOpen(false)}>Deactivate</button>
+          <button onClick={() => setIsOpen(false)}>Cancel</button>
+        </Dialog.Panel>
+      </Dialog> */}
     </>
   );
 }
