@@ -12,18 +12,19 @@ Easy to use app that provides real-time public group discussions
 
 ## Features
 ### Main Features
+- Register and login
 - Enter welcome page by default
+- See other people's message
+- Send a message
 - Create new channel with name and description
+- See and update my account detail
+- See others account detail
 - Enter channel of my choice
 - Search channel
 - See member of channel
-- Send a message
-- See other people's message
-- See and update my account detail
-- Register and login
+  
 ### Future Improvements
 - Search message
-- See others account detail
 - See others typing status
 - Send image to others
 
