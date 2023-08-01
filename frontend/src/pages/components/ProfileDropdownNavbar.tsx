@@ -3,6 +3,7 @@ import IconUserSquare from "../../assets/icon-user-square.svg";
 import IconTriangleDown from "../../assets/icon-triangle-down.svg";
 import IconProfileRounded from "../../assets/icon-user-rounded.svg";
 import IconLogout from "../../assets/icon-logout.svg";
+import IconGroup from "../../assets/icon-group.svg";
 
 export default function ProfileDropdownNavbar() {
   return (
@@ -41,6 +42,18 @@ export default function ProfileDropdownNavbar() {
                   className="w-[20px]"
                 />
                 My Profile
+              </button>
+            )}
+          </Menu.Item>
+          <Menu.Item>
+            {({ active }) => (
+              <button className="flex items-center gap-4 text-white px-3 py-2 active:bg-light-grey w-full rounded-lg text-modal-medium">
+                <img
+                  src={IconGroup}
+                  alt="icon-profile-rounded"
+                  className="w-[20px]"
+                />
+                Group Chat
               </button>
             )}
           </Menu.Item>
