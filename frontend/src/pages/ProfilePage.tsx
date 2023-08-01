@@ -5,6 +5,7 @@ import { Link, useParams } from "react-router-dom";
 
 export default function ProfilePage() {
   const { userID } = useParams();
+
   useEffect(() => {
     console.log(userID);
   }, []);
