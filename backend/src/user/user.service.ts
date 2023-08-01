@@ -31,6 +31,7 @@ export class UserService {
 		try {
 			const user = await this.prismaService.user.findUnique({
 				where: { id: userId },
+				include: { channels: true },
 			});
 
 			if (user) {
@@ -96,6 +97,23 @@ export class UserService {
 					response: "User not found",
 				};
 			}
+		} catch (err) {
+			return {
+				code: 500,
+				response: "Server error",
+			};
+		}
+	}
+
+	async getUserChannel(userID: string) {
+		try {
+			const response = await this.prismaService.userChannel.findMany({
+				where: { userID: userID },
+			});
+			return {
+				code: 200,
+				response: response,
+			};
 		} catch (err) {
 			return {
 				code: 500,

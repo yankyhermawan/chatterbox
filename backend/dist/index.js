@@ -108,6 +108,15 @@ app
         res.status(500).json("Server Error");
     }
 }));
+app.route("/user/channels/:id").get(checkTokenMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const response = yield userService.getUserChannel(req.params.id);
+        res.status(response.code).json(response.response);
+    }
+    catch (err) {
+        res.status(500).json("Server Error");
+    }
+}));
 app.get("/channel/:id", checkTokenMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const response = yield messageService.getChannelMessage(req.params.id);
     res.status(response.code).json(response.response);
