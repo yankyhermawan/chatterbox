@@ -1,7 +1,6 @@
 // COMPONENTS
 import ChannelList from "./components/ChannelList";
 import Chat from "./components/Chat";
-import ChannelDetailSidebar from "./components/ChannelDetailSidebar";
 
 // ASSETS
 import IconSend from "../assets/icon-send.svg";
@@ -21,6 +20,7 @@ const socket = io(BACKEND_URL);
 
 interface RequestOption {
   method: string;
+  headers: HeadersInit;
   redirect: "follow";
 }
 
@@ -55,7 +55,6 @@ export default function ChannelPage() {
   // STATES
   const [channelList, setChannelList] = useState<Channel[]>([]);
   const [channelListIsOpen, setChannelListIsOpen] = useState(true);
-  const [channelDetailIsOpen, setChannelDetailIsOpen] = useState(false);
   const ref = useRef<HTMLInputElement>(null);
   const dummyRef = useRef<HTMLDivElement>(null);
 
@@ -69,6 +68,7 @@ export default function ChannelPage() {
 
   const requestOptions: RequestOption = {
     method: "GET",
+    headers: { Authorization: `Bearer ${access_token}` },
     redirect: "follow",
   };
 
@@ -78,7 +78,6 @@ export default function ChannelPage() {
 
   useEffect(() => {
     const handleNewMessage = (messageData: Message) => {
-      console.log(messageData);
       if (messageData.content) {
         setMessages((prev) => [...prev, messageData]);
       }
@@ -122,6 +121,7 @@ export default function ChannelPage() {
       .then((result) => {
         try {
           setChannelList(result);
+          console.log(result);
         } catch (error) {
           console.log(error);
         }
@@ -153,18 +153,11 @@ export default function ChannelPage() {
   return (
     // PAGE CONTAINER
     <div className="flex h-screen w-screen fixed top-0 left-0 bg-medium-grey">
-      {/* LEFT */}
-      {/* <ChannelDetailSidebar
-        channelDetail={channelDetail}
-        setChannelListIsOpen={setChannelListIsOpen}
-        setChannelDetailIsOpen={setChannelDetailIsOpen}
-      /> */}
-
+      {/* LEFT SIDE */}
       {channelListIsOpen && (
         <ChannelList
           channelList={channelList}
           setChannelListIsOpen={setChannelListIsOpen}
-          setChannelDetailIsOpen={setChannelDetailIsOpen}
         />
       )}
 

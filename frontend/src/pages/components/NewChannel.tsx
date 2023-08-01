@@ -38,6 +38,7 @@ export default function NewChannel() {
 
   const handleFormSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
+
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
@@ -45,7 +46,6 @@ export default function NewChannel() {
       name: nameInput,
       description: descriptionInput,
       imageURL: urlInput,
-      // memberID: "eb35bc26-fa54-4daa-8539-acc0fe1d2a08",
     });
 
     const requestOptions: RequestOption = {
