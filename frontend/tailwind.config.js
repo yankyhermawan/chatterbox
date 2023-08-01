@@ -40,6 +40,12 @@ export const theme = {
         fontWeight: "700",
       },
     ],
+     "body-extrabold": [
+      "60px",
+      {
+        fontWeight: "900",
+      },
+    ],
 
     "input-medium": [
       "14px",
