@@ -20,7 +20,7 @@ export default function DropdownSidebar() {
       </Menu.Button>
       <Menu.Items
         className={
-          "absolute flex flex-col gap-4 bg-medium-grey border border-light-grey rounded-xl p-4 bottom-14 right-4 min-w-[195px] shadow-xl"
+          "absolute flex flex-col gap-2 bg-medium-grey border border-light-grey rounded-xl p-2 bottom-14 right-4 min-w-[195px] shadow-xl"
         }
       >
         <Menu.Item>
