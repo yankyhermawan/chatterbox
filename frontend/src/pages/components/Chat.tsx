@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import IconUserSquare from "../../assets/icon-user-square.svg";
 
 export default function Chat(props: {
@@ -9,12 +8,12 @@ export default function Chat(props: {
   const myId = localStorage.getItem("userID");
 
   const now = new Date();
-  const nowDay = now.toString().split(" ")[0];
+  // const nowDay = now.toString().split(" ")[0];
   const nowMonth = now.toString().split(" ")[1];
   const nowDate = +now.toString().split(" ")[2];
   const nowYear = +now.toString().split(" ")[3];
 
-  const nowTime = now.toString().split(" ")[4].slice(0, -3);
+  // const nowTime = now.toString().split(" ")[4].slice(0, -3);
 
   // SENT
   const sent = new Date(props.date);

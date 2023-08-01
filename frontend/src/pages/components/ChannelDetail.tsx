@@ -13,7 +13,7 @@ interface Channel {
 export default function ChannelDetail(props: {
   channelDetail: Channel | undefined;
 }) {
-  let [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>

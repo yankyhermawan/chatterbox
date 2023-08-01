@@ -1,8 +1,7 @@
-import { Menu, Transition } from "@headlessui/react";
+import { Menu } from "@headlessui/react";
 import IconProfileRounded from "../../assets/icon-user-rounded.svg";
 import IconLogout from "../../assets/icon-logout.svg";
 import IconChevronDown from "../../assets/icon-chevron-down.svg";
-import { useState } from "react";
 
 export default function DropdownSidebar() {
   return (
@@ -24,7 +23,7 @@ export default function DropdownSidebar() {
         }
       >
         <Menu.Item>
-          {({ active }) => (
+          {() => (
             <button className="flex items-center gap-4 text-white px-3 py-2 active:bg-light-grey w-full rounded-lg text-modal-medium">
               <img
                 src={IconProfileRounded}
@@ -37,7 +36,7 @@ export default function DropdownSidebar() {
         </Menu.Item>
         <hr className="border border-light-grey" />
         <Menu.Item>
-          {({ active }) => (
+          {() => (
             <button className="flex items-center gap-4 text-red px-3 py-2 active:bg-light-grey w-full rounded-lg text-modal-medium">
               <img
                 src={IconLogout}

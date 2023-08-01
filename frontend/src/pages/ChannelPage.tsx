@@ -8,7 +8,7 @@ import IconHamburger from "../assets/icon-hamburger.svg";
 import IconChat from "../assets/icon-chat.svg";
 
 // LIBRARY
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, SyntheticEvent } from "react";
 import { io } from "socket.io-client";
 import { useParams } from "react-router-dom";
 import ChannelDetail from "./components/ChannelDetail";
@@ -89,7 +89,7 @@ export default function ChannelPage() {
     };
   }, [channelID, messages]);
 
-  const sendMessage = (e: React.ChangeEvent<any>) => {
+  const sendMessage = (e: SyntheticEvent) => {
     const data = {
       channelID: channelID,
       content: messageInput,

@@ -1,4 +1,3 @@
-import { useParams } from "react-router-dom";
 import IconChevronDown from "../../assets/icon-chevron-down.svg";
 import IconCross from "../../assets/icon-cross.svg";
 import IconUserSquare from "../../assets/icon-user-square.svg";
