@@ -54,7 +54,7 @@ function RegisterPage() {
         }
       );
 
-      navigate("/login");
+      navigate("/registersuccessful");
     } catch (error) {
       console.error(error);
     }

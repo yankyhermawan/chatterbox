@@ -5,6 +5,7 @@ import ProfilePage from "./pages/ProfilePage";
 import EditProfilePage from "./pages/EditProfilePage";
 import RegisterPage from "./pages/RegisterPage";
 import LandingPage from "./pages/LandingPage";
+import RegisterSuccessfulPage from "./pages/RegisterSuccessfulPage";
 import "../dist/output.css";
 import "./App.css";
 
@@ -13,6 +14,11 @@ const App: React.FC = () => {
     <Router>
       <Routes>
         <Route path="/register" element={<RegisterPage />} />
+        <Route
+          path="/registersuccessful"
+          element={<RegisterSuccessfulPage />}
+        />
+
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<LandingPage />} />
         <Route path="/channel" element={<ChannelPage />} />
