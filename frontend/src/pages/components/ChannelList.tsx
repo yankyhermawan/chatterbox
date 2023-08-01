@@ -6,8 +6,6 @@ import IconCross from "../../assets/icon-cross.svg";
 
 import NewChannel from "./NewChannel";
 import DropdownSidebar from "./DropdownSidebar";
-import IconChevronDown from "../../assets/icon-chevron-down.svg";
-import Member from "./Member";
 
 interface Channel {
   id: string;
@@ -20,14 +18,12 @@ interface Channel {
 export default function ChannelList(props: {
   channelList: Channel[];
   setChannelListIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setChannelDetailIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const mappedChannelList = props.channelList.map((channel, index) => (
     <Channel
       key={index}
       channel={channel}
       setChannelListIsOpen={props.setChannelListIsOpen}
-      setChannelDetailIsOpen={props.setChannelDetailIsOpen}
     />
   ));
 
@@ -81,13 +77,6 @@ export default function ChannelList(props: {
       <div className="flex flex-col mt-auto gap-8 px-6 overflow-y-scroll scrollbar-hide">
         <div className="flex flex-col gap-8 py-6 overflow-y-scroll scrollbar-hide">
           {mappedChannelList}
-          {/* <Member name={"Xanthe Neal"} />
-          <Member name={"Nellie Francis"} />
-          <Member name={"Denzel Barrett"} />
-          <Member name={"Shaunna Firth"} />
-          <Member name={"Shaunna Firth"} />
-          <Member name={"Shaunna Firth"} />
-          <Member name={"Shaunna Firth"} /> */}
         </div>
       </div>
 

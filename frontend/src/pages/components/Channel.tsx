@@ -10,7 +10,6 @@ interface Channel {
 
 export default function Channel(props: {
   channel: Channel;
-  setChannelDetailIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setChannelListIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   // CHANNEL ID
