@@ -6,8 +6,6 @@ import EditProfilePage from "./pages/EditProfilePage";
 import RegisterPage from "./pages/RegisterPage";
 import LandingPage from "./pages/LandingPage";
 import RegisterSuccessfulPage from "./pages/RegisterSuccessfulPage";
-// import "../dist/output.css";
-import "./App.css";
 
 const App: React.FC = () => {
 	return (
