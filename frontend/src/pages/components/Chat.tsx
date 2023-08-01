@@ -28,10 +28,6 @@ export default function Chat(props: {
   const timeDifference = +now - +sent;
   const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
 
-  useEffect(() => {
-    console.log(props.senderID, myId);
-  }, []);
-
   return (
     <div className="flex gap-6">
       {/* PROFILE PICTURE */}
