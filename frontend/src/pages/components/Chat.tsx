@@ -1,4 +1,22 @@
+import { useEffect, useState } from "react";
 import IconUserSquare from "../../assets/icon-user-square.svg";
+import { Link } from "react-router-dom";
+
+interface RequestOption {
+  method: string;
+  headers: HeadersInit;
+  redirect: "follow";
+}
+
+interface UserData {
+  email: string;
+  firstName: string;
+  id: string;
+  imageURL: string;
+  lastName: string;
+  password: string;
+  username: string;
+}
 
 export default function Chat(props: {
   content: string;
@@ -6,7 +24,6 @@ export default function Chat(props: {
   senderID: string;
 }) {
   const myId = localStorage.getItem("userID");
-
   const now = new Date();
   // const nowDay = now.toString().split(" ")[0];
   const nowMonth = now.toString().split(" ")[1];
@@ -27,6 +44,34 @@ export default function Chat(props: {
   const timeDifference = +now - +sent;
   const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
 
+  const BACKEND_URL =
+    "https://w24-group-final-group-3-production.up.railway.app/";
+
+  const access_token = localStorage.getItem("access_token");
+
+  const requestOptions: RequestOption = {
+    method: "GET",
+    headers: { authorization: `Bearer ${access_token}` },
+    redirect: "follow",
+  };
+  const [userData, setUserData] = useState<UserData>();
+
+  const fetchUserData = () => {
+    fetch(BACKEND_URL + "user/" + `${props.senderID}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        try {
+          setUserData(result);
+        } catch (error) {
+          console.log(error);
+        }
+      });
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
   return (
     <div className="flex gap-6">
       {/* PROFILE PICTURE */}
@@ -41,9 +86,13 @@ export default function Chat(props: {
       {/* NAME, TIME, AND MESSAGE */}
       <div>
         <div className="flex gap-4 mb-1">
-          <span className="text-body-medium text-almost-white">
-            {props.senderID === myId ? "Me" : "Other person"}
-          </span>
+          <Link to={`/profile/${props.senderID}`}>
+            <span className="text-body-medium text-almost-white">
+              {props.senderID === myId
+                ? "Me"
+                : `${userData?.firstName} ${userData?.lastName}`}
+            </span>
+          </Link>
           <p className="text-time-small text-text-grey">
             {nowDate == sentDate && nowMonth == sentMonth && nowYear == sentYear
               ? `${sentTime}`

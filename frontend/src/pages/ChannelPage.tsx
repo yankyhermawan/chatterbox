@@ -79,6 +79,7 @@ export default function ChannelPage() {
   useEffect(() => {
     const handleNewMessage = (messageData: Message) => {
       if (messageData.content) {
+        console.log(messageData.senderID);
         setMessages((prev) => [...prev, messageData]);
       }
     };

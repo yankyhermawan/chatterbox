@@ -1,8 +1,14 @@
+import { useEffect } from "react";
 import IconUserSquare from "../assets/icon-user-square.svg";
 import Navbar2 from "./components/Nabvar2";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 export default function ProfilePage() {
+  const { userID } = useParams();
+  useEffect(() => {
+    console.log(userID);
+  }, []);
+
   return (
     // PAGE CONTIANER
     <div className="bg-medium-grey w-full h-full fixed top-0 left-0 overflow-scroll scrollbar-hide">
