@@ -6,12 +6,14 @@ const BACKEND_URL =
 
 interface RequestOption {
   method: "POST";
-  headers: Headers;
+  headers: HeadersInit;
   body: string;
   redirect: "follow";
 }
 
 export default function NewChannel() {
+  const access_token = localStorage.getItem("access_token");
+
   const [newChannelModalIsOpen, setNewChannelModalIsOpen] = useState(false);
   const [nameInput, setNameInput] = useState("");
   const [descriptionInput, setDescriptionInput] = useState("");
@@ -39,8 +41,10 @@ export default function NewChannel() {
   const handleFormSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
+    const myHeaders = {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${access_token}`,
+    };
 
     const raw = JSON.stringify({
       name: nameInput,

@@ -13,7 +13,7 @@ export default function ProfileModal() {
         My Profile
       </button>
 
-      <hr className="border border-light-grey" />
+      <hr className="border-light-grey" />
 
       <button className="flex items-center gap-4 text-red px-3 py-2 active:bg-light-grey w-full rounded-lg text-modal-medium">
         <img src={IconLogout} alt="icon-profile-rounded" className="w-[20px]" />

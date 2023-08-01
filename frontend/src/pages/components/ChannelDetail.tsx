@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Dialog } from "@headlessui/react";
+import IconCross from "../../assets/icon-cross.svg";
 
 interface Channel {
   id: string;
@@ -28,16 +29,23 @@ export default function ChannelDetail(props: {
         onClose={() => setIsOpen(false)}
         className="relative z-50 w-full max bg-red"
       >
-        {/* The backdrop, rendered as a fixed sibling to the panel container */}
         <div
           className="fixed top-0 left-0 flex justify-center items-center inset-0 bg-black/50 p-4"
           aria-hidden="true"
         />
 
-        {/* Full-screen container to center the panel */}
         <div className="fixed inset-0 flex items-center justify-center p-4">
-          {/* The actual dialog panel  */}
-          <Dialog.Panel className="bg-dark-grey rounded-lg w-full max-w-[425px] p-8 flex flex-col items-center gap-4">
+          <Dialog.Panel className="bg-dark-grey rounded-lg w-full max-w-[425px] p-8 flex flex-col items-center gap-4 relative">
+            <button
+              onClick={() => setIsOpen(false)}
+              className="justify-center items-center w-[30px] h-[30px] bg-very-dark-grey shadow-xl rounded-xl flex absolute top-2 right-2 active:bg-medium-grey"
+            >
+              <img
+                className="w-[12px] h-[12px]"
+                src={IconCross}
+                alt="icon-cross"
+              />
+            </button>
             <div className="flex justify-center items-center rounded-lg w-[100px] h-[100px] overflow-hidden bg-medium-grey">
               {props.channelDetail?.imageURL ? (
                 <img

@@ -68,7 +68,7 @@ export default function ChannelPage() {
 
   const requestOptions: RequestOption = {
     method: "GET",
-    headers: { Authorization: `Bearer ${access_token}` },
+    headers: { authorization: `Bearer ${access_token}` },
     redirect: "follow",
   };
 
@@ -121,7 +121,6 @@ export default function ChannelPage() {
       .then((result) => {
         try {
           setChannelList(result);
-          console.log(result);
         } catch (error) {
           console.log(error);
         }
