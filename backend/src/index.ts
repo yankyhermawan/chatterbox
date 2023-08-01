@@ -43,7 +43,7 @@ const checkTokenMiddleware = (
 			next();
 		} else {
 			// Token is invalid, return an error response
-			res.status(400).json("Invalid token");
+			res.status(401).json("Invalid token");
 		}
 	} catch (err) {
 		res.status(500).json("Server Error");
@@ -130,6 +130,15 @@ app
 			res.status(500).json("Server Error");
 		}
 	});
+
+app.route("/user/channels/:id").get(checkTokenMiddleware, async (req, res) => {
+	try {
+		const response = await userService.getUserChannel(req.params.id);
+		res.status(response.code).json(response.response);
+	} catch (err) {
+		res.status(500).json("Server Error");
+	}
+});
 
 // CHANNEL ENDPOINT
 

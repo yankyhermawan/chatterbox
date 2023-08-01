@@ -1,6 +1,6 @@
 ### REGISTER
 
-POST http://localhost:4000/register
+POST https://w24-group-final-group-3-production.up.railway.app/register
 Content-Type: application/json
 
 {
@@ -15,31 +15,56 @@ Content-Type: application/json
 
 ### LOGIN
 
-POST http://localhost:4000/login
+POST https://w24-group-final-group-3-production.up.railway.app/login
 Content-Type: application/json
 
 {
-    "email": "test1",
-    "password" : "test1"
+    "email": "abc@abcd.abcd",
+    "password" : "abcdabcd"
 }
 
 ### CREATE CHANNEL
 
-POST http://localhost:4000/channel
+POST https://w24-group-final-group-3-production.up.railway.app/channel
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRlMWJhNjEzLTE1YzAtNDNiMi1iMzBmLTg2YzBkZmJmN2RmMiIsImlhdCI6MTY5MDg5NjI3OSwiZXhwIjoxNjkwODk5ODc5fQ.CMwkFEsV1s1DsYUTJd-9WlfQe3D_lKYl69h0iq0GlPo
 Content-Type: application/json
 
 {
-    "channelName": "channel",
-    "channelImageURL": "abc",
-    "channelDescription": "Hello",
-    "memberID": "f2cfd3df-16dd-4430-a86a-c79891d78098"
+    "name": "team3-angel-yosua",
+    "imageURL": "abc",
+    "description": "Hello"
 }
 
 ### GET CHANNEL MESSAGES
-GET http://localhost:4000/channel/8e5a9928-7c9d-4688-bb1f-b0b85d720f9d
+GET https://w24-group-final-group-3-production.up.railway.app/channel/8e5a9928-7c9d-4688-bb1f-b0b85d720f9d
 
 ### GET ALL CHANNELS
-GET http://localhost:4000/channel/
+GET https://w24-group-final-group-3-production.up.railway.app/channel/
 
 ### JOIN CHANNEL
-POST http://localhost:4000/join/channel/eb35bc26-fa54-4daa-8539-acc0fe1d2a08
+POST https://w24-group-final-group-3-production.up.railway.app/join/ba2ff217-1f3b-4f29-82a6-09ca285943de/4e1ba613-15c0-43b2-b30f-86c0dfbf7df2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRlMWJhNjEzLTE1YzAtNDNiMi1iMzBmLTg2YzBkZmJmN2RmMiIsImlhdCI6MTY5MDg5NjI3OSwiZXhwIjoxNjkwODk5ODc5fQ.CMwkFEsV1s1DsYUTJd-9WlfQe3D_lKYl69h0iq0GlPo
+
+### GET USER DATA
+GET https://w24-group-final-group-3-production.up.railway.app/user/4e1ba613-15c0-43b2-b30f-86c0dfbf7df2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRlMWJhNjEzLTE1YzAtNDNiMi1iMzBmLTg2YzBkZmJmN2RmMiIsImlhdCI6MTY5MDg5NjI3OSwiZXhwIjoxNjkwODk5ODc5fQ.CMwkFEsV1s1DsYUTJd-9WlfQe3D_lKYl69h0iq0GlPo
+
+### GET USER CHANNELS
+GET https://w24-group-final-group-3-production.up.railway.app/user/channels/4e1ba613-15c0-43b2-b30f-86c0dfbf7df2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRlMWJhNjEzLTE1YzAtNDNiMi1iMzBmLTg2YzBkZmJmN2RmMiIsImlhdCI6MTY5MDg5NjI3OSwiZXhwIjoxNjkwODk5ODc5fQ.CMwkFEsV1s1DsYUTJd-9WlfQe3D_lKYl69h0iq0GlPo
+
+### EDIT USER DATA
+PUT https://w24-group-final-group-3-production.up.railway.app/user/b03693d4-620e-4e0a-9f51-ffcea43c8c69
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImIwMzY5M2Q0LTYyMGUtNGUwYS05ZjUxLWZmY2VhNDNjOGM2OSIsImlhdCI6MTY5MDgxNTE2MCwiZXhwIjoxNjkwODE4NzYwfQ.41ggfAnAiKf2djtyRjC10m4Xql7GFrveLmqFj6HGCI4
+Content-Type: application/json
+
+{
+    "username": "Yomans",
+    "email": "yomanskru",
+    "password": "yomans"
+}
+
+### DELETE USER DATA
+DELETE https://w24-group-final-group-3-production.up.railway.app/user/b03693d4-620e-4e0a-9f51-ffcea43c8c69
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxIiwiaWF0IjoxNjkwODA5ODk3LCJleHAiOjE2OTA4MTM0OTd9.loKprPJIBKyy1Fxpc4qNi3TpiA8teYLoJ5NHztRAb5Y
+
