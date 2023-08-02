@@ -6,6 +6,7 @@ import IconCross from "../../assets/icon-cross.svg";
 
 import NewChannel from "./NewChannel";
 import DropdownSidebar from "./DropdownSidebar";
+import { useEffect, useState } from "react";
 
 interface Channel {
   id: string;
@@ -15,10 +16,38 @@ interface Channel {
   date: Date[];
 }
 
+interface UserData {
+  email: string;
+  firstName: string;
+  id: string;
+  imageURL: string;
+  lastName: string;
+  password: string;
+  username: string;
+}
+
+interface RequestOption {
+  method: string;
+  headers: HeadersInit;
+  redirect: "follow";
+}
+
 export default function ChannelList(props: {
   channelList: Channel[];
   setChannelListIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+  const myId = localStorage.getItem("userID");
+  const access_token = localStorage.getItem("access_token");
+
+  const BACKEND_URL =
+    "https://w24-group-final-group-3-production.up.railway.app/";
+
+  const requestOptions: RequestOption = {
+    method: "GET",
+    headers: { authorization: `Bearer ${access_token}` },
+    redirect: "follow",
+  };
+
   const mappedChannelList = props.channelList.map((channel, index) => (
     <Channel
       key={index}
@@ -26,6 +55,24 @@ export default function ChannelList(props: {
       setChannelListIsOpen={props.setChannelListIsOpen}
     />
   ));
+
+  const [userData, setUserData] = useState<UserData>();
+
+  const fetchUserData = () => {
+    fetch(BACKEND_URL + "user/" + `${myId}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        try {
+          setUserData(result);
+        } catch (error) {
+          console.log(error);
+        }
+      });
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, [myId]);
 
   return (
     <div className="h-screen w-[325px] md:min-w-[350px] fixed md:static left-0 top-0 bg-dark-grey flex flex-col z-50 shadow-xl md:shadow-none">
@@ -87,7 +134,9 @@ export default function ChannelList(props: {
           alt="user-square"
           className="w-[42px] h-[42px]"
         />
-        <span className="text-body-bold text-text-light-grey">Full Name</span>
+        <span className="text-body-bold text-text-light-grey">
+          {userData?.firstName} {userData?.lastName}
+        </span>
         {/* PROFILE MODAL */}
         <DropdownSidebar />
       </div>

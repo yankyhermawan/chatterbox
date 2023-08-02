@@ -2,8 +2,17 @@ import { Menu } from "@headlessui/react";
 import IconProfileRounded from "../../assets/icon-user-rounded.svg";
 import IconLogout from "../../assets/icon-logout.svg";
 import IconChevronDown from "../../assets/icon-chevron-down.svg";
+import { useNavigate } from "react-router-dom";
 
 export default function DropdownSidebar() {
+  const navigate = useNavigate();
+  const myId = localStorage.getItem("userID");
+  const logout = () => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("userID");
+    navigate("/login");
+  };
+
   return (
     <Menu>
       <Menu.Button
@@ -24,7 +33,10 @@ export default function DropdownSidebar() {
       >
         <Menu.Item>
           {() => (
-            <button className="flex items-center gap-4 text-white px-3 py-2 active:bg-light-grey w-full rounded-lg text-modal-medium">
+            <button
+              onClick={() => navigate(`/profile/${myId}`)}
+              className="flex items-center gap-4 text-white px-3 py-2 active:bg-light-grey w-full rounded-lg text-modal-medium"
+            >
               <img
                 src={IconProfileRounded}
                 alt="icon-profile-rounded"
@@ -37,7 +49,10 @@ export default function DropdownSidebar() {
         <hr className="border border-light-grey" />
         <Menu.Item>
           {() => (
-            <button className="flex items-center gap-4 text-red px-3 py-2 active:bg-light-grey w-full rounded-lg text-modal-medium">
+            <button
+              onClick={() => logout()}
+              className="flex items-center gap-4 text-red px-3 py-2 active:bg-light-grey w-full rounded-lg text-modal-medium"
+            >
               <img
                 src={IconLogout}
                 alt="icon-profile-rounded"
