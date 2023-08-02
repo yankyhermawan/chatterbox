@@ -1,18 +1,58 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import IconUserSquare from "../assets/icon-user-square.svg";
-import Navbar2 from "./components/Nabvar2";
+import Navbar2 from "./components/Navbar2";
 import { Link, useParams } from "react-router-dom";
+
+interface RequestOption {
+  method: string;
+  headers: HeadersInit;
+  redirect: "follow";
+}
+
+interface UserData {
+  email: string;
+  firstName: string;
+  id: string;
+  imageURL: string;
+  lastName: string;
+  password: string;
+  username: string;
+}
 
 export default function ProfilePage() {
   const { userID } = useParams();
+  const [userData, setUserData] = useState<UserData>();
+
+  const BACKEND_URL =
+    "https://w24-group-final-group-3-production.up.railway.app/";
+
+  const myId = localStorage.getItem("userID");
+  const access_token = localStorage.getItem("access_token");
+  const requestOptions: RequestOption = {
+    method: "GET",
+    headers: { authorization: `Bearer ${access_token}` },
+    redirect: "follow",
+  };
+
+  const fetchUserData = () => {
+    fetch(BACKEND_URL + "user/" + `${userID}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        try {
+          setUserData(result);
+        } catch (error) {
+          console.log(error);
+        }
+      });
+  };
 
   useEffect(() => {
-    console.log(userID);
-  }, []);
+    fetchUserData();
+  }, [userID]);
 
   return (
-    // PAGE CONTIANER
-    <div className="bg-medium-grey w-full h-full fixed top-0 left-0 overflow-scroll scrollbar-hide">
+    // PAGE CONTAINER
+    <div className="flex flex-col items-center bg-medium-grey w-full h-full fixed top-0 left-0 overflow-scroll scrollbar-hide">
       {/* NAVBAR */}
       <Navbar2 />
 
@@ -35,11 +75,14 @@ export default function ProfilePage() {
                 Some info may be visible to other people
               </h3>
             </div>
-            <Link to={`../editprofile/`}>
-              <button className="px-8 py-1 border border-text-grey text-text-grey rounded-lg hover:border-white hover:text-white">
-                Edit
-              </button>
-            </Link>
+
+            {myId == userID && (
+              <Link to={`../editprofile/`}>
+                <button className="px-8 py-1 border border-text-grey text-text-grey rounded-lg hover:border-white hover:text-white">
+                  Edit
+                </button>
+              </Link>
+            )}
           </div>
 
           <hr className="border-light-grey" />
@@ -64,7 +107,9 @@ export default function ProfilePage() {
             <span className="w-[200px] text-input-medium text-text-grey text-left">
               NAME
             </span>
-            <span className="text-white text-body-regular">Arya Imanuel</span>
+            <span className="text-white text-body-regular">
+              {userData?.firstName} {userData?.lastName}
+            </span>
           </div>
           <hr className="border-light-grey" />
 
@@ -73,7 +118,9 @@ export default function ProfilePage() {
             <span className="w-[200px] text-input-medium text-text-grey text-left">
               USERNAME
             </span>
-            <span className="text-white text-body-regular">aryaimanuel</span>
+            <span className="text-white text-body-regular">
+              {userData?.username}
+            </span>
           </div>
           <hr className="border-light-grey" />
 
@@ -82,7 +129,7 @@ export default function ProfilePage() {
               EMAIL
             </span>
             <span className="text-white text-body-regular">
-              aryafe@mail.com
+              {userData?.email}
             </span>
           </div>
           <hr className="border-light-grey" />
