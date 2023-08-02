@@ -19,14 +19,14 @@ POST https://w24-group-final-group-3-production.up.railway.app/login
 Content-Type: application/json
 
 {
-    "email": "abc@abcd.abcd",
-    "password" : "abcdabcd"
+    "email": "yankyhermawan42@gmail.com",
+    "password" : "yanky123"
 }
 
 ### CREATE CHANNEL
 
 POST https://w24-group-final-group-3-production.up.railway.app/channel
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRlMWJhNjEzLTE1YzAtNDNiMi1iMzBmLTg2YzBkZmJmN2RmMiIsImlhdCI6MTY5MDg5NjI3OSwiZXhwIjoxNjkwODk5ODc5fQ.CMwkFEsV1s1DsYUTJd-9WlfQe3D_lKYl69h0iq0GlPo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ2OTkyZWMxLTBmNTMtNDZlNC04YzkxLWZhYmRiODMzMTljZSIsImlhdCI6MTY5MDg5OTQxOSwiZXhwIjoxNjkwOTAzMDE5fQ.RVsyiVarU5REJI7XDDVdSm0TOuFxp0iNsdgXp4pYWW0
 Content-Type: application/json
 
 {
