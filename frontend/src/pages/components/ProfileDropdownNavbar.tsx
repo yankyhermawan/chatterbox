@@ -27,7 +27,7 @@ export default function ProfileDropdownNavbar() {
   const access_token = localStorage.getItem("access_token");
   const BACKEND_URL =
     "https://w24-group-final-group-3-production.up.railway.app/";
-  const userID = localStorage.getItem("userID");
+  const myId = localStorage.getItem("userID");
   const navigate = useNavigate();
   const logout = () => {
     localStorage.removeItem("access_token");
@@ -43,12 +43,11 @@ export default function ProfileDropdownNavbar() {
   };
 
   const fetchUserData = () => {
-    fetch(BACKEND_URL + "user/" + `${userID}`, requestOptions)
+    fetch(BACKEND_URL + "user/" + `${myId}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         try {
           setUserData(result);
-          console.log(result);
         } catch (error) {
           console.log(error);
         }
@@ -78,7 +77,7 @@ export default function ProfileDropdownNavbar() {
             {userData?.firstName} {userData?.lastName}
           </span>
           <img
-            className="w-[10px] h-[10px] hidden md:block"
+            className="w-[10px] h-[10px]"
             src={IconTriangleDown}
             alt="icon-chevron-down"
           />
@@ -91,7 +90,7 @@ export default function ProfileDropdownNavbar() {
           <Menu.Item>
             {() => (
               <button
-                onClick={() => navigate(`/pofile/${userID}`)}
+                onClick={() => navigate(`/profile/${myId}`)}
                 className="flex items-center gap-4 text-white px-3 py-2 active:bg-light-grey w-full rounded-lg text-modal-medium"
               >
                 <img
@@ -105,7 +104,10 @@ export default function ProfileDropdownNavbar() {
           </Menu.Item>
           <Menu.Item>
             {() => (
-              <button className="flex items-center gap-4 text-white px-3 py-2 active:bg-light-grey w-full rounded-lg text-modal-medium">
+              <button
+                onClick={() => navigate("/channel/")}
+                className="flex items-center gap-4 text-white px-3 py-2 active:bg-light-grey w-full rounded-lg text-modal-medium"
+              >
                 <img
                   src={IconGroup}
                   alt="icon-profile-rounded"

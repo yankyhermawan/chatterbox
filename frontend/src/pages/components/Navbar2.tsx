@@ -8,7 +8,12 @@ export default function Navbar2() {
 
   return (
     <nav className="p-4 flex justify-between lg:px-16 border-light-grey w-full max-w-[1440px]">
-      <img src={LogoText} alt="logo-text" />
+      <img
+        className="hover:cursor-pointer"
+        onClick={() => navigate("/")}
+        src={LogoText}
+        alt="logo-text"
+      />
       {/* NAVBAR PROFILE BUTTON */}
       {access_token ? (
         <ProfileDropdownNavbar />

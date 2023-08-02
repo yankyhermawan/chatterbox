@@ -1,10 +1,18 @@
-import Navbar2 from "./components/Nabvar2";
+import Navbar2 from "./components/Navbar2";
 import IconChevronDownBlue from "../assets/icon-chevron-down-blue.svg";
+// import { useState } from "react";
 
 export default function EditProfilePage() {
+  // const [photoUrlInput, setPhotoUrlInput] = useState("");
+  // const [firstNameInput, setFirstNameInput] = useState("");
+  // const [lastNameInput, setLastNameInput] = useState("");
+  // const [usernameInput, setUsernameInput] = useState("");
+  // const [emailInput, setEmailInput] = useState("");
+  // const [passwordInput, setPasswordInput] = useState("");
+
   return (
     // PAGE
-    <div className="bg-medium-grey w-full h-full fixed top-0 left-0 overflow-scroll scrollbar-hide">
+    <div className="flex flex-col items-center bg-medium-grey w-full h-full fixed top-0 left-0 overflow-scroll scrollbar-hide">
       <Navbar2 />
       <section className="flex flex-col justify-center items-center w-full h-auto md:px-4 py-8">
         <div className="flex flex-col items-start w-full max-w-[768px]">
