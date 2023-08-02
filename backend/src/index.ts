@@ -13,6 +13,7 @@ interface messageData {
 	channelID: string;
 	content: string;
 	senderID: string;
+	name: string;
 }
 
 const app = express();
@@ -88,6 +89,13 @@ io.on("connection", (socket) => {
 			io.emit("chat message", msg);
 		}
 	});
+	socket.on("typing", (name) => {
+		socket.broadcast.emit("username", name);
+	});
+
+	socket.on("stopTyping", (name) => {
+		socket.broadcast.emit("userStopTyping", name);
+	});
 });
 
 // AUTH
@@ -142,10 +150,20 @@ app.route("/user/channels/:id").get(checkTokenMiddleware, async (req, res) => {
 
 // CHANNEL ENDPOINT
 
-app.get("/channel/:id", checkTokenMiddleware, async (req, res) => {
-	const response = await messageService.getChannelMessage(req.params.id);
-	res.status(response.code).json(response.response);
-});
+app
+	.route("/channel/:id")
+	.get(checkTokenMiddleware, async (req, res) => {
+		const response = await messageService.getChannelMessage(req.params.id);
+		res.status(response.code).json(response.response);
+	})
+	.delete(checkTokenMiddleware, async (req, res) => {
+		const response = await channelService.deleteChannel(req.params.id);
+		res.status(response.code).json(response?.response);
+	})
+	.put(checkTokenMiddleware, async (req, res) => {
+		const response = await channelService.editChannel(req.params.id, req.body);
+		res.status(response.code).json(response.response);
+	});
 
 app
 	.route("/channel")

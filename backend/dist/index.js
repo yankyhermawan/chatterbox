@@ -40,7 +40,7 @@ const checkTokenMiddleware = (req, res, next) => {
             next();
         }
         else {
-            res.status(400).json("Invalid token");
+            res.status(401).json("Invalid token");
         }
     }
     catch (err) {
@@ -75,6 +75,12 @@ io.on("connection", (socket) => {
             io.emit("chat message", msg);
         }
     }));
+    socket.on("typing", (name) => {
+        socket.broadcast.emit("username", name);
+    });
+    socket.on("stopTyping", (name) => {
+        socket.broadcast.emit("userStopTyping", name);
+    });
 });
 app.post("/register", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const response = yield (0, auth_service_1.registerUser)(req.body);
@@ -117,8 +123,18 @@ app.route("/user/channels/:id").get(checkTokenMiddleware, (req, res) => __awaite
         res.status(500).json("Server Error");
     }
 }));
-app.get("/channel/:id", checkTokenMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app
+    .route("/channel/:id")
+    .get(checkTokenMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const response = yield messageService.getChannelMessage(req.params.id);
+    res.status(response.code).json(response.response);
+}))
+    .delete(checkTokenMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const response = yield channelService.deleteChannel(req.params.id);
+    res.status(response.code).json(response === null || response === void 0 ? void 0 : response.response);
+}))
+    .put(checkTokenMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const response = yield channelService.editChannel(req.params.id, req.body);
     res.status(response.code).json(response.response);
 }));
 app
