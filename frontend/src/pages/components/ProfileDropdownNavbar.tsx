@@ -5,8 +5,28 @@ import IconTriangleDown from "../../assets/icon-triangle-down.svg";
 import IconProfileRounded from "../../assets/icon-user-rounded.svg";
 import IconLogout from "../../assets/icon-logout.svg";
 import IconGroup from "../../assets/icon-group.svg";
+import { useEffect, useState } from "react";
+
+interface RequestOption {
+  method: string;
+  headers: HeadersInit;
+  redirect: "follow";
+}
+
+interface UserData {
+  email: string;
+  firstName: string;
+  id: string;
+  imageURL: string;
+  lastName: string;
+  password: string;
+  username: string;
+}
 
 export default function ProfileDropdownNavbar() {
+  const access_token = localStorage.getItem("access_token");
+  const BACKEND_URL =
+    "https://w24-group-final-group-3-production.up.railway.app/";
   const userID = localStorage.getItem("userID");
   const navigate = useNavigate();
   const logout = () => {
@@ -14,6 +34,30 @@ export default function ProfileDropdownNavbar() {
     localStorage.removeItem("userID");
     navigate("/login");
   };
+
+  const [userData, setUserData] = useState<UserData>();
+  const requestOptions: RequestOption = {
+    method: "GET",
+    headers: { authorization: `Bearer ${access_token}` },
+    redirect: "follow",
+  };
+
+  const fetchUserData = () => {
+    fetch(BACKEND_URL + "user/" + `${userID}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        try {
+          setUserData(result);
+          console.log(result);
+        } catch (error) {
+          console.log(error);
+        }
+      });
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
 
   return (
     <Menu>
@@ -30,7 +74,9 @@ export default function ProfileDropdownNavbar() {
               alt="icon-user-square"
             />
           </div>
-          <span className="hidden md:block"> Arya Immanuel</span>
+          <span className="hidden md:block">
+            {userData?.firstName} {userData?.lastName}
+          </span>
           <img
             className="w-[10px] h-[10px] hidden md:block"
             src={IconTriangleDown}
