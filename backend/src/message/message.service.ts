@@ -1,4 +1,17 @@
 import { PrismaService } from "../prisma.service";
+import { Message } from "@prisma/client";
+
+interface MessageData extends Message {
+	sender: {
+		id: string;
+		email: string;
+		username: string;
+		password: string;
+		firstName: string;
+		lastName: string;
+		imageURL: string;
+	};
+}
 
 export class MessageService {
 	constructor(private readonly prismaService: PrismaService) {}
@@ -36,7 +49,7 @@ export class MessageService {
 					channel: true,
 				},
 			});
-			response.map((respon) => {
+			response.map((respon: MessageData) => {
 				respon.sender.password = "";
 			});
 			return {
