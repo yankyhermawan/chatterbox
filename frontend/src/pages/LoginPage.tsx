@@ -41,20 +41,17 @@ function LoginPage() {
           password: formData.password,
         }
       );
-      if (response.data.status === "success") {
-        localStorage.setItem("userID", response.data.userID);
-        localStorage.setItem("access_token", response.data.access_token);
-        navigate("/");
-      } else if (response.data.status === "error") {
-        setErrorMessage("Incorrect email or password. Please try again.");
-      }
-    } catch (error) {
-      console.error(error);
-      setErrorMessage("An error occurred during login. Please try again later.");
-    } finally {
-      setSubmitLogin(false);
-    }
+      localStorage.setItem("userID", response.data.userID);
+      localStorage.setItem("access_token", response.data.access_token);
+      navigate("/");
+  } catch (error) {
+    console.error(error);
+    setErrorMessage("An error occurred during login. Please try again later.");
+  } finally {
+    setSubmitLogin(false);
   }
+}
+
   return (
     <section className="flex justify-center items-center bg-medium-grey w-screen h-screen fixed top-0 left-0">
       <form
@@ -128,13 +125,14 @@ function LoginPage() {
             )}
           />
         </div>
-         <div className="text-red text-sm text-center text-input-medium">
-          {errorMessage}
+        <div className="text-red text-sm text-center text-input-medium">
+        {errorMessage}
         </div>
         <button
           type="submit"
           disabled={submitLogin}
           className="w-full text-white text-body-medium bg-blue rounded-lg text-sm px-5 py-2 text-center active:bg-blue-hover"
+          onClick={handleSubmit(onSubmit)}
         >
           Login
         </button>
