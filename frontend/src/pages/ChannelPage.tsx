@@ -15,29 +15,40 @@ import ChannelDetail from "./components/ChannelDetail";
 import EditChannel from "./components/EditChannel";
 
 const BACKEND_URL =
-	"https://w24-group-final-group-3-production.up.railway.app/";
+  "https://w24-group-final-group-3-production.up.railway.app/";
 
 const socket = io(BACKEND_URL);
 
 interface RequestOption {
-	method: string;
-	headers: HeadersInit;
-	redirect: "follow";
+  method: string;
+  headers: HeadersInit;
+  redirect: "follow";
+}
+
+interface User {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  imageURL: string;
+  username: string;
+  password: string;
 }
 
 interface Message {
-	id: string;
-	content: string;
-	date: string;
-	senderID: string;
+  id: string;
+  content: string;
+  date: string;
+  senderID: string;
+  sender: User;
 }
 
 interface Channel {
-	id: string;
-	name: string;
-	imageURL: string;
-	description: string;
-	date: Date[];
+  id: string;
+  name: string;
+  imageURL: string;
+  description: string;
+  date: Date[];
 }
 
 export default function ChannelPage() {
@@ -56,6 +67,8 @@ export default function ChannelPage() {
   // STATES
   const [channelList, setChannelList] = useState<Channel[]>([]);
   const [channelListIsOpen, setChannelListIsOpen] = useState(true);
+  const [channelDetail, setChannelDetail] = useState<Channel>();
+
   const ref = useRef<HTMLInputElement>(null);
   const dummyRef = useRef<HTMLDivElement>(null);
 
@@ -72,10 +85,6 @@ export default function ChannelPage() {
     headers: { authorization: `Bearer ${access_token}` },
     redirect: "follow",
   };
-
-  const channelDetail = channelList.find(
-    (channel: Channel) => channel.id == channelID
-  );
 
   useEffect(() => {
     const handleNewMessage = (messageData: Message) => {
@@ -131,8 +140,10 @@ export default function ChannelPage() {
   useEffect(() => {
     fetchAllChannel();
     fetchMessages();
-    console.log("channel fetched");
-  }, [channelID, socket, channelList.length]);
+    setChannelDetail(
+      channelList.find((channel: Channel) => channel.id == channelID)
+    );
+  }, [channelID, socket, channelList.length, channelDetail]);
 
   useEffect(() => {
     if (messages.length)
@@ -144,10 +155,11 @@ export default function ChannelPage() {
   const sortedMessage = messages.sort((a, b) => a.date.localeCompare(b.date));
   const mappedMessage = sortedMessage.map((message) => (
     <Chat
-      key={message.date}
+      key={message.id}
       content={message.content}
       date={message.date}
       senderID={message.senderID}
+      sender={message.sender}
     />
   ));
 
@@ -160,6 +172,7 @@ export default function ChannelPage() {
           channelList={channelList}
           setChannelList={setChannelList}
           setChannelListIsOpen={setChannelListIsOpen}
+          setChannelDetail={setChannelDetail}
         />
       )}
 
@@ -178,9 +191,21 @@ export default function ChannelPage() {
               />
             </button>
           )}
-          <ChannelDetail channelDetail={channelDetail} />
-          <EditChannel />
-          {/* <EditChannel /> */}
+
+          {channelDetail && (
+            <ChannelDetail
+              channelDetail={channelDetail}
+              setChannelDetail={setChannelDetail}
+              setChannelList={setChannelList}
+            />
+          )}
+          {channelDetail && (
+            <EditChannel
+              channelDetail={channelDetail}
+              setChannelDetail={setChannelDetail}
+              setChannelList={setChannelList}
+            />
+          )}
         </nav>
         {/* CHAT CONTAINER */}
         <div className=" w-full h-screen p-4 md:p-12 pb-0 md:pb-0 gap-4 flex flex-col overflow-y-scroll scrollbar-hide">

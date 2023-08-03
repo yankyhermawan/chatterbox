@@ -149,7 +149,7 @@ app
     res.status(response.code).json(response.response);
 }));
 app
-    .route("/channelmembers/:channelID")
+    .route("/channel/:channelID/members")
     .get(checkTokenMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const response = yield channelService.getChannelMembers(req.params.channelID);
     res.status(response.code).json(response.response);

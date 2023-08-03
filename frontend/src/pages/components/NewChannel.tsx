@@ -31,6 +31,7 @@ const schema = yup.object({
 
 export default function NewChannel(props: {
   setChannelList: React.Dispatch<React.SetStateAction<Channel[]>>;
+  setChannelDetail: React.Dispatch<React.SetStateAction<Channel | undefined>>;
 }) {
   const access_token = localStorage.getItem("access_token");
   const [newChannelModalIsOpen, setNewChannelModalIsOpen] = useState(false);
@@ -40,6 +41,7 @@ export default function NewChannel(props: {
     handleSubmit,
     formState: { errors },
   } = useForm<Channel>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: yupResolver<any>(schema),
   });
 
@@ -59,8 +61,7 @@ export default function NewChannel(props: {
     fetch(BACKEND_URL + "channel", requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result.stringify);
-        props.setChannelList((current: Channel[]) => [...current, data]);
+        props.setChannelDetail(result);
         setNewChannelModalIsOpen(false);
       })
       .catch((error) => console.log("error", error));
