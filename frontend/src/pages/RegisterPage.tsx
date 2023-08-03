@@ -45,29 +45,17 @@ function RegisterPage() {
     try {
       const imageURL = `https://avatars.dicebear.com/api/identicon/${userData.username}.svg`;
       const userDataWithImage = { ...userData, imageURL };
-      const response = await axios.post(
+      await axios.post(
         "https://w24-group-final-group-3-production.up.railway.app/register",
         userDataWithImage
       );
-
-    if (response.data.status === "success") {
       navigate("/registersuccessful");
-    } else if (response.data.status === "error") {
-      if (response.data.message === "Email already registered") {
-          setErrorMessage("Email is already registered. Please use a different email.");
-        } else if (response.data.message === "User already exists") {
-          setErrorMessage("Username is already taken. Please choose a different username.");
-        } else {
-          setErrorMessage("Registration was unsuccessful. Please try again later.");
-        }
+    } catch (error) {
+      console.error(error);
+      setErrorMessage("An error occurred during registration. Please try again later.");
     }
-  } catch (error) {
-    console.error(error);
-    setErrorMessage("An error occurred during registration. Please try again later.");
-  } finally {
-    setSubmitRegister(false);
-  }
 }
+
 
   return (
     <section className="flex justify-center items-center bg-medium-grey w-screen h-screen fixed top-0 left-0">
@@ -248,6 +236,7 @@ function RegisterPage() {
           type="submit"
           disabled={submitRegister}
           className="w-full text-white text-body-medium bg-blue rounded-lg text-sm px-5 py-2 text-center active:bg-blue-hover"
+          onClick={handleSubmit(onSubmit)}
         >
           Register
         </button>
