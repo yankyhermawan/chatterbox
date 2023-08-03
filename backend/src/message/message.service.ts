@@ -1,7 +1,11 @@
 import { PrismaService } from "../prisma.service";
-import { Message } from "@prisma/client";
 
-interface MessageData extends Message {
+interface MessageData {
+	id: string;
+	content: string;
+	date: Date;
+	senderID: string;
+	channelID: string;
 	sender: {
 		id: string;
 		email: string;
@@ -10,6 +14,12 @@ interface MessageData extends Message {
 		firstName: string;
 		lastName: string;
 		imageURL: string;
+	};
+	channel: {
+		id: string;
+		name: string;
+		imageURL: string;
+		description: string;
 	};
 }
 
