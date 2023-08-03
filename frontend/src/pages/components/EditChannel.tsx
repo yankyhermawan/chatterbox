@@ -1,12 +1,10 @@
+import { Dialog } from "@headlessui/react";
 import { useState } from "react";
-import AddIcon from "../../assets/add-icon.svg";
-import * as yup from "yup";
+import IconEdit from "../../assets/icon-edit.svg";
 import { Controller, useForm } from "react-hook-form";
+import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-// import { useNavigate } from "react-router-dom";
-
-const BACKEND_URL =
-  "https://w24-group-final-group-3-production.up.railway.app/";
+import DeleteChannel from "./DeleteChannel";
 
 interface Channel {
   id: string;
@@ -23,17 +21,17 @@ interface RequestOption {
   redirect: "follow";
 }
 
-const schema = yup.object({
-  name: yup.string().required("Channel name is required"),
-  description: yup.string().required("Channel description is required"),
-  imageURL: yup.string().required("Image URL is required"),
-});
-
-export default function NewChannel(props: {
-  setChannelList: React.Dispatch<React.SetStateAction<Channel[]>>;
-}) {
+export default function EditChannel() {
+  const [isOpen, setIsOpen] = useState(false);
   const access_token = localStorage.getItem("access_token");
-  const [newChannelModalIsOpen, setNewChannelModalIsOpen] = useState(false);
+  const BACKEND_URL =
+    "https://w24-group-final-group-3-production.up.railway.app/";
+
+  const schema = yup.object({
+    name: yup.string().required("Channel name is required"),
+    description: yup.string().required("Channel description is required"),
+    imageURL: yup.string().required("Image URL is required"),
+  });
 
   const {
     control,
@@ -60,8 +58,8 @@ export default function NewChannel(props: {
       .then((response) => response.json())
       .then((result) => {
         console.log(result.stringify);
-        props.setChannelList((current: Channel[]) => [...current, data]);
-        setNewChannelModalIsOpen(false);
+        // props.setChannelList((current: Channel[]) => [...current, data]);
+        // setNewChannelModalIsOpen(false);
       })
       .catch((error) => console.log("error", error));
   };
@@ -69,23 +67,31 @@ export default function NewChannel(props: {
   return (
     <>
       <button
-        onClick={() => setNewChannelModalIsOpen(true)}
-        className="w-[32px] h-[32px] rounded-lg bg-medium-grey flex justify-center items-center"
+        onClick={() => setIsOpen((current: boolean) => !current)}
+        className="justify-center items-center w-[30px] h-[30px] ml-auto shadow-xl rounded-xl flex active:bg-light-grey"
       >
-        <img src={AddIcon} alt="add-icon" className="w-[24px]" />
+        <img className="w-[20px] h-[20px]" src={IconEdit} alt="icon-edit" />
       </button>
 
-      {newChannelModalIsOpen && (
-        <div
-          onClick={() => setNewChannelModalIsOpen(false)}
-          className="fixed top-0 left-0 flex justify-center items-center w-screen h-screen p-4 md:p-0 bg-black/50 z-40"
-        >
+      <Dialog
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        className="relative z-50 w-full h-screen flex justify-center items-center bg-black/50"
+      >
+        {/* BACKGROUND OVERLAY */}
+        {/* <div
+          className="fixed top-0 left-0 flex justify-center items-center inset-0 bg-black/50 p-4"
+          aria-hidden="true"
+        /> */}
+
+        {/* <div className="fixed inset-0 flex items-center justify-center p-4"> */}
+        <Dialog.Panel className="p-4 flex justify-center items-center w-full md:max-w-[650px]">
           <form
             onClick={(e) => e.stopPropagation()}
-            className="bg-very-dark-grey w-[650px] p-10 flex flex-col items-start gap-6 rounded-[24px]"
+            className="bg-very-dark-grey w-full md:max-w-[650px] p-10 flex flex-col items-start gap-6 rounded-[24px]"
             onSubmit={handleSubmit(handleFormSubmit)}
           >
-            <h3 className="text-white text-body-bold">NEW CHANNEL</h3>
+            <h3 className="text-white text-body-bold">EDIT CHANNEL</h3>
             <Controller
               name="name"
               control={control}
@@ -150,12 +156,12 @@ export default function NewChannel(props: {
                 </>
               )}
             />
-
-            <div className="w-full flex justify-end gap-4">
+            <div className="w-full flex justify-between gap-4">
+              <DeleteChannel />
               <button
-                onClick={() => setNewChannelModalIsOpen(false)}
+                onClick={() => setIsOpen(false)}
                 type="button"
-                className="py-1 px-6 rounded-lg bg-medium-grey hover:bg-light-grey text-white hover:text-white text-body-medium outline-none"
+                className="py-1 px-6 rounded-lg bg-medium-grey hover:bg-light-grey text-white hover:text-white text-body-medium outline-none ml-auto"
               >
                 Cancel
               </button>
@@ -167,8 +173,9 @@ export default function NewChannel(props: {
               </button>
             </div>
           </form>
-        </div>
-      )}
+        </Dialog.Panel>
+        {/* </div> */}
+      </Dialog>
     </>
   );
 }

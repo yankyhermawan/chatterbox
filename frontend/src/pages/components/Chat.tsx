@@ -23,7 +23,7 @@ export default function Chat(props: {
   date: string;
   senderID: string;
 }) {
-  const myId = localStorage.getItem("userID");
+  // const myId = localStorage.getItem("userID");
   const now = new Date();
   // const nowDay = now.toString().split(" ")[0];
   const nowMonth = now.toString().split(" ")[1];
@@ -88,9 +88,7 @@ export default function Chat(props: {
         <div className="flex gap-4 mb-1">
           <Link to={`/profile/${props.senderID}`}>
             <span className="text-body-medium text-almost-white">
-              {props.senderID === myId
-                ? "Me"
-                : `${userData?.firstName} ${userData?.lastName}`}
+              {userData?.firstName} {userData?.lastName}
             </span>
           </Link>
           <p className="text-time-small text-text-grey">
