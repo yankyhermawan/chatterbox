@@ -31,6 +31,13 @@ export class MessageService {
 				where: {
 					channelID: channelId,
 				},
+				include: {
+					sender: true,
+					channel: true,
+				},
+			});
+			response.map((respon) => {
+				respon.sender.password = "";
 			});
 			return {
 				code: 200,
