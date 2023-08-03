@@ -1,10 +1,58 @@
-import { useState } from "react";
+import { SyntheticEvent, useState } from "react";
 import { Dialog } from "@headlessui/react";
+import { useParams, useNavigate } from "react-router-dom";
 
-export default function DeleteChannel() {
-  let [isOpen, setIsOpen] = useState(false);
+interface Channel {
+  id: string;
+  name: string;
+  description: string;
+  imageURL: string;
+  date: Date[];
+}
 
-  //   function handleDeactivate() {}
+interface RequestOption {
+  method: "DELETE";
+  headers: HeadersInit;
+  redirect: "follow";
+}
+
+export default function DeleteChannel(props: {
+  setChannelDetail: React.Dispatch<React.SetStateAction<Channel | undefined>>;
+  setChannelList: React.Dispatch<React.SetStateAction<Channel[]>>;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const access_token = localStorage.getItem("access_token");
+  const { channelID } = useParams();
+
+  const navigate = useNavigate();
+
+  const BACKEND_URL =
+    "https://w24-group-final-group-3-production.up.railway.app/";
+
+  const deleteChannel = (e: SyntheticEvent) => {
+    e.preventDefault();
+    const myHeaders = {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${access_token}`,
+    };
+
+    const requestOptions: RequestOption = {
+      method: "DELETE",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    fetch(BACKEND_URL + `channel/${channelID}`, requestOptions)
+      .then((response) => response.json())
+      .then(() => {
+        props.setChannelList((current: Channel[]) =>
+          current.filter((channel: Channel) => channel.id !== channelID)
+        );
+        navigate(`../channel/`);
+        setIsOpen(false);
+      })
+      .catch((error) => console.log("error", error));
+  };
 
   return (
     <>
@@ -44,7 +92,7 @@ export default function DeleteChannel() {
             </button>
 
             <button
-              onClick={() => setIsOpen(true)}
+              onClick={deleteChannel}
               type="button"
               className="border border-red py-1 px-6 rounded-lg hover:bg-red text-red hover:text-white text-body-medium outline-none"
             >

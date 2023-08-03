@@ -13,6 +13,8 @@ interface Channel {
 
 export default function ChannelDetail(props: {
   channelDetail: Channel | undefined;
+  setChannelDetail: React.Dispatch<React.SetStateAction<Channel | undefined>>;
+  setChannelList: React.Dispatch<React.SetStateAction<Channel[]>>;
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
