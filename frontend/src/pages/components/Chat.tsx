@@ -50,6 +50,7 @@ export default function Chat(props: {
 
   // const access_token = localStorage.getItem("access_token");
 
+
   // const requestOptions: RequestOption = {
   //   method: "GET",
   //   headers: { authorization: `Bearer ${access_token}` },

@@ -69,7 +69,7 @@ export default function ProfileDropdownNavbar() {
           <div className="w-[30px] h-[30px] overflow-hidden rounded-lg">
             <img
               className="object-cover w-full h-full"
-              src={IconUserSquare}
+              src={userData?.imageURL || IconUserSquare}
               alt="icon-user-square"
             />
           </div>

@@ -148,7 +148,7 @@ export default function ChannelList(props: {
       {/* PROFILE */}
       <div className="relative bg-black h-[75px] w-full flex items-center gap-6 p-6 mt-auto">
         <img
-          src={IconUserSquare}
+          src={userData?.imageURL || IconUserSquare}
           alt="user-square"
           className="w-[42px] h-[42px]"
         />
