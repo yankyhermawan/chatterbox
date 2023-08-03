@@ -43,7 +43,7 @@ function RegisterPage() {
   async function onSubmit(userData: RegisterProps) {
     setSubmitRegister(true);
     try {
-      const imageURL = `https://avatars.dicebear.com/api/identicon/${userData.username}.svg`;
+      const imageURL = `https://avatars.dicebear.com/api/personas/${userData.username}.svg`;
       const userDataWithImage = { ...userData, imageURL };
       await axios.post(
         "https://w24-group-final-group-3-production.up.railway.app/register",

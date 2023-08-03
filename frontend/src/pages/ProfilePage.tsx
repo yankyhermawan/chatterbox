@@ -93,10 +93,10 @@ export default function ProfilePage() {
               PHOTO
             </span>
             <div className="w-[60px] h-[60px] overflow-hidden rounded-lg">
-              <img
+               <img
                 className="object-cover w-full h-full"
-                src={IconUserSquare}
-                alt="icon-user-square"
+                src={userData?.imageURL || IconUserSquare}
+                alt="user-profile-pic"
               />
             </div>
           </div>

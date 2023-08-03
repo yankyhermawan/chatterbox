@@ -55,6 +55,7 @@ export default function Chat(props: {
     redirect: "follow",
   };
   const [userData, setUserData] = useState<UserData>();
+  const [userImage, setUserImage] = useState<string | undefined>(undefined);
 
   const fetchUserData = () => {
     fetch(BACKEND_URL + "user/" + `${props.senderID}`, requestOptions)
@@ -72,15 +73,30 @@ export default function Chat(props: {
     fetchUserData();
   }, []);
 
+  useEffect(() => {
+    if (userData?.imageURL) {
+      fetch(userData.imageURL)
+        .then((response) => response.blob())
+        .then((blob) => {
+          const imageUrl = URL.createObjectURL(blob);
+          setUserImage(imageUrl);
+        })
+        .catch((error) => {
+          console.log("Error fetching image:", error);
+          setUserImage(undefined);
+        });
+    }
+  }, [userData]);
+
   return (
     <div className="flex gap-6">
       {/* PROFILE PICTURE */}
       <div className="min-w-[42px] h-[42px] rounded-lg overflow-hidden">
-        <img
-          src={IconUserSquare}
-          alt="icon-user-square"
-          className="w-[42px] h-[42px] "
-        />
+        {userImage ? (
+          <img src={userImage} alt="user-profile-pic" className="w-[42px] h-[42px]" />
+        ) : (
+          <img src={IconUserSquare} alt="icon-user-square" className="w-[42px] h-[42px]" />
+        )}
       </div>
 
       {/* NAME, TIME, AND MESSAGE */}
