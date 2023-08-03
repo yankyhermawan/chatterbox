@@ -122,24 +122,28 @@ export default function ProfilePage() {
               {userData?.username}
             </span>
           </div>
-          <hr className="border-light-grey" />
 
-          <div className="flex items-center justify-between md:justify-start px-4 md:px-10 py-6">
-            <span className="w-[200px] text-input-medium text-text-grey text-left">
-              EMAIL
-            </span>
-            <span className="text-white text-body-regular">
-              {userData?.email}
-            </span>
-          </div>
-          <hr className="border-light-grey" />
+          {myId == userID && (
+            <>
+              <hr className="border-light-grey" />
+              <div className="flex items-center justify-between md:justify-start px-4 md:px-10 py-6">
+                <span className="w-[200px] text-input-medium text-text-grey text-left">
+                  EMAIL
+                </span>
+                <span className="text-white text-body-regular">
+                  {userData?.email}
+                </span>
+              </div>
+              <hr className="border-light-grey" />
 
-          <div className="flex items-center justify-between md:justify-start px-4 md:px-10 py-6">
-            <span className="w-[200px] text-input-medium text-text-grey text-left">
-              PASSWORD
-            </span>
-            <span className="text-white text-body-regular">********</span>
-          </div>
+              <div className="flex items-center justify-between md:justify-start px-4 md:px-10 py-6">
+                <span className="w-[200px] text-input-medium text-text-grey text-left">
+                  PASSWORD
+                </span>
+                <span className="text-white text-body-regular">********</span>
+              </div>
+            </>
+          )}
         </div>
       </section>
     </div>
