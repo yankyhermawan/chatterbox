@@ -12,6 +12,7 @@ import { useState, useEffect, useRef, SyntheticEvent } from "react";
 import { io } from "socket.io-client";
 import { useParams } from "react-router-dom";
 import ChannelDetail from "./components/ChannelDetail";
+import EditChannel from "./components/EditChannel";
 
 const BACKEND_URL =
   "https://w24-group-final-group-3-production.up.railway.app/";
@@ -79,7 +80,6 @@ export default function ChannelPage() {
   useEffect(() => {
     const handleNewMessage = (messageData: Message) => {
       if (messageData.content) {
-        console.log(messageData.senderID);
         setMessages((prev) => [...prev, messageData]);
       }
     };
@@ -131,7 +131,8 @@ export default function ChannelPage() {
   useEffect(() => {
     fetchAllChannel();
     fetchMessages();
-  }, [channelID, socket]);
+    console.log("channel fetched");
+  }, [channelID, socket, channelList.length]);
 
   useEffect(() => {
     if (messages.length)
@@ -157,6 +158,7 @@ export default function ChannelPage() {
       {channelListIsOpen && (
         <ChannelList
           channelList={channelList}
+          setChannelList={setChannelList}
           setChannelListIsOpen={setChannelListIsOpen}
         />
       )}
@@ -176,11 +178,9 @@ export default function ChannelPage() {
               />
             </button>
           )}
-
-          {/* <button className="text-white hover:underline">
-            {channelDetail?.name}
-          </button> */}
           <ChannelDetail channelDetail={channelDetail} />
+          <EditChannel />
+          {/* <EditChannel /> */}
         </nav>
         {/* CHAT CONTAINER */}
         <div className=" w-full h-screen p-4 md:p-12 pb-0 md:pb-0 gap-4 flex flex-col overflow-y-scroll scrollbar-hide">
@@ -195,6 +195,7 @@ export default function ChannelPage() {
           )}
           <div ref={dummyRef}></div>
         </div>
+
         {/* CHATBOX */}
         {channelID && (
           <div className="flex py-4 px-4 md:px-12 pb-8 w-full  bg-medium-grey">
@@ -211,7 +212,7 @@ export default function ChannelPage() {
               />
               <button
                 onClick={sendMessage}
-                className="bg-blue active:bg-blue-hover w-[40px] h-[40px] right-2 inset-y-0 rounded-lg flex justify-center items-center disabled:bg-text-grey"
+                className="bg-blue hover:bg-blue-hover w-[40px] h-[40px] right-2 inset-y-0 rounded-lg flex justify-center items-center disabled:bg-text-grey"
                 disabled={!messageInput}
               >
                 <img src={IconSend} alt="icon-send" className="w-[20px]" />

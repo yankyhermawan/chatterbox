@@ -123,7 +123,7 @@ export default function EditProfilePage() {
             </div>
             <button
               type="button"
-              className="bg-blue mt-4 py-2 px-6 rounded-lg text-white text-body-medium mr-auto active:bg-blue-hover outline-none w-full md:max-w-[100px]"
+              className="bg-blue mt-4 py-2 px-6 rounded-lg text-white text-body-medium mr-auto hover:bg-blue-hover outline-none w-full md:max-w-[100px]"
             >
               Save
             </button>
