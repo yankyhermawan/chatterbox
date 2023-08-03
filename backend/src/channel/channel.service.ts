@@ -124,11 +124,21 @@ export class ChannelService {
 		}
 	}
 	async deleteChannel(channelId: string) {
-		try {
-			const channelExist = await this.prismaService.channel.findUnique({
-				where: { id: channelId },
-			});
-			if (channelExist) {
+		// try {
+		const channelExist = await this.prismaService.channel.findUnique({
+			where: { id: channelId },
+		});
+		if (channelExist) {
+			const [deleteMessage, deleteUserChannel] = await Promise.all([
+				this.prismaService.message.deleteMany({
+					where: { channelID: channelId },
+				}),
+				this.prismaService.userChannel.deleteMany({
+					where: { channelID: channelId },
+				}),
+			]);
+
+			if (deleteMessage && deleteUserChannel) {
 				const response = await this.prismaService.channel.delete({
 					where: { id: channelId },
 				});
@@ -137,15 +147,16 @@ export class ChannelService {
 					response: response,
 				};
 			}
-			return {
-				code: 404,
-				response: "Channel not found",
-			};
-		} catch (err) {
-			return {
-				code: 500,
-				response: "Server error",
-			};
 		}
+		return {
+			code: 404,
+			response: "Channel not found",
+		};
+		// } catch (err) {
+		// 	return {
+		// 		code: 500,
+		// 		response: "Server error",
+		// 	};
+		// }
 	}
 }

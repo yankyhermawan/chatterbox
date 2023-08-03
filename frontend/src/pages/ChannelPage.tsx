@@ -15,29 +15,29 @@ import ChannelDetail from "./components/ChannelDetail";
 import EditChannel from "./components/EditChannel";
 
 const BACKEND_URL =
-  "https://w24-group-final-group-3-production.up.railway.app/";
+	"https://w24-group-final-group-3-production.up.railway.app/";
 
 const socket = io(BACKEND_URL);
 
 interface RequestOption {
-  method: string;
-  headers: HeadersInit;
-  redirect: "follow";
+	method: string;
+	headers: HeadersInit;
+	redirect: "follow";
 }
 
 interface Message {
-  id: string;
-  content: string;
-  date: string;
-  senderID: string;
+	id: string;
+	content: string;
+	date: string;
+	senderID: string;
 }
 
 interface Channel {
-  id: string;
-  name: string;
-  imageURL: string;
-  description: string;
-  date: Date[];
+	id: string;
+	name: string;
+	imageURL: string;
+	description: string;
+	date: Date[];
 }
 
 export default function ChannelPage() {
