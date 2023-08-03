@@ -190,7 +190,7 @@ app
 	});
 
 app
-	.route("/channelmembers/:channelID")
+	.route("/channel/:channelID/members")
 	.get(checkTokenMiddleware, async (req, res) => {
 		const response = await channelService.getChannelMembers(
 			req.params.channelID
