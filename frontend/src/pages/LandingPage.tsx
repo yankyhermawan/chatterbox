@@ -1,8 +1,3 @@
-// import Features from "./components/Features";
-// import Footer from "./components/Footer";
-// import Home from "./components/Home";
-// import NavBar from "./components/Navbar";
-// import PopularChannels from "./components/PopularChannels";
 import Navbar2 from "./components/Navbar2";
 import HeroImage from "../assets/hero-image.svg";
 import Feature1 from "../assets/features-1.svg";

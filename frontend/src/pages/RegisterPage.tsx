@@ -20,11 +20,11 @@ interface RegisterProps {
 
 const schema = yup
   .object({
-    firstName: yup.string().required(),
-    lastName: yup.string().required(),
-    username: yup.string().required(),
-    email: yup.string().email().required(),
-    password: yup.string().min(5).required(),
+    firstName: yup.string().required("First Name is required"),
+    lastName: yup.string().required("Last Name is required"),
+    username: yup.string().required("Username is required"),
+    email: yup.string().email("Invalid email").required("Email is required"),
+    password: yup.string().min(5, "Password must be at least 5 characters").required("Password is required"),
   })
   .required();
 
@@ -38,27 +38,36 @@ function RegisterPage() {
   } = useForm({
     resolver: yupResolver(schema),
   });
+  const [errorMessage, setErrorMessage] = useState('');
 
   async function onSubmit(userData: RegisterProps) {
     setSubmitRegister(true);
     try {
-      await axios.post(
+      const imageURL = `https://avatars.dicebear.com/api/identicon/${userData.username}.svg`;
+      const userDataWithImage = { ...userData, imageURL };
+      const response = await axios.post(
         "https://w24-group-final-group-3-production.up.railway.app/register",
-        {
-          firstName: userData.firstName,
-          lastName: userData.lastName,
-          username: userData.username,
-          email: userData.email,
-          password: userData.password,
-          imageURL: "",
-        }
+        userDataWithImage
       );
 
+    if (response.data.status === "success") {
       navigate("/registersuccessful");
-    } catch (error) {
-      console.error(error);
+    } else if (response.data.status === "error") {
+      if (response.data.message === "Email already registered") {
+          setErrorMessage("Email is already registered. Please use a different email.");
+        } else if (response.data.message === "User already exists") {
+          setErrorMessage("Username is already taken. Please choose a different username.");
+        } else {
+          setErrorMessage("Registration was unsuccessful. Please try again later.");
+        }
     }
+  } catch (error) {
+    console.error(error);
+    setErrorMessage("An error occurred during registration. Please try again later.");
+  } finally {
+    setSubmitRegister(false);
   }
+}
 
   return (
     <section className="flex justify-center items-center bg-medium-grey w-screen h-screen fixed top-0 left-0">
@@ -77,6 +86,7 @@ function RegisterPage() {
           <Controller
             name="firstName"
             control={control}
+            defaultValue=""
             render={({ field }) => (
               <>
                 <input
@@ -109,6 +119,7 @@ function RegisterPage() {
           <Controller
             name="lastName"
             control={control}
+            defaultValue=""
             render={({ field }) => (
               <>
                 <input
@@ -141,6 +152,7 @@ function RegisterPage() {
           <Controller
             name="username"
             control={control}
+            defaultValue=""
             render={({ field }) => (
               <>
                 <input
@@ -173,6 +185,7 @@ function RegisterPage() {
           <Controller
             name="email"
             control={control}
+            defaultValue=""
             render={({ field }) => (
               <>
                 <input
@@ -205,6 +218,7 @@ function RegisterPage() {
           <Controller
             name="password"
             control={control}
+            defaultValue=""
             render={({ field }) => (
               <>
                 <input
@@ -227,6 +241,9 @@ function RegisterPage() {
             )}
           />
         </div>
+      <div className="text-red text-sm text-center text-input-medium">
+        {errorMessage}
+      </div>
         <button
           type="submit"
           disabled={submitRegister}
