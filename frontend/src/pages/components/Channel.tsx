@@ -21,8 +21,16 @@ export default function Channel(props: {
           channelID === props.channel.id ? "text-white" : "text-text-grey"
         }  text-body-bold gap-3 text-left hover:cursor-pointer`}
       >
-        <div className="flex justify-center items-center w-[42px] h-[42px] rounded-lg text-white bg-medium-grey uppercase">
-          {props.channel.name[0]}
+        <div className="flex justify-center items-center w-[42px] h-[42px] rounded-lg text-white bg-medium-grey uppercase overflow-hidden">
+          {props.channel.imageURL ? (
+            <img
+              className="object-cover w-full h-full"
+              src={`${props.channel.imageURL}`}
+              alt="channel-image"
+            />
+          ) : (
+            props.channel.name[0]
+          )}
         </div>
         {props.channel.name}
       </span>

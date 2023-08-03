@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import IconCross from "../../assets/icon-cross.svg";
+import IconChevronDown from "../../assets/icon-chevron-down.svg";
 
 interface Channel {
   id: string;
@@ -19,15 +20,20 @@ export default function ChannelDetail(props: {
     <>
       <button
         onClick={() => setIsOpen((current: boolean) => !current)}
-        className="text-white active:bg-light-grey p-2 rounded-lg"
+        className="text-white hover:bg-light-grey p-2 rounded-lg flex items-center gap-3"
       >
-        {props.channelDetail?.name}
+        {props.channelDetail?.name}{" "}
+        <img
+          className="w-[10px] h-[10px]"
+          src={IconChevronDown}
+          alt="icon-chevron-down"
+        />
       </button>
 
       <Dialog
         open={isOpen}
         onClose={() => setIsOpen(false)}
-        className="relative z-50 w-full max bg-red"
+        className="relative z-50 w-full bg-red"
       >
         <div
           className="fixed top-0 left-0 flex justify-center items-center inset-0 bg-black/50 p-4"
@@ -35,18 +41,20 @@ export default function ChannelDetail(props: {
         />
 
         <div className="fixed inset-0 flex items-center justify-center p-4">
-          <Dialog.Panel className="bg-dark-grey rounded-lg w-full max-w-[425px] p-8 flex flex-col items-center gap-4 relative">
-            <button
-              onClick={() => setIsOpen(false)}
-              className="justify-center items-center w-[30px] h-[30px] bg-very-dark-grey shadow-xl rounded-xl flex absolute top-2 right-2 active:bg-medium-grey"
-            >
-              <img
-                className="w-[12px] h-[12px]"
-                src={IconCross}
-                alt="icon-cross"
-              />
-            </button>
-            <div className="flex justify-center items-center rounded-lg w-[100px] h-[100px] overflow-hidden bg-medium-grey">
+          <Dialog.Panel className="bg-dark-grey rounded-lg w-full max-w-[425px] p-4 pb-8 flex flex-col items-center gap-4 relative">
+            <div className="w-full flex justify-end">
+              <button
+                onClick={() => setIsOpen(false)}
+                className="justify-center items-center w-[30px] h-[30px] bg-very-dark-grey shadow-xl rounded-xl flex active:bg-medium-grey"
+              >
+                <img
+                  className="w-[12px] h-[12px]"
+                  src={IconCross}
+                  alt="icon-cross"
+                />
+              </button>
+            </div>
+            <div className="flex justify-center items-center rounded-lg w-[150px] h-[150px] overflow-hidden bg-medium-grey">
               {props.channelDetail?.imageURL ? (
                 <img
                   className="object-cover h-full w-full"
@@ -59,32 +67,21 @@ export default function ChannelDetail(props: {
                 </div>
               )}
             </div>
-            <Dialog.Title className={"text-white text-body-bold"}>
-              {props.channelDetail?.name}
-            </Dialog.Title>
+            <div className="flex gap-2">
+              <div>
+                <Dialog.Title className={"text-white text-body-bold"}>
+                  {props.channelDetail?.name}
+                </Dialog.Title>
+              </div>
+            </div>
+
             <p className="text-text-grey text-input-medium -mt-4">30 members</p>
-            <Dialog.Description className="text-center text-almost-white text-input-medium">
+            <Dialog.Description className="text-center text-almost-white text-input-medium overflow-y-scroll scrollbar-hide h-[200px]">
               {props.channelDetail?.description}
             </Dialog.Description>
           </Dialog.Panel>
         </div>
       </Dialog>
-      {/* <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
-        <Dialog.Panel className={"bg-red w-full h-full"}>
-          <Dialog.Title>Deactivate account</Dialog.Title>
-          <Dialog.Description>
-            This will permanently deactivate your account
-          </Dialog.Description>
-
-          <p>
-            Are you sure you want to deactivate your account? All of your data
-            will be permanently removed. This action cannot be undone.
-          </p>
-
-          <button onClick={() => setIsOpen(false)}>Deactivate</button>
-          <button onClick={() => setIsOpen(false)}>Cancel</button>
-        </Dialog.Panel>
-      </Dialog> */}
     </>
   );
 }
