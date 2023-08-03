@@ -3,6 +3,8 @@ import Channel from "./Channel";
 
 import IconUserSquare from "../../assets/icon-user-square.svg";
 import IconCross from "../../assets/icon-cross.svg";
+// import IconHome from "../../assets/icon-home.svg";
+import IconChevronDown from "../../assets/icon-chevron-down.svg";
 
 import NewChannel from "./NewChannel";
 import DropdownSidebar from "./DropdownSidebar";
@@ -35,6 +37,7 @@ interface RequestOption {
 export default function ChannelList(props: {
   channelList: Channel[];
   setChannelList: React.Dispatch<React.SetStateAction<Channel[]>>;
+  setChannelDetail: React.Dispatch<React.SetStateAction<Channel | undefined>>;
   setChannelListIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const myId = localStorage.getItem("userID");
@@ -58,9 +61,9 @@ export default function ChannelList(props: {
   const filteredChannelList = props.channelList.filter((channel: Channel) =>
     channel.name.toLowerCase().includes(searchInput)
   );
-  const mappedChannelList = filteredChannelList.map((channel, index) => (
+  const mappedChannelList = filteredChannelList.map((channel) => (
     <Channel
-      key={index}
+      key={channel.id}
       channel={channel}
       setChannelListIsOpen={props.setChannelListIsOpen}
     />
@@ -95,27 +98,30 @@ export default function ChannelList(props: {
       </button>
       {/* CHANNEL NAME */}
       <div className="min-h-[60px] px-4 py-2 flex justify-between items-center shadow-xl">
-        <span className="flex gap-4 text-almost-white text-body-bold">
+        <span className="flex items-center gap-4 text-almost-white text-body-bold">
+          <button
+            className="flex items-center"
+            onClick={() => props.setChannelListIsOpen(false)}
+          >
+            <img
+              className="w-[20px] h-[20px] rotate-90"
+              src={IconChevronDown}
+              alt="icon-chevron-down"
+            />
+          </button>
           Channels
         </span>
 
         <div className="flex items-center gap-4">
-          <NewChannel setChannelList={props.setChannelList} />
-          <button
-            onClick={() => props.setChannelListIsOpen(false)}
-            className="w-[32px] h-[32px] rounded-lg bg-dark-grey hidden md:flex justify-center items-center active:bg-medium-grey"
-          >
-            <img
-              className="rotate-90 w-[16px]"
-              src={IconCross}
-              alt="icon-chevron-down"
-            />
-          </button>
+          <NewChannel
+            setChannelList={props.setChannelList}
+            setChannelDetail={props.setChannelDetail}
+          />
         </div>
       </div>
 
       {/* CHANNEL DETAIL */}
-      <div className="p-6 flex flex-col gap-4">
+      <div className="p-4 flex flex-col gap-4">
         <div className="relative border-medium-grey">
           <input
             onChange={handleSearchInputChange}
@@ -134,6 +140,7 @@ export default function ChannelList(props: {
       {/* MEMBERS LIST */}
       <div className="flex flex-col gap-8 px-6 overflow-y-scroll scrollbar-hide">
         <div className="flex flex-col gap-8 py-6 overflow-y-scroll scrollbar-hide">
+          <h3 className="text-body-bold text-white">My Channels</h3>
           {mappedChannelList}
         </div>
       </div>

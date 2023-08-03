@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import IconUserSquare from "../../assets/icon-user-square.svg";
 import { Link } from "react-router-dom";
 
-interface RequestOption {
-  method: string;
-  headers: HeadersInit;
-  redirect: "follow";
-}
+// interface RequestOption {
+//   method: string;
+//   headers: HeadersInit;
+//   redirect: "follow";
+// }
 
 interface UserData {
   email: string;
@@ -22,6 +22,7 @@ export default function Chat(props: {
   content: string;
   date: string;
   senderID: string;
+  sender: UserData;
 }) {
   // const myId = localStorage.getItem("userID");
   const now = new Date();
@@ -44,43 +45,51 @@ export default function Chat(props: {
   const timeDifference = +now - +sent;
   const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
 
-  const BACKEND_URL =
-    "https://w24-group-final-group-3-production.up.railway.app/";
+  // const BACKEND_URL =
+  //   "https://w24-group-final-group-3-production.up.railway.app/";
 
-  const access_token = localStorage.getItem("access_token");
+  // const access_token = localStorage.getItem("access_token");
 
-  const requestOptions: RequestOption = {
-    method: "GET",
-    headers: { authorization: `Bearer ${access_token}` },
-    redirect: "follow",
-  };
-  const [userData, setUserData] = useState<UserData>();
+  // const requestOptions: RequestOption = {
+  //   method: "GET",
+  //   headers: { authorization: `Bearer ${access_token}` },
+  //   redirect: "follow",
+  // };
+  // const [userData, setUserData] = useState<UserData>();
 
-  const fetchUserData = () => {
-    fetch(BACKEND_URL + "user/" + `${props.senderID}`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        try {
-          setUserData(result);
-        } catch (error) {
-          console.log(error);
-        }
-      });
-  };
+  // const fetchUserData = () => {
+  //   fetch(BACKEND_URL + "user/" + `${props.senderID}`, requestOptions)
+  //     .then((response) => response.json())
+  //     .then((result) => {
+  //       try {
+  //         setUserData(result);
+  //       } catch (error) {
+  //         console.log(error);
+  //       }
+  //     });
+  // };
 
-  useEffect(() => {
-    fetchUserData();
-  }, []);
+  // useEffect(() => {
+  //   fetchUserData();
+  // }, []);
 
   return (
     <div className="flex gap-6">
       {/* PROFILE PICTURE */}
       <div className="min-w-[42px] h-[42px] rounded-lg overflow-hidden">
-        <img
-          src={IconUserSquare}
-          alt="icon-user-square"
-          className="w-[42px] h-[42px] "
-        />
+        {props.sender.imageURL ? (
+          <img
+            src={props.sender.imageURL}
+            alt="icon-user-square"
+            className="w-[42px] h-[42px] "
+          />
+        ) : (
+          <img
+            src={IconUserSquare}
+            alt="icon-user-square"
+            className="w-[42px] h-[42px] "
+          />
+        )}
       </div>
 
       {/* NAME, TIME, AND MESSAGE */}
@@ -88,7 +97,7 @@ export default function Chat(props: {
         <div className="flex gap-4 mb-1">
           <Link to={`/profile/${props.senderID}`}>
             <span className="text-body-medium text-almost-white">
-              {userData?.firstName} {userData?.lastName}
+              {props.sender.firstName} {props.sender.lastName}
             </span>
           </Link>
           <p className="text-time-small text-text-grey">
