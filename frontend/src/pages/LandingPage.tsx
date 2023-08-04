@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import Navbar2 from "./components/Navbar2";
 import HeroImage from "../assets/hero-image.svg";
 import Feature1 from "../assets/features-1.svg";
@@ -15,31 +14,49 @@ interface Channel {
   imageURL: string;
 }
 
+interface RequestOption {
+  method: string;
+  headers: HeadersInit;
+  redirect: "follow";
+}
+
 export default function LandingPage() {
   const navigate = useNavigate();
-  const access_token = localStorage.getItem("access_token"); 
-  const [channels, setChannels] = useState<Channel[]>([]);
+  const access_token = localStorage.getItem("access_token");
+  const BACKEND_URL =
+    "https://w24-group-final-group-3-production.up.railway.app/";
+  const [channelList, setChannelList] = useState<Channel[]>([]);
 
-   useEffect(() => {
-    const fetchPopularChannels = async () => {
-      try {
-        const response = await axios.get("https://w24-group-final-group-3-production.up.railway.app/channel");
-        setChannels(response.data);
-      } catch (error) {
-        console.error("Error fetching popular channels:", error);
-      }
-    };
-    fetchPopularChannels();
+  const requestOptions: RequestOption = {
+    method: "GET",
+    headers: { authorization: `Bearer ${access_token}` },
+    redirect: "follow",
+  };
+
+  const fetchAllChannel = () => {
+    fetch(BACKEND_URL + "channel", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        try {
+          setChannelList(result.slice(0, 4));
+          console.log(result.slice(0, 4));
+        } catch (error) {
+          console.log(error);
+        }
+      });
+  };
+
+  useEffect(() => {
+    fetchAllChannel();
   }, []);
-
 
   return (
     // PAGE
-    <div className="bg-medium-grey w-screen h-full flex flex-col items-center">
+    <div className="bg-medium-grey w-screen h-full flex flex-col items-center scrollbar-hide">
       <Navbar2 />
       {/* HERO */}
       {/* CONTAINER */}
-      <div className="flex flex-col justify-center items-center w-full h-full max-w-[1440px] pb-12">
+      <div className="flex flex-col justify-center items-center w-full h-full max-w-[1440px] pb-12 scrollbar-hide">
         {/* HERO SECTION */}
         <section className="flex flex-col lg:flex-row items-center gap-2 lg:gap-12 px-8 lg:px-16 w-auto mb-16">
           {/* LEFT */}
@@ -109,8 +126,9 @@ export default function LandingPage() {
                 Cross Platform
               </h3>
               <p className="text-white text-[14px] font-medium text-center">
-                Users can stay connected and engaged with their conversations and contacts, 
-                regardless of their preferred device or operating system.
+                Users can stay connected and engaged with their conversations
+                and contacts, regardless of their preferred device or operating
+                system.
               </p>
             </div>
 
@@ -124,8 +142,8 @@ export default function LandingPage() {
                 Customizable Profile
               </h3>
               <p className="text-white text-[14px] font-medium text-center">
-               Personalize user profiles with display names, avatars, and
-               status messages.
+                Personalize user profiles with display names, avatars, and
+                status messages.
               </p>
             </div>
             {/* FEATURE 4*/}
@@ -137,141 +155,170 @@ export default function LandingPage() {
                 Seamless Messaging
               </h3>
               <p className="text-white text-[14px] font-medium text-center">
-                Conversations feel natural and instantaneous,
-                resembling face-to-face interactions as closely as possible. 
+                Conversations feel natural and instantaneous, resembling
+                face-to-face interactions as closely as possible.
               </p>
             </div>
           </div>
         </section>
 
-      {/* POPULAR CHANNELS */}
-      {access_token ? (
-      <section className="flex flex-col items-center px-6 lg:px-16">
-          <h2 className="text-[36px] lg:text-[48px] text-center lg:text-left font-bold text-white">
-          Popular Channels
-        </h2>
-        <p className="text-[14px] lg:text-[24px] text-center lg:text-left font-medium text-white mb-12">
-          Explore trending topics and vibrant conversations{" "}
-        </p>
-        {/* GRID CONTAINER */}
-        <div className="flex flex-col md:grid grid-cols-2 lg:grid-rows-[200px] gap-8 w-full">
-          {channels.map((channel) => (
-            <div
-              key={channel.id}
-              className="flex flex-col lg:flex-row gap-6 bg-light-grey h-full p-6 rounded-xl"
-            >
-              <div className="bg-text-grey rounded-xl overflow-hidden lg:min-w-[150px] h-[150px]">
-                <img
-                  className="w-full h-full object-cover"
-                  src={channel.imageURL}
-                  alt="image-channel"
-                />
-              </div>
-              <div className="flex flex-col gap-2 items-center lg:items-start">
-                <h4 className="text-body-bold text-white">{channel.name}</h4>
-                <p className="text-[14px] text-center lg:text-left text-white overflow-hidden max-h-[60px] mb-4">
-                  {channel.description}
-                </p>
-                <button className="bg-blue text-white font-medium text-[12px] w-full lg:max-w-[80px] h-[30px] rounded-lg mt-auto">
-                  Join
-                </button>
-              </div>
+        {/* POPULAR CHANNELS */}
+        {access_token ? (
+          <section className="flex flex-col items-center px-6 lg:px-16">
+            <h2 className="text-[36px] lg:text-[48px] text-center lg:text-left font-bold text-white">
+              Popular Channels
+            </h2>
+            <p className="text-[14px] lg:text-[24px] text-center lg:text-left font-medium text-white mb-12">
+              Explore trending topics and vibrant conversations{" "}
+            </p>
+            {/* GRID CONTAINER */}
+            <div className="flex flex-col md:grid grid-cols-2 lg:grid-rows-[200px] gap-8 w-full">
+              {channelList.map((channel) => (
+                <div
+                  key={channel.id}
+                  className="flex flex-col lg:flex-row gap-6 bg-light-grey h-full p-6 rounded-xl"
+                >
+                  <div className="bg-text-grey rounded-xl overflow-hidden lg:min-w-[150px] h-[150px]">
+                    <img
+                      className="w-full h-full object-cover"
+                      src={channel.imageURL}
+                      alt="image-channel"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2 items-center lg:items-start">
+                    <h4 className="text-body-bold text-white">
+                      {channel.name}
+                    </h4>
+                    <p className="text-[14px] text-center lg:text-left text-white overflow-hidden max-h-[60px] mb-4">
+                      {channel.description}
+                    </p>
+                    <button
+                      onClick={() => navigate(`/channel/${channel.id}`)}
+                      className="bg-blue text-white font-medium text-[12px] w-full lg:max-w-[100px] h-[30px] rounded-lg mt-auto hover:bg-blue-hover"
+                    >
+                      Go to Channel
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </section> 
-     ) : (
-      <section className="flex flex-col items-center px-6 lg:px-16">
-          <h2 className="text-[36px] lg:text-[48px] text-center lg:text-left font-bold text-white">
-            Popular Channels
-          </h2>
-          <p className="text-[14px] lg:text-[24px] text-center lg:text-left font-medium text-white mb-12">
-            Explore trending topics and vibrant conversations{" "}
-          </p>
-          {/* GRID CONTAINER */}
-          <div className="flex flex-col md:grid grid-cols-2 lg:grid-rows-[200px] gap-8 w-full">
-            {/* CHANNEL */}
-            <div className="flex flex-col lg:flex-row gap-6 bg-light-grey h-full p-6 rounded-xl">
-              <div className="bg-text-grey rounded-xl overflow-hidden lg:min-w-[150px] h-[150px]">
-                <img
-                  className="w-full h-full object-cover"
-                  src="https://images.unsplash.com/photo-1429087969512-1e85aab2683d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
-                  alt="image-channel"
-                />
+          </section>
+        ) : (
+          <section className="flex flex-col items-center px-6 lg:px-16">
+            <h2 className="text-[36px] lg:text-[48px] text-center lg:text-left font-bold text-white">
+              Popular Channels
+            </h2>
+            <p className="text-[14px] lg:text-[24px] text-center lg:text-left font-medium text-white mb-12">
+              Explore trending topics and vibrant conversations{" "}
+            </p>
+            {/* GRID CONTAINER */}
+            <div className="flex flex-col md:grid grid-cols-2 lg:grid-rows-[200px] gap-8 w-full">
+              {/* CHANNEL */}
+              <div className="flex flex-col lg:flex-row gap-6 bg-light-grey h-full p-6 rounded-xl">
+                <div className="bg-text-grey rounded-xl overflow-hidden lg:min-w-[150px] h-[150px]">
+                  <img
+                    className="w-full h-full object-cover"
+                    src="https://images.unsplash.com/photo-1429087969512-1e85aab2683d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
+                    alt="image-channel"
+                  />
+                </div>
+                <div className="flex flex-col gap-2 items-center lg:items-start">
+                  <h4 className="text-body-bold text-white">
+                    Creative Carnival
+                  </h4>
+                  <p className="text-[14px] text-center lg:text-left text-white overflow-hidden max-h-[60px] mb-4">
+                    Step right up to the Creative Carnival, a vibrant and
+                    dynamic celebration of all things creative! 🎨🎪 Whether
+                    you're an artist, writer, musician, or simply someone with a
+                    passion for innovation, you've found your haven in this
+                    whimsical realm.
+                  </p>
+                  <button className="bg-blue text-white font-medium text-[12px] w-full lg:max-w-[80px] h-[30px] rounded-lg mt-auto">
+                    Go to channel
+                  </button>
+                </div>
               </div>
-              <div className="flex flex-col gap-2 items-center lg:items-start">
-                <h4 className="text-body-bold text-white">Creative Carnival</h4>
-                <p className="text-[14px] text-center lg:text-left text-white overflow-hidden max-h-[60px] mb-4">
-                  Step right up to the Creative Carnival, a vibrant and dynamic celebration of all things creative! 🎨🎪 Whether you're an artist, writer, musician, or simply someone with a passion for innovation, you've found your haven in this whimsical realm.
-                </p>
-                <button className="bg-blue text-white font-medium text-[12px] w-full lg:max-w-[80px] h-[30px] rounded-lg mt-auto">
-                  Join
-                </button>
-              </div>
-            </div>
 
-            {/* CHANNEL */}
-            <div className="flex flex-col lg:flex-row gap-6 bg-light-grey h-full p-6 rounded-xl">
-              <div className="bg-text-grey rounded-xl overflow-hidden lg:min-w-[150px] h-[150px]">
-                <img
-                  className="w-full h-full object-cover"
-                  src="https://images.unsplash.com/photo-1512568400610-62da28bc8a13?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2787&q=80"
-                  alt="image-channel"
-                />
+              {/* CHANNEL */}
+              <div className="flex flex-col lg:flex-row gap-6 bg-light-grey h-full p-6 rounded-xl">
+                <div className="bg-text-grey rounded-xl overflow-hidden lg:min-w-[150px] h-[150px]">
+                  <img
+                    className="w-full h-full object-cover"
+                    src="https://images.unsplash.com/photo-1512568400610-62da28bc8a13?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2787&q=80"
+                    alt="image-channel"
+                  />
+                </div>
+                <div className="flex flex-col gap-2 items-center lg:items-start">
+                  <h4 className="text-body-bold text-white">Coffee Cove</h4>
+                  <p className="text-[14px] text-center lg:text-left text-white overflow-hidden max-h-[60px] mb-4">
+                    Welcome to the Coffee Cove, where every sip brings warmth
+                    and camaraderie! ☕ Whether you're a dedicated coffee
+                    connoisseur or simply enjoy the comforting embrace of a
+                    well-brewed cup, this channel is your haven. Come together
+                    with fellow coffee enthusiasts to share your brewing
+                    methods, trade beans from around the world, and swap tales
+                    of your most memorable coffee experiences
+                  </p>
+                  <button className="bg-blue text-white font-medium text-[12px] w-full lg:max-w-[80px] h-[30px] rounded-lg mt-auto">
+                    Join
+                  </button>
+                </div>
               </div>
-              <div className="flex flex-col gap-2 items-center lg:items-start">
-                <h4 className="text-body-bold text-white">Coffee Cove</h4>
-                <p className="text-[14px] text-center lg:text-left text-white overflow-hidden max-h-[60px] mb-4">
-                  Welcome to the Coffee Cove, where every sip brings warmth and camaraderie! ☕ Whether you're a dedicated coffee connoisseur or simply enjoy the comforting embrace of a well-brewed cup, this channel is your haven.  Come together with fellow coffee enthusiasts to share your brewing methods, trade beans from around the world, and swap tales of your most memorable coffee experiences 
-                </p>
-                <button className="bg-blue text-white font-medium text-[12px] w-full lg:max-w-[80px] h-[30px] rounded-lg mt-auto">
-                  Join
-                </button>
-              </div>
-            </div>
 
-            {/* CHANNEL */}
-            <div className="flex flex-col lg:flex-row gap-6 bg-light-grey h-full p-6 rounded-xl">
-              <div className="bg-text-grey rounded-xl overflow-hidden lg:min-w-[150px] h-[150px]">
-                <img
-                  className="w-full h-full object-cover"
-                  src="https://images.unsplash.com/photo-1532009877282-3340270e0529?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
-                  alt="image-channel"
-                />
+              {/* CHANNEL */}
+              <div className="flex flex-col lg:flex-row gap-6 bg-light-grey h-full p-6 rounded-xl">
+                <div className="bg-text-grey rounded-xl overflow-hidden lg:min-w-[150px] h-[150px]">
+                  <img
+                    className="w-full h-full object-cover"
+                    src="https://images.unsplash.com/photo-1532009877282-3340270e0529?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80"
+                    alt="image-channel"
+                  />
+                </div>
+                <div className="flex flex-col gap-2 items-center lg:items-start">
+                  <h4 className="text-body-bold text-white">Zen Zone</h4>
+                  <p className="text-[14px] text-center lg:text-left text-white overflow-hidden max-h-[60px] mb-4">
+                    Welcome to the Zen Zone, where tranquility and mindfulness
+                    intertwine! 🌿 In this haven of serenity, we invite you to
+                    leave behind the hustle and bustle of the outside world and
+                    embark on a journey of self-discovery and inner peace.
+                    Whether you're seeking a moment of stillness, a place to
+                    discuss meditation techniques, share inspiring quotes, or
+                    engage in soothing conversations, you've found your
+                    sanctuary
+                  </p>
+                  <button className="bg-blue text-white font-medium text-[12px] w-full lg:max-w-[80px] h-[30px] rounded-lg mt-auto">
+                    Join
+                  </button>
+                </div>
               </div>
-              <div className="flex flex-col gap-2 items-center lg:items-start">
-                <h4 className="text-body-bold text-white">Zen Zone</h4>
-                <p className="text-[14px] text-center lg:text-left text-white overflow-hidden max-h-[60px] mb-4">
-                  Welcome to the Zen Zone, where tranquility and mindfulness intertwine! 🌿 In this haven of serenity, we invite you to leave behind the hustle and bustle of the outside world and embark on a journey of self-discovery and inner peace. Whether you're seeking a moment of stillness, a place to discuss meditation techniques, share inspiring quotes, or engage in soothing conversations, you've found your sanctuary
-                </p>
-                <button className="bg-blue text-white font-medium text-[12px] w-full lg:max-w-[80px] h-[30px] rounded-lg mt-auto">
-                  Join
-                </button>
-              </div>
-            </div>
 
-            {/* CHANNEL */}
-            <div className="flex flex-col lg:flex-row gap-6 bg-light-grey h-full p-6 rounded-xl">
-              <div className="bg-text-grey rounded-xl overflow-hidden lg:min-w-[150px] h-[150px]">
-                <img
-                  className="w-full h-full object-cover"
-                  src="https://images.unsplash.com/photo-1592561199818-6b69d3d1d6e2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1976&q=80"
-                  alt="image-channel"
-                />
-              </div>
-              <div className="flex flex-col gap-2 items-center lg:items-start">
-                <h4 className="text-body-bold text-white">Cosmo Hub</h4>
-                <p className="text-[14px] text-center lg:text-left text-white overflow-hidden max-h-[60px] mb-4">
-                 Welcome to Cosmo Chat, where we journey through the cosmos of conversation! 🚀 Explore the universe of diverse topics, from astronomy and space exploration to sci-fi wonders and beyond. Engage in cosmic conversations, share astronomical discoveries, exchange celestial insights, and marvel at the mysteries of the cosmos.
-                </p>
-                <button className="bg-blue text-white font-medium text-[12px] w-full lg:max-w-[80px] h-[30px] rounded-lg mt-auto">
-                  Join
-                </button>
+              {/* CHANNEL */}
+              <div className="flex flex-col lg:flex-row gap-6 bg-light-grey h-full p-6 rounded-xl">
+                <div className="bg-text-grey rounded-xl overflow-hidden lg:min-w-[150px] h-[150px]">
+                  <img
+                    className="w-full h-full object-cover"
+                    src="https://images.unsplash.com/photo-1592561199818-6b69d3d1d6e2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1976&q=80"
+                    alt="image-channel"
+                  />
+                </div>
+                <div className="flex flex-col gap-2 items-center lg:items-start">
+                  <h4 className="text-body-bold text-white">Cosmo Hub</h4>
+                  <p className="text-[14px] text-center lg:text-left text-white overflow-hidden max-h-[60px] mb-4">
+                    Welcome to Cosmo Chat, where we journey through the cosmos
+                    of conversation! 🚀 Explore the universe of diverse topics,
+                    from astronomy and space exploration to sci-fi wonders and
+                    beyond. Engage in cosmic conversations, share astronomical
+                    discoveries, exchange celestial insights, and marvel at the
+                    mysteries of the cosmos.
+                  </p>
+                  <button className="bg-blue text-white font-medium text-[12px] w-full lg:max-w-[80px] h-[30px] rounded-lg mt-auto">
+                    Join
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
-     )}
+          </section>
+        )}
       </div>
     </div>
   );
