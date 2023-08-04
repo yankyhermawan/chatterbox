@@ -52,6 +52,19 @@ interface Channel {
   date: Date[];
 }
 
+interface UserChannel {
+  channel: Channel;
+  channelID: string;
+  userID: string;
+}
+
+interface ChannelMember {
+  channelID: string;
+  channel: Channel;
+  user: User;
+  userID: string;
+}
+
 export default function ChannelPage() {
   // CHANNEL ID
   const { channelID } = useParams();
@@ -70,6 +83,11 @@ export default function ChannelPage() {
   const [channelListIsOpen, setChannelListIsOpen] = useState(true);
   const [channelDetail, setChannelDetail] = useState<Channel>();
 
+  const [channelMembers, setChannelMembers] = useState<ChannelMember[]>([]);
+  const [isMember, setIsMember] = useState<boolean>(false);
+
+  const [userChannelList, setUserChannelList] = useState<UserChannel[]>([]);
+
   const ref = useRef<HTMLInputElement>(null);
   const dummyRef = useRef<HTMLDivElement>(null);
 
@@ -81,10 +99,24 @@ export default function ChannelPage() {
     setMessageInput(event.target.value);
   };
 
+  const [userData, setUserData] = useState<User>();
+
   const requestOptions: RequestOption = {
     method: "GET",
     headers: { authorization: `Bearer ${access_token}` },
     redirect: "follow",
+  };
+
+  const fetchUserData = () => {
+    fetch(BACKEND_URL + "user/" + `${userID}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        try {
+          setUserData(result);
+        } catch (error) {
+          console.log(error);
+        }
+      });
   };
 
   const sendMessage = (e: SyntheticEvent) => {
@@ -93,6 +125,11 @@ export default function ChannelPage() {
       content: messageInput,
       senderID: userID,
       date: isoString,
+      sender: {
+        firstName: userData?.firstName,
+        lastName: userData?.lastName,
+        imageURL: userData?.imageURL,
+      },
     };
     e.preventDefault();
     socket.emit("chat message", data);
@@ -130,19 +167,25 @@ export default function ChannelPage() {
       .then((response) => response.json())
       .then((result) => {
         try {
-          console.log(result);
+          setChannelMembers(result);
+          if (
+            result.find((member: ChannelMember) => member.userID == userID) !==
+            undefined
+          ) {
+            setIsMember(true);
+          } else setIsMember(false);
         } catch (error) {
           console.log(error);
         }
       });
   };
 
-  const fetchMyChannels = () => {
+  const fetchUserChannels = () => {
     fetch(BACKEND_URL + `user/channels/${userID}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         try {
-          console.log(result);
+          setUserChannelList(result);
         } catch (error) {
           console.log(error);
         }
@@ -159,11 +202,26 @@ export default function ChannelPage() {
       .then((result) => {
         try {
           console.log(result);
+          setChannelMembers([
+            {
+              user: {
+                id: userID,
+                firstName: userData?.firstName,
+                lastName: userData?.lastName,
+                imageURL: userData?.imageURL,
+                username: userData?.username,
+              },
+            },
+          ] as ChannelMember[]);
         } catch (error) {
           console.log(error);
         }
       });
   };
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
 
   useEffect(() => {
     const handleNewMessage = (messageData: Message) => {
@@ -187,7 +245,7 @@ export default function ChannelPage() {
 
   useEffect(() => {
     fetchAllChannel();
-    fetchMyChannels();
+    fetchUserChannels();
     fetchChannelMembers();
   }, [channelID, socket, channelList.length, channelDetail]);
 
@@ -201,7 +259,7 @@ export default function ChannelPage() {
   const sortedMessage = messages.sort((a, b) => a.date.localeCompare(b.date));
   const mappedMessage = sortedMessage.map((message) => (
     <Chat
-      key={message.id}
+      key={message.date}
       content={message.content}
       date={message.date}
       senderID={message.senderID}
@@ -219,35 +277,33 @@ export default function ChannelPage() {
           setChannelList={setChannelList}
           setChannelListIsOpen={setChannelListIsOpen}
           setChannelDetail={setChannelDetail}
+          userChannelList={userChannelList}
+          setUserChannelList={setUserChannelList}
         />
       )}
 
       {/* RIGHT SIDE */}
       <div className="flex flex-col w-full h-screen relative">
         {/* OVERLAY NOT JOIN YET */}
-        <div className="absolute w-full h-full bg-black/80 z-40 flex flex-col items-center justify-center p-8 mt-[60px] pb-[60px] gap-4">
-          <h2 className="text-[24px] text-center font-bold text-white">
-            {channelDetail?.name}
-            {/* Join Channel to start Chattering! */}
-          </h2>
-          <p className="text-white text-center text-[14px] w-full max-w-[768px]">
-            {channelDetail?.description}
-            {/* Hello, dear global citizens! Your participation in this channel is
-            highly welcomed. To fully engage and connect with our diverse
-            community, we kindly ask you to become a member of the channel. By
-            joining, you unlock the ability to share your thoughts, ideas, and
-            experiences on a global platform. Don't miss out on this opportunity
-            to be part of meaningful conversations that span across borders and
-            cultures. Click the "Join Channel" button above and let's embark on
-            this global journey of knowledge and exchange together. Thank you! */}
-          </p>
-          <button
-            onClick={joinChannel}
-            className="bg-blue hover:bg-blue-hover text-white text-center px-4 py-2 mt-8 rounded-lg"
-          >
-            Join Channel
-          </button>
-        </div>
+        {!isMember && channelID && (
+          <div className="absolute w-full h-full bg-black/80 z-40 flex flex-col items-center justify-center p-8 mt-[60px] pb-[60px] gap-4">
+            <h2 className="text-[24px] text-center font-bold text-white">
+              {channelDetail?.name}
+            </h2>
+            <p className="text-white text-center text-[14px] w-full max-w-[768px]">
+              {channelDetail?.description}
+            </p>
+            <button
+              onClick={() => {
+                joinChannel();
+                setIsMember(true);
+              }}
+              className="bg-blue hover:bg-blue-hover text-white text-center px-4 py-2 mt-8 rounded-lg"
+            >
+              Join Channel
+            </button>
+          </div>
+        )}
 
         <nav className="flex items-center gap-4 px-4 md:px-12 min-h-[60px] w-full text-body-bold bg-medium-grey shadow-xl">
           {!channelListIsOpen && (
@@ -270,8 +326,10 @@ export default function ChannelPage() {
               setChannelList={setChannelList}
             />
           )}
-          {channelDetail && <MemberList />}
-          {channelDetail && (
+          {channelDetail && isMember && (
+            <MemberList channelMembers={channelMembers} />
+          )}
+          {channelDetail && isMember && (
             <EditChannel
               channelDetail={channelDetail}
               setChannelDetail={setChannelDetail}

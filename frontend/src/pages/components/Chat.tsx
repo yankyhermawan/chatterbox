@@ -48,19 +48,15 @@ export default function Chat(props: {
   return (
     <div className="flex gap-6">
       {/* PROFILE PICTURE */}
-      <div className="min-w-[42px] h-[42px] rounded-lg overflow-hidden">
+      <div className="min-w-[42px] h-[42px] rounded-lg overflow-hidden bg-light-grey">
         {props.sender.imageURL ? (
           <img
             src={props.sender.imageURL}
-            alt="icon-user-square"
+            alt=""
             className="w-[42px] h-[42px]"
           />
         ) : (
-          <img
-            src={IconUserSquare}
-            alt="icon-user-square"
-            className="w-[42px] h-[42px]"
-          />
+          <img src={IconUserSquare} alt="" className="w-[42px] h-[42px]" />
         )}
       </div>
 

@@ -34,11 +34,19 @@ interface RequestOption {
   redirect: "follow";
 }
 
+interface UserChannel {
+  channel: Channel;
+  channelID: string;
+  userID: string;
+}
+
 export default function ChannelList(props: {
   channelList: Channel[];
   setChannelList: React.Dispatch<React.SetStateAction<Channel[]>>;
   setChannelDetail: React.Dispatch<React.SetStateAction<Channel | undefined>>;
   setChannelListIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  userChannelList: UserChannel[];
+  setUserChannelList: React.Dispatch<React.SetStateAction<UserChannel[]>>;
 }) {
   const myId = localStorage.getItem("userID");
   const access_token = localStorage.getItem("access_token");
@@ -52,10 +60,10 @@ export default function ChannelList(props: {
     redirect: "follow",
   };
 
-  const mappedChannelList = props.channelList.map((channel) => (
+  const mappedChannelList = props.userChannelList.map((userChannel) => (
     <Channel
-      key={channel.id}
-      channel={channel}
+      key={userChannel.channel.id}
+      channel={userChannel.channel}
       setChannelListIsOpen={props.setChannelListIsOpen}
     />
   ));
