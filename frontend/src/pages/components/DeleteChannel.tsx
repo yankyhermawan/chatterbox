@@ -59,7 +59,7 @@ export default function DeleteChannel(props: {
       <button
         onClick={() => setIsOpen(true)}
         type="button"
-        className="border border-red py-1 px-6 rounded-lg hover:bg-red text-red hover:text-white text-body-medium outline-none"
+        className="border border-red py-1 px-6 rounded-lg hover:bg-red text-red hover:text-white text-body-medium outline-none order-last md:order-first"
       >
         Delete
       </button>

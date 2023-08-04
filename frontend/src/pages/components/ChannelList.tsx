@@ -1,7 +1,7 @@
 import Channel from "./Channel";
 
 import IconUserSquare from "../../assets/icon-user-square.svg";
-import IconCross from "../../assets/icon-cross.svg";
+// import IconCross from "../../assets/icon-cross.svg";
 // import IconHome from "../../assets/icon-home.svg";
 import IconChevronDown from "../../assets/icon-chevron-down.svg";
 
@@ -81,12 +81,12 @@ export default function ChannelList(props: {
   return (
     <div className="h-screen w-[325px] md:min-w-[350px] fixed md:static left-0 top-0 bg-dark-grey flex flex-col z-50 shadow-xl md:shadow-none">
       {/* CLOSE BUTTON FLOATING*/}
-      <button
+      {/* <button
         onClick={() => props.setChannelListIsOpen(false)}
         className="flex justify-center items-center w-[40px] h-[40px] bg-very-dark-grey shadow-xl rounded-xl top-2 -right-11 md:hidden absolute"
       >
         <img className="w-[15px] h-[15px]" src={IconCross} alt="icon-cross" />
-      </button>
+      </button> */}
       {/* CHANNEL NAME */}
       <div className="min-h-[60px] px-4 py-2 flex justify-between items-center shadow-xl">
         <span className="flex items-center gap-4 text-almost-white text-body-bold">
@@ -116,8 +116,10 @@ export default function ChannelList(props: {
 
       {/* CHANNEL LIST */}
       <div className="flex flex-col gap-2 px-4 overflow-y-scroll scrollbar-hide">
-        <div className="flex flex-col gap-4 py-6 overflow-y-scroll scrollbar-hide">
-          <h3 className="text-body-bold text-white">My Channels</h3>
+        <button className="text-body-bold text-white text-left py-2">
+          My Channels
+        </button>
+        <div className="flex flex-col gap-4 overflow-y-scroll scrollbar-hide p-2">
           {mappedChannelList}
         </div>
       </div>

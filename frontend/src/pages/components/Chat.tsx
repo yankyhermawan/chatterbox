@@ -91,7 +91,7 @@ export default function Chat(props: {
               : `${sentDate} ${sentMonth} ${sentYear} at  ${sentTime}`}
           </p>
         </div>
-        <p className="text-white text-input-medium text-left">
+        <p className="text-text-grey text-input-medium text-left">
           {props.content}
         </p>
       </div>

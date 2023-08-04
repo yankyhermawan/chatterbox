@@ -49,7 +49,7 @@ export default function SearchChannel(props: { channelList: Channel[] }) {
 
   const notFound = (
     <span className={`text-text-grey text-[14px] italic px-4 py-2`}>
-      Channel not found
+      No channel found
     </span>
   );
 
@@ -58,12 +58,12 @@ export default function SearchChannel(props: { channelList: Channel[] }) {
       <Combobox.Input
         ref={ref}
         placeholder="Search here to join a channel!"
-        className={`bg-light-grey outline-none rounded-lg mx-4 h-[40px] p-4 mt-4 text-white placeholder:text-text-grey`}
+        className={`bg-light-grey outline-none rounded-lg mx-4 h-[40px] p-4 my-4 text-white placeholder:text-text-grey`}
         onChange={(event) => setQuery(event.target.value)}
       />
       {query && (
         <Combobox.Options
-          className={`bg-dark-grey border border-medium-grey shadow-md mx-4 rounded-lg mt-4 py-2 max-h-[500px] overflow-y-scroll scrollbar-hide`}
+          className={`bg-dark-grey border border-medium-grey shadow-md mx-4 rounded-lg py-2 max-h-[500px] overflow-y-scroll scrollbar-hide`}
         >
           {filteredChannel.length > 0 ? mapped : notFound}
         </Combobox.Options>

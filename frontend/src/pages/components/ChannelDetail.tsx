@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import IconCross from "../../assets/icon-cross.svg";
 import IconChevronDown from "../../assets/icon-chevron-down.svg";
+import CopyToClipboard from "./CopyToClipboard";
 
 interface Channel {
   id: string;
@@ -47,7 +48,7 @@ export default function ChannelDetail(props: {
             <div className="w-full flex justify-end">
               <button
                 onClick={() => setIsOpen(false)}
-                className="justify-center items-center w-[30px] h-[30px] bg-very-dark-grey shadow-xl rounded-xl flex active:bg-medium-grey"
+                className="justify-center items-center w-[30px] h-[30px] bg-very-dark-grey shadow-xl rounded-xl flex hover:bg-medium-grey"
               >
                 <img
                   className="w-[12px] h-[12px]"
@@ -56,7 +57,7 @@ export default function ChannelDetail(props: {
                 />
               </button>
             </div>
-            <div className="flex justify-center items-center rounded-lg w-[150px] h-[150px] overflow-hidden bg-medium-grey">
+            <div className="flex justify-center items-center rounded-2xl w-[150px] h-[150px] overflow-hidden bg-medium-grey">
               {props.channelDetail?.imageURL ? (
                 <img
                   className="object-cover h-full w-full"
@@ -78,6 +79,7 @@ export default function ChannelDetail(props: {
             </div>
 
             <p className="text-text-grey text-input-medium -mt-4">30 members</p>
+            <CopyToClipboard />
             <Dialog.Description className="text-center text-almost-white text-input-medium overflow-y-scroll scrollbar-hide h-[200px]">
               {props.channelDetail?.description}
             </Dialog.Description>
