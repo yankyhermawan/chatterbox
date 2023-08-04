@@ -2,7 +2,7 @@
 
 ![image](./frontend/src/assets/chatterbox.png)
 
-Your Ultimate Group Chat Companion
+Where Group Chat Made Easy!
 
 ChatterBox is a cutting-edge group chat app designed to revolutionize your communication experience. Whether it's connecting with friends, family, or colleagues, ChatterBox offers a seamless and intuitive platform for all your group messaging needs. With its cross-platform capabilities and customizable profiles, ChatterBox brings a new level of convenience and personalization to your conversations.
 
@@ -47,6 +47,6 @@ ChatterBox is a cutting-edge group chat app designed to revolutionize your commu
 | Yanky Hermawan  |        Back-End Engineer         |
 | Gary Cruise     |        Back-End Engineer         |
 
-## Built With
+## Tech Stack
 
 [![My Skills](https://skillicons.dev/icons?i=html,ts,react,tailwind,vite,vercel,express,postgres,socketio,&perline=10)](https://skillicons.dev)
