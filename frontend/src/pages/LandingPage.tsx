@@ -53,8 +53,8 @@ export default function LandingPage() {
   return (
     // PAGE
     <div className="bg-medium-grey w-screen h-full flex flex-col items-center scrollbar-hide">
+      <div></div>
       <Navbar2 />
-      {/* HERO */}
       {/* CONTAINER */}
       <div className="flex flex-col justify-center items-center w-full h-full max-w-[1440px] pb-12 scrollbar-hide">
         {/* HERO SECTION */}
@@ -146,6 +146,7 @@ export default function LandingPage() {
                 status messages.
               </p>
             </div>
+
             {/* FEATURE 4*/}
             <div className="flex flex-col items-center lg:max-w-[235px] gap-2">
               <div className="h-[120px] flex">
