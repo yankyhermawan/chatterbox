@@ -109,8 +109,8 @@ export default function LandingPage() {
                 Cross Platform
               </h3>
               <p className="text-white text-[14px] font-medium text-center">
-                Personalize user profiles with display names, avatars, and
-                status messages.
+                Users can stay connected and engaged with their conversations and contacts, 
+                regardless of their preferred device or operating system.
               </p>
             </div>
 
@@ -124,8 +124,8 @@ export default function LandingPage() {
                 Customizable Profile
               </h3>
               <p className="text-white text-[14px] font-medium text-center">
-                Create and join unlimited group chats to connect with friends,
-                family, colleagues, or communities.
+               Personalize user profiles with display names, avatars, and
+               status messages.
               </p>
             </div>
             {/* FEATURE 4*/}
@@ -137,8 +137,8 @@ export default function LandingPage() {
                 Seamless Messaging
               </h3>
               <p className="text-white text-[14px] font-medium text-center">
-                Create and join unlimited group chats to connect with friends,
-                family, colleagues, or communities.
+                Conversations feel natural and instantaneous,
+                resembling face-to-face interactions as closely as possible. 
               </p>
             </div>
           </div>
