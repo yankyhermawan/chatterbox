@@ -109,6 +109,9 @@ export class UserService {
 		try {
 			const response = await this.prismaService.userChannel.findMany({
 				where: { userID: userID },
+				include: {
+					channel: true,
+				},
 			});
 			return {
 				code: 200,

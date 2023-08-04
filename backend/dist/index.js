@@ -76,7 +76,7 @@ io.on("connection", (socket) => {
         }
     }));
     socket.on("typing", (name) => {
-        socket.broadcast.emit("username", name);
+        socket.broadcast.emit("userTyping", name);
     });
     socket.on("stopTyping", (name) => {
         socket.broadcast.emit("userStopTyping", name);
