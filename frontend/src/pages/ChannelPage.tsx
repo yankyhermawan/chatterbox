@@ -126,7 +126,7 @@ export default function ChannelPage() {
   };
 
   const fetchChannelMembers = () => {
-    fetch(BACKEND_URL + `channelmembers/${channelID}`, requestOptions)
+    fetch(BACKEND_URL + `channel/${channelID}/members`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         try {
