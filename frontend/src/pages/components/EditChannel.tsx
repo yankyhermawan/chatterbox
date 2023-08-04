@@ -93,13 +93,7 @@ export default function EditChannel(props: {
     fetch(BACKEND_URL + `channel/${channelID}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        props.setChannelList((current: Channel[]) =>
-          current.filter((channel: Channel) => channel.id !== channelID)
-        );
-        // props.setChannelList((current: Channel[]) => [result, ...current]);
         props.setChannelDetail(result);
-
-        navigate(`../channel/${channelID}`);
         setIsOpen(false);
       })
       .catch((error) => console.log("error", error));
@@ -112,7 +106,7 @@ export default function EditChannel(props: {
           navigate(`../channel/${channelID}`);
           setIsOpen(true);
         }}
-        className="justify-center items-center w-[30px] h-[30px] ml-auto shadow-xl rounded-xl flex active:bg-light-grey"
+        className="justify-center items-center w-[30px] h-[30px] shadow-xl rounded-xl flex active:bg-light-grey"
       >
         <img className="w-[20px] h-[20px]" src={IconEdit} alt="icon-edit" />
       </button>
@@ -175,7 +169,7 @@ export default function EditChannel(props: {
               </p>
             )}
 
-            <div className="w-full flex justify-between gap-4">
+            <div className="w-full flex flex-col md:flex-row justify-between gap-4">
               <DeleteChannel
                 setChannelList={props.setChannelList}
                 setChannelDetail={props.setChannelDetail}
@@ -183,7 +177,7 @@ export default function EditChannel(props: {
               <button
                 onClick={() => setIsOpen(false)}
                 type="button"
-                className="py-1 px-6 rounded-lg bg-medium-grey hover:bg-light-grey text-white hover:text-white text-body-medium outline-none ml-auto"
+                className="py-1 px-6 rounded-lg bg-medium-grey hover:bg-light-grey text-white hover:text-white text-body-medium outline-none md:ml-auto"
               >
                 Cancel
               </button>

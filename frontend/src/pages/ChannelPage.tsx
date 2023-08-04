@@ -13,6 +13,7 @@ import { io } from "socket.io-client";
 import { useParams } from "react-router-dom";
 import ChannelDetail from "./components/ChannelDetail";
 import EditChannel from "./components/EditChannel";
+import MemberList from "./components/MemberList";
 
 const BACKEND_URL =
   "https://w24-group-final-group-3-production.up.railway.app/";
@@ -86,19 +87,6 @@ export default function ChannelPage() {
     redirect: "follow",
   };
 
-  useEffect(() => {
-    const handleNewMessage = (messageData: Message) => {
-      if (messageData.content) {
-        setMessages((prev) => [...prev, messageData]);
-      }
-    };
-
-    socket.on("chat message", handleNewMessage);
-    return () => {
-      socket.off("chat message", handleNewMessage);
-    };
-  }, [channelID, messages]);
-
   const sendMessage = (e: SyntheticEvent) => {
     const data = {
       channelID: channelID,
@@ -137,12 +125,70 @@ export default function ChannelPage() {
       });
   };
 
+  const fetchChannelMembers = () => {
+    fetch(BACKEND_URL + `channelmembers/${channelID}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        try {
+          console.log(result);
+        } catch (error) {
+          console.log(error);
+        }
+      });
+  };
+
+  const fetchMyChannels = () => {
+    fetch(BACKEND_URL + `user/channels/${userID}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        try {
+          console.log(result);
+        } catch (error) {
+          console.log(error);
+        }
+      });
+  };
+
+  const joinChannel = () => {
+    fetch(BACKEND_URL + `join/${channelID}/${userID}`, {
+      method: "POST",
+      redirect: "follow",
+      headers: { authorization: `Bearer ${access_token}` },
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        try {
+          console.log(result);
+        } catch (error) {
+          console.log(error);
+        }
+      });
+  };
+
   useEffect(() => {
-    fetchAllChannel();
+    const handleNewMessage = (messageData: Message) => {
+      if (messageData.content) {
+        setMessages((prev) => [...prev, messageData]);
+      }
+    };
+
+    socket.on("chat message", handleNewMessage);
+    return () => {
+      socket.off("chat message", handleNewMessage);
+    };
+  }, [channelID, messages]);
+
+  useEffect(() => {
     fetchMessages();
     setChannelDetail(
       channelList.find((channel: Channel) => channel.id == channelID)
     );
+  }, [channelID, socket, channelList.length]);
+
+  useEffect(() => {
+    fetchAllChannel();
+    fetchMyChannels();
+    fetchChannelMembers();
   }, [channelID, socket, channelList.length, channelDetail]);
 
   useEffect(() => {
@@ -177,7 +223,32 @@ export default function ChannelPage() {
       )}
 
       {/* RIGHT SIDE */}
-      <div className="flex flex-col w-full h-screen">
+      <div className="flex flex-col w-full h-screen relative">
+        {/* OVERLAY NOT JOIN YET */}
+        <div className="absolute w-full h-full bg-black/80 z-40 flex flex-col items-center justify-center p-8 mt-[60px] pb-[60px] gap-4">
+          <h2 className="text-[24px] text-center font-bold text-white">
+            {channelDetail?.name}
+            {/* Join Channel to start Chattering! */}
+          </h2>
+          <p className="text-white text-center text-[14px] w-full max-w-[768px]">
+            {channelDetail?.description}
+            {/* Hello, dear global citizens! Your participation in this channel is
+            highly welcomed. To fully engage and connect with our diverse
+            community, we kindly ask you to become a member of the channel. By
+            joining, you unlock the ability to share your thoughts, ideas, and
+            experiences on a global platform. Don't miss out on this opportunity
+            to be part of meaningful conversations that span across borders and
+            cultures. Click the "Join Channel" button above and let's embark on
+            this global journey of knowledge and exchange together. Thank you! */}
+          </p>
+          <button
+            onClick={joinChannel}
+            className="bg-blue hover:bg-blue-hover text-white text-center px-4 py-2 mt-8 rounded-lg"
+          >
+            Join Channel
+          </button>
+        </div>
+
         <nav className="flex items-center gap-4 px-4 md:px-12 min-h-[60px] w-full text-body-bold bg-medium-grey shadow-xl">
           {!channelListIsOpen && (
             <button
@@ -199,6 +270,7 @@ export default function ChannelPage() {
               setChannelList={setChannelList}
             />
           )}
+          {channelDetail && <MemberList />}
           {channelDetail && (
             <EditChannel
               channelDetail={channelDetail}
