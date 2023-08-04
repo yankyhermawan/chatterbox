@@ -1,4 +1,3 @@
-import SearchIcon from "../../assets/search-icon.svg";
 import Channel from "./Channel";
 
 import IconUserSquare from "../../assets/icon-user-square.svg";
@@ -9,6 +8,7 @@ import IconChevronDown from "../../assets/icon-chevron-down.svg";
 import NewChannel from "./NewChannel";
 import DropdownSidebar from "./DropdownSidebar";
 import { useEffect, useState } from "react";
+import SearchChannel from "./SearchChannel";
 
 interface Channel {
   id: string;
@@ -52,16 +52,7 @@ export default function ChannelList(props: {
     redirect: "follow",
   };
 
-  const [searchInput, setSearchInput] = useState("");
-  const handleSearchInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setSearchInput(event.target.value);
-  };
-  const filteredChannelList = props.channelList.filter((channel: Channel) =>
-    channel.name.toLowerCase().includes(searchInput)
-  );
-  const mappedChannelList = filteredChannelList.map((channel) => (
+  const mappedChannelList = props.channelList.map((channel) => (
     <Channel
       key={channel.id}
       channel={channel}
@@ -120,26 +111,12 @@ export default function ChannelList(props: {
         </div>
       </div>
 
-      {/* CHANNEL DETAIL */}
-      <div className="p-4 flex flex-col gap-4">
-        <div className="relative border-medium-grey">
-          <input
-            onChange={handleSearchInputChange}
-            type="text"
-            placeholder="Search"
-            className="h-[48px] w-full rounded-lg px-4 pl-10 bg-light-grey placeholder:text-input-medium outline-none text-input-medium text-white"
-          />
-          <img
-            className="absolute w-[17px] top-[15px] left-[15px]"
-            src={SearchIcon}
-            alt="search-icon"
-          />
-        </div>
-      </div>
+      {/* SEARCH DETAIL */}
+      <SearchChannel channelList={props.channelList} />
 
-      {/* MEMBERS LIST */}
-      <div className="flex flex-col gap-8 px-6 overflow-y-scroll scrollbar-hide">
-        <div className="flex flex-col gap-8 py-6 overflow-y-scroll scrollbar-hide">
+      {/* CHANNEL LIST */}
+      <div className="flex flex-col gap-2 px-4 overflow-y-scroll scrollbar-hide">
+        <div className="flex flex-col gap-4 py-6 overflow-y-scroll scrollbar-hide">
           <h3 className="text-body-bold text-white">My Channels</h3>
           {mappedChannelList}
         </div>

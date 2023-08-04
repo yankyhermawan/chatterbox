@@ -86,19 +86,6 @@ export default function ChannelPage() {
     redirect: "follow",
   };
 
-  useEffect(() => {
-    const handleNewMessage = (messageData: Message) => {
-      if (messageData.content) {
-        setMessages((prev) => [...prev, messageData]);
-      }
-    };
-
-    socket.on("chat message", handleNewMessage);
-    return () => {
-      socket.off("chat message", handleNewMessage);
-    };
-  }, [channelID, messages]);
-
   const sendMessage = (e: SyntheticEvent) => {
     const data = {
       channelID: channelID,
@@ -138,11 +125,27 @@ export default function ChannelPage() {
   };
 
   useEffect(() => {
-    fetchAllChannel();
+    const handleNewMessage = (messageData: Message) => {
+      if (messageData.content) {
+        setMessages((prev) => [...prev, messageData]);
+      }
+    };
+
+    socket.on("chat message", handleNewMessage);
+    return () => {
+      socket.off("chat message", handleNewMessage);
+    };
+  }, [channelID, messages]);
+
+  useEffect(() => {
     fetchMessages();
     setChannelDetail(
       channelList.find((channel: Channel) => channel.id == channelID)
     );
+  }, [channelID, socket, channelList.length]);
+
+  useEffect(() => {
+    fetchAllChannel();
   }, [channelID, socket, channelList.length, channelDetail]);
 
   useEffect(() => {

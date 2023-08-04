@@ -93,13 +93,7 @@ export default function EditChannel(props: {
     fetch(BACKEND_URL + `channel/${channelID}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        props.setChannelList((current: Channel[]) =>
-          current.filter((channel: Channel) => channel.id !== channelID)
-        );
-        // props.setChannelList((current: Channel[]) => [result, ...current]);
         props.setChannelDetail(result);
-
-        navigate(`../channel/${channelID}`);
         setIsOpen(false);
       })
       .catch((error) => console.log("error", error));
