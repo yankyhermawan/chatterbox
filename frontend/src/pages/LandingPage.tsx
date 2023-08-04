@@ -53,7 +53,6 @@ export default function LandingPage() {
   return (
     // PAGE
     <div className="bg-medium-grey w-screen h-full flex flex-col items-center scrollbar-hide">
-      <div></div>
       <Navbar2 />
       {/* CONTAINER */}
       <div className="flex flex-col justify-center items-center w-full h-full max-w-[1440px] pb-12 scrollbar-hide">
