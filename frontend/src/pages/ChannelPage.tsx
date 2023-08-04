@@ -14,6 +14,7 @@ import { useParams } from "react-router-dom";
 import ChannelDetail from "./components/ChannelDetail";
 import EditChannel from "./components/EditChannel";
 import MemberList from "./components/MemberList";
+import { useNavigate } from "react-router-dom";
 
 const BACKEND_URL =
   "https://w24-group-final-group-3-production.up.railway.app/";
@@ -66,12 +67,15 @@ interface ChannelMember {
 }
 
 export default function ChannelPage() {
+  const userID = localStorage.getItem("userID");
+  const access_token = localStorage.getItem("access_token");
+  const navigate = useNavigate();
+  if (!access_token) navigate("/");
+
   // CHANNEL ID
   const { channelID } = useParams();
 
   // ACCESS TOKEN & USERID
-  const userID = localStorage.getItem("userID");
-  const access_token = localStorage.getItem("access_token");
 
   // TIME
   const unixTimestamp = Date.now();
