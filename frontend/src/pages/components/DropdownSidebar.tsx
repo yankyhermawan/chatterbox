@@ -2,6 +2,7 @@ import { Menu } from "@headlessui/react";
 import IconProfileRounded from "../../assets/icon-user-rounded.svg";
 import IconLogout from "../../assets/icon-logout.svg";
 import IconChevronDown from "../../assets/icon-chevron-down.svg";
+import IconHome from "../../assets/icon-home.svg";
 import { useNavigate } from "react-router-dom";
 
 export default function DropdownSidebar() {
@@ -31,6 +32,17 @@ export default function DropdownSidebar() {
           "absolute flex flex-col gap-2 bg-medium-grey border border-light-grey rounded-xl p-2 bottom-14 right-4 min-w-[195px] shadow-xl"
         }
       >
+        <Menu.Item>
+          {() => (
+            <button
+              onClick={() => navigate(`/`)}
+              className="flex items-center gap-4 text-white px-3 py-2 active:bg-light-grey w-full rounded-lg text-modal-medium"
+            >
+              <img src={IconHome} alt="icon-home" className="w-[20px]" />
+              Home
+            </button>
+          )}
+        </Menu.Item>
         <Menu.Item>
           {() => (
             <button

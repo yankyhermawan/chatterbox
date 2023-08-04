@@ -24,7 +24,7 @@ export default function Chat(props: {
   senderID: string;
   sender: UserData;
 }) {
-  // const myId = localStorage.getItem("userID");
+  const myId = localStorage.getItem("userID");
   const now = new Date();
   // const nowDay = now.toString().split(" ")[0];
   const nowMonth = now.toString().split(" ")[1];
@@ -45,35 +45,6 @@ export default function Chat(props: {
   const timeDifference = +now - +sent;
   const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
 
-  // const BACKEND_URL =
-  //   "https://w24-group-final-group-3-production.up.railway.app/";
-
-  // const access_token = localStorage.getItem("access_token");
-
-
-  // const requestOptions: RequestOption = {
-  //   method: "GET",
-  //   headers: { authorization: `Bearer ${access_token}` },
-  //   redirect: "follow",
-  // };
-  // const [userData, setUserData] = useState<UserData>();
-
-  // const fetchUserData = () => {
-  //   fetch(BACKEND_URL + "user/" + `${props.senderID}`, requestOptions)
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       try {
-  //         setUserData(result);
-  //       } catch (error) {
-  //         console.log(error);
-  //       }
-  //     });
-  // };
-
-  // useEffect(() => {
-  //   fetchUserData();
-  // }, []);
-
   return (
     <div className="flex gap-6">
       {/* PROFILE PICTURE */}
@@ -82,13 +53,13 @@ export default function Chat(props: {
           <img
             src={props.sender.imageURL}
             alt="icon-user-square"
-            className="w-[42px] h-[42px] "
+            className="w-[42px] h-[42px]"
           />
         ) : (
           <img
             src={IconUserSquare}
             alt="icon-user-square"
-            className="w-[42px] h-[42px] "
+            className="w-[42px] h-[42px]"
           />
         )}
       </div>
@@ -97,8 +68,13 @@ export default function Chat(props: {
       <div>
         <div className="flex gap-4 mb-1">
           <Link to={`/profile/${props.senderID}`}>
-            <span className="text-body-medium text-almost-white">
-              {props.sender.firstName} {props.sender.lastName}
+            <span
+              className={`font-bold text-[16px] ${
+                props.senderID == myId ? "text-white" : "text-text-grey"
+              } hover:underline`}
+            >
+              {props.sender.firstName} {props.sender.lastName}{" "}
+              {props.senderID == myId && "(You)"}
             </span>
           </Link>
           <p className="text-time-small text-text-grey">

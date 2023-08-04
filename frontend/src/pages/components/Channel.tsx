@@ -18,8 +18,10 @@ export default function Channel(props: {
     <Link to={`/channel/${props.channel.id}`}>
       <span
         className={`flex items-center ${
-          channelID === props.channel.id ? "text-white" : "text-text-grey"
-        }  text-body-bold gap-3 text-left hover:cursor-pointer`}
+          channelID === props.channel.id
+            ? "text-white font-bold"
+            : "text-text-grey"
+        } text-[16px] font-medium gap-3 text-left hover:cursor-pointer rounded-lg`}
       >
         <div className="flex justify-center items-center w-[42px] h-[42px] rounded-lg text-white bg-medium-grey uppercase overflow-hidden">
           {props.channel.imageURL ? (
