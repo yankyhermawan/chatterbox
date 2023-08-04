@@ -1,36 +1,52 @@
 # ChatterBox
-Easy to use app that provides real-time public group discussions
 
-![image](https://github.com/revou-fsse-1/w24-group-final-group-3/assets/119645228/802b7ddf-33d4-46b6-817a-528d82e6d43e)
+![image](./frontend/src/assets/chatterbox.png)
+
+Your Ultimate Group Chat Companion
+
+ChatterBox is a cutting-edge group chat app designed to revolutionize your communication experience. Whether it's connecting with friends, family, or colleagues, ChatterBox offers a seamless and intuitive platform for all your group messaging needs. With its cross-platform capabilities and customizable profiles, ChatterBox brings a new level of convenience and personalization to your conversations.
 
 ## Concept
 
 ![image](https://github.com/revou-fsse-1/w24-group-final-group-3/assets/119645228/50e58131-3c92-4cc9-8a93-4005f622effe)
 
-## Built With
-[![My Skills](https://skillicons.dev/icons?i=html,tailwind,ts,react,vite,vercel,express,postgres,socketio,&perline=10)](https://skillicons.dev)
+## Links
+
+- Figma : https://www.figma.com/file/Un6O27HvtnsthkJW1bkAqV/ChatterBox?type=design&node-id=0-1&mode=design&t=79Zd6xBTlITprgfl-0
+
+-
 
 ## Features
+
 ### Main Features
-- Register and login
+
 - Enter welcome page by default
-- See other people's message
-- Send a message
+- Register and Login
+- Send messages
+- See others messages
 - Create new channel with name and description
 - See and update my account detail
 - See others account detail
 - Enter channel of my choice
 - Search channel
 - See member of channel
-  
+
 ### Future Improvements
+
 - Search message
 - See others typing status
 - Send image to others
 
-### Contributors
-- Niko Setiawan P - Lead, Frontend Engineer
-- Immanuel Arya - Front-end Engineer
-- Nurdin Beta - Front-end Engineer
-- Yanky Hermawan - Back-end Engineer
-- Gary Cruise - Back-end Engineer
+## Contributors
+
+| Name            |               Role               |
+| --------------- | :------------------------------: |
+| Niko Setiawan P | Team Lead and Front-End Engineer |
+| Immanuel Arya   |        Front-End Engineer        |
+| Nurdin Beta     |        Front-End Engineer        |
+| Yanky Hermawan  |        Back-End Engineer         |
+| Gary Cruise     |        Back-End Engineer         |
+
+## Built With
+
+[![My Skills](https://skillicons.dev/icons?i=html,ts,react,tailwind,vite,vercel,express,postgres,socketio,&perline=10)](https://skillicons.dev)
