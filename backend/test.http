@@ -1,15 +1,15 @@
 ### REGISTER
 
-POST https://w24-group-final-group-3-production.up.railway.app/register
+POST http://localhost:4000/register
 Content-Type: application/json
 
 {
-    "email" : "test2",  
-    "password"  : "test2",
-    "username"      : "test2",
-    "firstName" :"test2",
-    "lastName"  : "test2",
-    "profileImageURL": "test2"
+    "email"         : "dev@email.com",  
+    "password"      : "dev123",
+    "username"      : "developer",
+    "firstName"     : "team",
+    "lastName"      : "developer",
+    "imageURL"      : "https://i.imgur.com/RFCAqX4.png"
 }
 
 
@@ -19,8 +19,8 @@ POST https://w24-group-final-group-3-production.up.railway.app/login
 Content-Type: application/json
 
 {
-    "email": "yankyhermawan42@gmail.com",
-    "password" : "yanky123"
+    "email": "dev@email.com",
+    "password" : "dev123"
 }
 
 ### CREATE CHANNEL
@@ -36,22 +36,23 @@ Content-Type: application/json
 }
 
 ### GET CHANNEL MESSAGES
-GET https://w24-group-final-group-3-production.up.railway.app/channel/8e5a9928-7c9d-4688-bb1f-b0b85d720f9d
+GET https://w24-group-final-group-3-production.up.railway.app/channel/88954934-5553-42b9-9a49-a0f3d2e46a34
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhY2YyZWJkLTg2NTItNDVhOS1hMzQwLTJlMDAzZDk3Yjc2OSIsImlhdCI6MTY5MTA2NTg1MywiZXhwIjoxNjkxMTUyMjUzfQ.2h3A2aJKiXrWfXc6RD5n1hPVAK7DPevfq9WiyyPLYh4
 
 ### GET ALL CHANNELS
 GET https://w24-group-final-group-3-production.up.railway.app/channel/
 
 ### JOIN CHANNEL
-POST https://w24-group-final-group-3-production.up.railway.app/join/ba2ff217-1f3b-4f29-82a6-09ca285943de/4e1ba613-15c0-43b2-b30f-86c0dfbf7df2
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRlMWJhNjEzLTE1YzAtNDNiMi1iMzBmLTg2YzBkZmJmN2RmMiIsImlhdCI6MTY5MDg5NjI3OSwiZXhwIjoxNjkwODk5ODc5fQ.CMwkFEsV1s1DsYUTJd-9WlfQe3D_lKYl69h0iq0GlPo
+POST https://w24-group-final-group-3-production.up.railway.app/join/88954934-5553-42b9-9a49-a0f3d2e46a34/7da95c10-ae07-4852-97df-2b925c8f1106
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhY2YyZWJkLTg2NTItNDVhOS1hMzQwLTJlMDAzZDk3Yjc2OSIsImlhdCI6MTY5MTA2NjAxOSwiZXhwIjoxNjkxMTUyNDE5fQ.3bUctjFdp3i58TzLDCkMS8kCkR0N3iwyKu4xBd3VDsg
 
 ### GET USER DATA
 GET https://w24-group-final-group-3-production.up.railway.app/user/4e1ba613-15c0-43b2-b30f-86c0dfbf7df2
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRlMWJhNjEzLTE1YzAtNDNiMi1iMzBmLTg2YzBkZmJmN2RmMiIsImlhdCI6MTY5MDg5NjI3OSwiZXhwIjoxNjkwODk5ODc5fQ.CMwkFEsV1s1DsYUTJd-9WlfQe3D_lKYl69h0iq0GlPo
 
 ### GET USER CHANNELS
-GET https://w24-group-final-group-3-production.up.railway.app/user/channels/4e1ba613-15c0-43b2-b30f-86c0dfbf7df2
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRlMWJhNjEzLTE1YzAtNDNiMi1iMzBmLTg2YzBkZmJmN2RmMiIsImlhdCI6MTY5MDg5NjI3OSwiZXhwIjoxNjkwODk5ODc5fQ.CMwkFEsV1s1DsYUTJd-9WlfQe3D_lKYl69h0iq0GlPo
+GET https://w24-group-final-group-3-production.up.railway.app/user/channels/88954934-5553-42b9-9a49-a0f3d2e46a34
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhY2YyZWJkLTg2NTItNDVhOS1hMzQwLTJlMDAzZDk3Yjc2OSIsImlhdCI6MTY5MTA2NTY4NCwiZXhwIjoxNjkxMTUyMDg0fQ.gkSK0Q16h4FVuzwfKKX77BkoiPbKVvBcznkMLno644k
 
 ### EDIT USER DATA
 PUT https://w24-group-final-group-3-production.up.railway.app/user/b03693d4-620e-4e0a-9f51-ffcea43c8c69
@@ -68,3 +69,19 @@ Content-Type: application/json
 DELETE https://w24-group-final-group-3-production.up.railway.app/user/b03693d4-620e-4e0a-9f51-ffcea43c8c69
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxIiwiaWF0IjoxNjkwODA5ODk3LCJleHAiOjE2OTA4MTM0OTd9.loKprPJIBKyy1Fxpc4qNi3TpiA8teYLoJ5NHztRAb5Y
 
+### DELETE CHANNEL
+DELETE http://localhost:4000/channel/c4341c05-0a03-452b-b6f9-d8287635ebdf
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhY2YyZWJkLTg2NTItNDVhOS1hMzQwLTJlMDAzZDk3Yjc2OSIsImlhdCI6MTY5MTA1NjIwMCwiZXhwIjoxNjkxMTQyNjAwfQ.C2I5ff2O93R0RmLDNY4DkGYPYNF6LlUE8mT3jItt5K4
+
+### EDIT CHANNEL DATA
+PUT http://localhost:4000/channel/d53a2068-2a18-4595-918f-cf71c6762cfd
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhY2YyZWJkLTg2NTItNDVhOS1hMzQwLTJlMDAzZDk3Yjc2OSIsImlhdCI6MTY5MTA1NjIwMCwiZXhwIjoxNjkxMTQyNjAwfQ.C2I5ff2O93R0RmLDNY4DkGYPYNF6LlUE8mT3jItt5K4
+Content-Type: application/json
+
+{
+    "name": "Ngopi skuy"
+}
+
+### GET CHANNEL MEMBERS
+GET http://localhost:4000/channel/88954934-5553-42b9-9a49-a0f3d2e46a34/members
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhY2YyZWJkLTg2NTItNDVhOS1hMzQwLTJlMDAzZDk3Yjc2OSIsImlhdCI6MTY5MTA2NTg1MywiZXhwIjoxNjkxMTUyMjUzfQ.2h3A2aJKiXrWfXc6RD5n1hPVAK7DPevfq9WiyyPLYh4
