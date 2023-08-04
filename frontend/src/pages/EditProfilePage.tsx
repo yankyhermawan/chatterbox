@@ -1,14 +1,132 @@
 import Navbar2 from "./components/Navbar2";
 import IconChevronDownBlue from "../assets/icon-chevron-down-blue.svg";
-// import { useState } from "react";
+import { SyntheticEvent, useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+interface RequestOption {
+  method: string;
+  headers: HeadersInit;
+  redirect: "follow";
+}
+
+interface UserData {
+  email: string;
+  firstName: string;
+  id: string;
+  imageURL: string;
+  lastName: string;
+  password: string;
+  username: string;
+}
 
 export default function EditProfilePage() {
-  // const [photoUrlInput, setPhotoUrlInput] = useState("");
-  // const [firstNameInput, setFirstNameInput] = useState("");
-  // const [lastNameInput, setLastNameInput] = useState("");
-  // const [usernameInput, setUsernameInput] = useState("");
-  // const [emailInput, setEmailInput] = useState("");
-  // const [passwordInput, setPasswordInput] = useState("");
+  const navigate = useNavigate();
+  const [userData, setUserData] = useState<UserData>();
+  const [photoUrlInput, setPhotoUrlInput] = useState(userData?.imageURL);
+  const [firstNameInput, setFirstNameInput] = useState(userData?.firstName);
+  const [lastNameInput, setLastNameInput] = useState(userData?.lastName);
+  const [usernameInput, setUsernameInput] = useState(userData?.username);
+  const [emailInput, setEmailInput] = useState(userData?.email);
+
+  const handlePhotoUrlInputChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setPhotoUrlInput(event.target.value);
+    },
+    []
+  );
+  const handleFirstNameInputChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setFirstNameInput(event.target.value);
+    },
+    []
+  );
+  const handleLastNameInputChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setLastNameInput(event.target.value);
+    },
+    []
+  );
+  const handleUsernameInputChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setUsernameInput(event.target.value);
+    },
+    []
+  );
+  const handleEmailInputChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setEmailInput(event.target.value);
+    },
+    []
+  );
+
+  const BACKEND_URL =
+    "https://w24-group-final-group-3-production.up.railway.app/";
+
+  const myId = localStorage.getItem("userID");
+  const access_token = localStorage.getItem("access_token");
+
+  const requestOptions: RequestOption = {
+    method: "GET",
+    headers: {
+      authorization: `Bearer ${access_token}`,
+      "Content-Type": "application/json",
+    },
+    redirect: "follow",
+  };
+
+  const fetchUserData = () => {
+    fetch(BACKEND_URL + "user/" + `${myId}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        try {
+          setUserData(result);
+        } catch (error) {
+          console.log(error);
+        }
+      });
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  useEffect(() => {
+    if (userData) {
+      setPhotoUrlInput(userData.imageURL);
+      setFirstNameInput(userData.firstName);
+      setLastNameInput(userData.lastName);
+      setUsernameInput(userData.username);
+      setEmailInput(userData.email);
+    }
+  }, [userData]);
+
+  const raw = {
+    imageURL: photoUrlInput,
+    username: usernameInput,
+    email: emailInput,
+    password: userData?.password,
+    firstName: firstNameInput,
+    lastName: lastNameInput,
+  };
+
+  const updateData = (e: SyntheticEvent) => {
+    e.preventDefault();
+    fetch(BACKEND_URL + `user/${myId}`, {
+      method: "PUT",
+      headers: {
+        authorization: `Bearer ${access_token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(raw),
+      redirect: "follow",
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        navigate(`/profile/${myId}`);
+      })
+      .catch((error) => console.log("error", error));
+  };
 
   return (
     // PAGE
@@ -29,7 +147,10 @@ export default function EditProfilePage() {
             Back
           </button>
 
-          <form className="flex flex-col items-start p-4 md:p-10 bg-medium-grey rounded-2xl md:border border-text-grey w-full max-w-[768px] gap-6">
+          <form
+            onSubmit={updateData}
+            className="flex flex-col items-start p-4 md:p-10 bg-medium-grey rounded-2xl md:border border-text-grey w-full max-w-[768px] gap-6"
+          >
             <div className="flex flex-col items-start">
               <h2 className="text-body-regular text-white text-[24px] mb-2">
                 Change Info
@@ -38,12 +159,15 @@ export default function EditProfilePage() {
                 Changes will be reflected to every services
               </h3>
             </div>
+
             {/* PHOTO */}
             <div className="w-full flex flex-col items-start">
               <label htmlFor="photo" className="text-text-grey">
                 Photo
               </label>
               <input
+                value={photoUrlInput && photoUrlInput}
+                onChange={handlePhotoUrlInputChange}
                 type="text"
                 name="photo"
                 id="photo"
@@ -58,6 +182,8 @@ export default function EditProfilePage() {
                 First Name
               </label>
               <input
+                value={firstNameInput && firstNameInput}
+                onChange={handleFirstNameInputChange}
                 type="text"
                 name="firstName"
                 id="firstName"
@@ -72,6 +198,8 @@ export default function EditProfilePage() {
                 Last Name
               </label>
               <input
+                value={lastNameInput && lastNameInput}
+                onChange={handleLastNameInputChange}
                 type="text"
                 name="lastName"
                 id="lastName"
@@ -86,6 +214,8 @@ export default function EditProfilePage() {
                 Username
               </label>
               <input
+                value={usernameInput && usernameInput}
+                onChange={handleUsernameInputChange}
                 type="text"
                 name="username"
                 id="username"
@@ -100,6 +230,8 @@ export default function EditProfilePage() {
                 Email
               </label>
               <input
+                value={emailInput && emailInput}
+                onChange={handleEmailInputChange}
                 type="email"
                 name="email"
                 id="email"
@@ -109,20 +241,8 @@ export default function EditProfilePage() {
             </div>
 
             {/* PASSWORD */}
-            <div className="w-full flex flex-col items-start">
-              <label htmlFor="password" className="text-text-grey">
-                Password
-              </label>
-              <input
-                type="password"
-                name="phopasswordto"
-                id="password"
-                placeholder="Enter your new password..."
-                className="bg-medium-grey w-full outline-none border border-text-grey rounded-lg text-white p-3 px-4 text-input-medium"
-              />
-            </div>
             <button
-              type="button"
+              type="submit"
               className="bg-blue mt-4 py-2 px-6 rounded-lg text-white text-body-medium mr-auto hover:bg-blue-hover outline-none w-full md:max-w-[100px]"
             >
               Save
