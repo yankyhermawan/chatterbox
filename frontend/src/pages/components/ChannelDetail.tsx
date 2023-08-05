@@ -78,7 +78,7 @@ export default function ChannelDetail(props: {
               </div>
             </div>
 
-            <p className="text-text-grey text-input-medium -mt-4">30 members</p>
+            {/* <p className="text-text-grey text-input-medium -mt-4">30 members</p> */}
             <CopyToClipboard />
             <Dialog.Description className="text-center text-almost-white text-input-medium overflow-y-scroll scrollbar-hide h-[200px]">
               {props.channelDetail?.description}
